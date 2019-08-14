@@ -2,8 +2,22 @@
 
 var passport = require('passport'),
   TwitterTokenStrategy = require('passport-twitter-token'),
-  User = require('mongoose').model('User'),
-  twitterConfig = require('./twitter.config.js');
+  twitterConfig = require('./data/twitter.config.js');
+
+
+var createUser = (token, tokenSecret, profile, verify) => {
+  console.log(profile);
+  var newUser = {
+    name: profile.displayName,
+    img: profile._json.profile_image_url,
+    twitterProvider: {
+      id: profile.id,
+      token: token,
+      tokenSecret: tokenSecret
+    }
+  };
+  verify(null, newUser);
+}
 
 module.exports = function () {
 
@@ -13,7 +27,7 @@ module.exports = function () {
       includeEmail: true
     },
     function (token, tokenSecret, profile, done) {
-      User.upsertTwitterUser(token, tokenSecret, profile, function(err, user) {
+      createUser(token, tokenSecret, profile, function(err, user) {
         return done(err, user);
       });
     }));

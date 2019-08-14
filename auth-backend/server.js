@@ -1,9 +1,7 @@
 'use strict';
 
-//mongoose file must be loaded before all other files in order to provide
 // models to other modules
-var mongoose = require('./mongoose'),
-  passport = require('passport'),
+var passport = require('passport'),
   express = require('express'),
   jwt = require('jsonwebtoken'),
   expressJwt = require('express-jwt'),
@@ -11,12 +9,11 @@ var mongoose = require('./mongoose'),
   cors = require('cors'),
   bodyParser = require('body-parser'),
   request = require('request'),
-  twitterConfig = require('./twitter.config.js');
+  twitterConfig = require('./data/twitter.config.js'),
+  Twitter = require('twitter-node-client');
 
-mongoose();
-
-var User = require('mongoose').model('User');
 var passportConfig = require('./passport');
+
 
 //setup configuration for facebook login
 passportConfig();
@@ -38,18 +35,18 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-router.route('/health-check').get(function(req, res) {
+router.route('/health-check').get(function (req, res) {
   res.status(200);
   res.send('Hello World');
 });
 
-var createToken = function(auth) {
+var createToken = function (auth) {
   return jwt.sign({
     id: auth.id
   }, 'my-secret',
-  {
-    expiresIn: 60 * 120
-  });
+    {
+      expiresIn: 60 * 120
+    });
 };
 
 var generateToken = function (req, res, next) {
@@ -62,8 +59,36 @@ var sendToken = function (req, res) {
   return res.status(200).send(JSON.stringify(req.user));
 };
 
+//endpoint for fetching timeline
+router.get('/timeline', function (req, res) {
+  let aT = req.query.aT;
+  let aTS = req.query.aTS;
+  console.log(`token: ${aT}, tokenSecret: ${aTS}`);
+
+  //ISSUE HERE - "TWITTER IS NOT A CONSTRUCTOR...." - need to figure out how to initiliaze
+  var twitter = new Twitter({
+    "consumerKey": twitterConfig.consumerKey,
+    "consumerSecret": twitterConfig.consumerSecret,
+    "accessToken": aT,
+    "accessTokenSecret": aTS,
+    "callBackUrl": "http://localhost:4000"
+  });
+
+  var returnTimeline = (data) => {
+    console.log(data);
+    res.send()
+  }
+  var error = (err, response, body) => {
+    console.log(err, response, body);
+    return res.send(500, { message: "whoops, couldn't get the timeline" });
+  }
+  twitter.getHomeTimeline({ count: '10' }, error, returnTimeline);
+
+});
+
+//first step in authentication
 router.route('/auth/twitter/reverse')
-  .post(function(req, res) {
+  .post(function (req, res) {
     request.post({
       url: 'https://api.twitter.com/oauth/request_token',
       oauth: {
@@ -81,6 +106,7 @@ router.route('/auth/twitter/reverse')
     });
   });
 
+//second step 
 router.route('/auth/twitter')
   .post((req, res, next) => {
     request.post({
@@ -92,6 +118,7 @@ router.route('/auth/twitter')
       },
       form: { oauth_verifier: req.query.oauth_verifier }
     }, function (err, r, body) {
+      console.log(err);
       if (err) {
         return res.send(500, { message: err.message });
       }
@@ -105,53 +132,18 @@ router.route('/auth/twitter')
 
       next();
     });
-  }, passport.authenticate('twitter-token', {session: false}), function(req, res, next) {
-      if (!req.user) {
-        return res.send(401, 'User Not Authenticated');
-      }
-
-      // prepare token for API
-      req.auth = {
-        id: req.user.id
-      };
-
-      return next();
-    }, generateToken, sendToken);
-
-//token handling middleware
-var authenticate = expressJwt({
-  secret: 'my-secret',
-  requestProperty: 'auth',
-  getToken: function(req) {
-    if (req.headers['x-auth-token']) {
-      return req.headers['x-auth-token'];
+  }, passport.authenticate('twitter-token', { session: false }), function (req, res, next) {
+    if (!req.user) {
+      return res.send(401, 'User Not Authenticated');
     }
-    return null;
-  }
-});
 
-var getCurrentUser = function(req, res, next) {
-  User.findById(req.auth.id, function(err, user) {
-    if (err) {
-      next(err);
-    } else {
-      req.user = user;
-      next();
-    }
-  });
-};
+    // prepare token for API
+    req.auth = {
+      id: req.user.id
+    };
 
-var getOne = function (req, res) {
-  var user = req.user.toObject();
-
-  delete user['twitterProvider'];
-  delete user['__v'];
-
-  res.json(user);
-};
-
-router.route('/auth/me')
-  .get(authenticate, getCurrentUser, getOne);
+    return next();
+  }, generateToken, sendToken);
 
 app.use('/api/v1', router);
 
