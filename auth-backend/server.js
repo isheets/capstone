@@ -59,31 +59,46 @@ var sendToken = function (req, res) {
   return res.status(200).send(JSON.stringify(req.user));
 };
 
+var twitter = null;
+
 //endpoint for fetching timeline
 router.get('/timeline', function (req, res) {
   let aT = req.query.aT;
   let aTS = req.query.aTS;
+  let since = req.query.since;
   console.log(`token: ${aT}, tokenSecret: ${aTS}`);
 
-  //ISSUE HERE - "TWITTER IS NOT A CONSTRUCTOR...." - need to figure out how to initiliaze
-  var twitter = new Twitter({
-    "consumerKey": twitterConfig.consumerKey,
-    "consumerSecret": twitterConfig.consumerSecret,
-    "accessToken": aT,
-    "accessTokenSecret": aTS,
-    "callBackUrl": "http://localhost:4000"
-  });
+  //if we haven't intialized twitter connection, do so now
+  if (twitter == null) {
+    twitter = new Twitter({
+      "consumerKey": twitterConfig.consumerKey,
+      "consumerSecret": twitterConfig.consumerSecret,
+      "accessToken": aT,
+      "accessTokenSecret": aTS,
+      "callBackUrl": "http://localhost:4000"
+    });
+  }
 
+  //success function
   var returnTimeline = (data) => {
-    //console.log(data);
+    console.log(data);
     return res.send(data);
   }
+
+  //error function
   var error = (err, response, body) => {
     console.log(err, response, body);
     return res.send(500, { message: "whoops, couldn't get the timeline" });
   }
-  twitter.getHomeTimeline({ count: '10' }, error, returnTimeline);
 
+  //if request includes a since_id, use it
+  if(since) {
+    twitter.getHomeTimeline({ since_id: since }, error, returnTimeline);
+  }
+  //if no since id, default to fetching 10 most recent tweets
+  else {
+    twitter.getHomeTimeline({ count: '11' }, error, returnTimeline);
+  }
 });
 
 //first step in authentication

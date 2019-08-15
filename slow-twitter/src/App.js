@@ -6,10 +6,11 @@ class App extends Component {
   constructor() {
     super();
 
-    this.state = { 
-      isAuthenticated: false, 
-      user: null, 
-      token: '' 
+    this.state = {
+      isAuthenticated: false,
+      user: null,
+      token: '',
+      last_tweet: null
     };
   }
 
@@ -32,15 +33,46 @@ class App extends Component {
   };
 
   fetchTimeline = () => {
-    fetch(`http://localhost:4000/api/v1/timeline?aT=${this.state.user.twitterProvider.token}&aTS=${this.state.user.twitterProvider.tokenSecret}`, { headers: { "Content-Type": "application/json; charset=utf-8" }})
-    .then(res => res.json())
-    .then(response => {
-        console.log(response);
-    })
-    .catch(err => {
-        console.log("u")
-        alert("sorry, there are no results for your search")
-    });
+    //if this is the first request then don't include since_id
+    if (this.state.last_tweet == null) {
+      fetch(`http://localhost:4000/api/v1/timeline?aT=${this.state.user.twitterProvider.token}&aTS=${this.state.user.twitterProvider.tokenSecret}`, { headers: { "Content-Type": "application/json; charset=utf-8" } })
+        .then(res => res.json())
+        .then(response => {
+          console.log(response);
+          //make sure it's not null
+          if (response[0].id) {
+            this.setState({last_tweet: response[0].id});
+          }
+          else {
+            alert("No new tweets");
+          }
+
+        })
+        .catch(err => {
+          console.log("u")
+          alert("sorry, there are no results for your search")
+        });
+    }
+    //else pass id of last tweet consumed as parameter
+    else {
+      fetch(`http://localhost:4000/api/v1/timeline?aT=${this.state.user.twitterProvider.token}&aTS=${this.state.user.twitterProvider.tokenSecret}&since=${this.state.last_tweet}`, { headers: { "Content-Type": "application/json; charset=utf-8" } })
+        .then(res => res.json())
+        .then(response => {
+          console.log(response);
+          //make sure it's not null
+          if (response[0].id) {
+            this.setState({last_tweet: response[0].id});
+          }
+          else {
+            alert("No new tweets");
+          }
+
+        })
+        .catch(err => {
+          alert("sorry, there are no results for your search")
+        });
+    }
+
   };
   render() {
     let content = !!this.state.isAuthenticated ?
