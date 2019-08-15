@@ -6,6 +6,7 @@ class App extends Component {
   constructor() {
     super();
 
+    //init state
     this.state = {
       isAuthenticated: false,
       user: null,
@@ -14,22 +15,70 @@ class App extends Component {
     };
   }
 
-  onSuccess = (response) => {
+  componentDidMount = () => {
+    this.retrieveState();
+  }
+
+  //save state to local storage for fake persistence
+  saveState = () => {
+    localStorage.setItem('isAuthenticated', this.state.isAuthenticated);
+    if(this.state.user !== null) {
+    localStorage.setItem('user', JSON.stringify(this.state.user));
+    }
+    if(this.state.token !== '') {
+      localStorage.setItem('token', this.state.token);
+    }
+    if(this.state.last_tweet !== null) {
+      localStorage.setItem('last_tweet', this.state.last_tweet);
+    }
+  };
+
+  //remove all state info from local storage
+  unsaveState = () => {
+    localStorage.clear();
+  };
+//retrieve state info from local storage
+  retrieveState = () => {
+
+    let auth = localStorage.getItem('isAuthenticated');
+    let user = JSON.parse(localStorage.getItem('user'));
+    let token = localStorage.getItem('token');
+    let last_tweet = localStorage.getItem('last_tweet');
+
+    if(auth !== null) {
+      this.setState({isAuthenticated: auth});
+    }
+    if(user !== null) {
+      this.setState({user: user});
+    }
+    if(token !== null) {
+      this.setState({token: token});
+    }
+    if(last_tweet !== null) {
+      this.setState({last_tweet: last_tweet});
+    }
+  };
+
+  onSuccessAuth = (response) => {
     const token = response.headers.get('x-auth-token');
     console.log(response);
     response.json().then(user => {
+      //successful auth, update state
       if (token) {
-        this.setState({ isAuthenticated: true, user: user, token: token });
+        this.setState({ isAuthenticated: true, user: user, token: token});
       }
+      //save updated state
+      this.saveState();
     });
   };
 
-  onFailed = (error) => {
+  onFailedAuth = (error) => {
     alert(error);
   };
 
   logout = () => {
     this.setState({ isAuthenticated: false, token: '', user: null })
+    this.unsaveState();
   };
 
   fetchTimeline = () => {
@@ -42,15 +91,11 @@ class App extends Component {
           //make sure it's not null
           if (response[0].id) {
             this.setState({last_tweet: response[0].id});
+            this.saveState();
           }
-          else {
-            alert("No new tweets");
-          }
-
         })
         .catch(err => {
-          console.log("u")
-          alert("sorry, there are no results for your search")
+          console.log(err)
         });
     }
     //else pass id of last tweet consumed as parameter
@@ -62,6 +107,7 @@ class App extends Component {
           //make sure it's not null
           if (response[0].id) {
             this.setState({last_tweet: response[0].id});
+            this.saveState();
           }
           else {
             alert("No new tweets");
@@ -99,7 +145,7 @@ class App extends Component {
       ) :
       (
         <TwitterLogin loginUrl="http://localhost:4000/api/v1/auth/twitter"
-          onFailure={this.onFailed} onSuccess={this.onSuccess}
+          onFailure={this.onFailedAuth} onSuccess={this.onSuccessAuth}
           requestTokenUrl="http://localhost:4000/api/v1/auth/twitter/reverse" />
       );
 
