@@ -10,7 +10,7 @@ var passport = require('passport'),
   bodyParser = require('body-parser'),
   request = require('request'),
   twitterConfig = require('./data/twitter.config.js'),
-  Twitter = require('twitter-node-client');
+  Twitter = require('twitter-node-client').Twitter;
 
 var passportConfig = require('./passport');
 
@@ -75,8 +75,8 @@ router.get('/timeline', function (req, res) {
   });
 
   var returnTimeline = (data) => {
-    console.log(data);
-    res.send()
+    //console.log(data);
+    return res.send(data);
   }
   var error = (err, response, body) => {
     console.log(err, response, body);

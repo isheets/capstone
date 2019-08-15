@@ -6,7 +6,6 @@ var passport = require('passport'),
 
 
 var createUser = (token, tokenSecret, profile, verify) => {
-  console.log(profile);
   var newUser = {
     name: profile.displayName,
     img: profile._json.profile_image_url,
