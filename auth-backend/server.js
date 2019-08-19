@@ -93,11 +93,11 @@ router.get('/timeline', function (req, res) {
 
   //if request includes a since_id, use it
   if(since) {
-    twitter.getHomeTimeline({ since_id: since }, error, returnTimeline);
+    twitter.getHomeTimeline({ since_id: since, tweet_mode: "extended" }, error, returnTimeline);
   }
   //if no since id, default to fetching 10 most recent tweets
   else {
-    twitter.getHomeTimeline({ count: '11' }, error, returnTimeline);
+    twitter.getHomeTimeline({ count: '11', tweet_mode: "extended" }, error, returnTimeline);
   }
 });
 

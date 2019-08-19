@@ -13,7 +13,7 @@ class App extends Component {
       user: null,
       token: '',
       last_tweet: null,
-      rawTweets: null
+      parsedTweets: null
     };
   }
 
@@ -33,8 +33,8 @@ class App extends Component {
     if(this.state.last_tweet !== null) {
       localStorage.setItem('last_tweet', this.state.last_tweet);
     }
-    if(this.state.rawTweets !== null) {
-      localStorage.setItem('rawTweets', JSON.stringify(this.state.rawTweets));
+    if(this.state.parsedTweets !== null) {
+      localStorage.setItem('parsedTweets', JSON.stringify(this.state.parsedTweets));
     }
   };
 
@@ -49,7 +49,7 @@ class App extends Component {
     let user = JSON.parse(localStorage.getItem('user'));
     let token = localStorage.getItem('token');
     let last_tweet = localStorage.getItem('last_tweet');
-    let rawTweets = JSON.parse(localStorage.getItem('rawTweets'));
+    let parsedTweets = JSON.parse(localStorage.getItem('parsedTweets'));
 
     if(auth !== null) {
       this.setState({isAuthenticated: auth});
@@ -63,8 +63,8 @@ class App extends Component {
     if(last_tweet !== null) {
       this.setState({last_tweet: last_tweet});
     }
-    if(rawTweets !== null) {
-      this.setState({rawTweets: rawTweets});
+    if(parsedTweets !== null) {
+      this.setState({parsedTweets: parsedTweets});
     }
   };
 
@@ -102,8 +102,23 @@ class App extends Component {
             this.setState({last_tweet: response[0].id});
             this.saveState();
           }
-          this.setState({rawTweets: response});
-          console.log(this.state.rawTweets);
+          let newTweets = [{}];
+          for(let tweet of response) {
+            let newTweet = {};
+            if(tweet.retweeted_status) {
+              newTweet.text = tweet.retweeted_status.full_text;
+            }
+            else {
+              newTweet.text = tweet.full_text;
+            }
+            newTweet.userName = tweet.user.name;
+            newTweet.profilePic = tweet.user.profile_image_url;
+            newTweet.userHandle = tweet.user.screen_name;
+            newTweets.push(newTweet);
+          }
+          
+          this.setState({parsedTweets: newTweets});
+          console.log(this.state.parsedTweets);
         })
         .catch(err => {
           console.log(err)
@@ -118,8 +133,8 @@ class App extends Component {
           //make sure it's not null
           if (response[0].id) {
             this.setState({last_tweet: response[0].id});
-            this.setState({rawTweets: response});
-          console.log(this.state.rawTweets);
+            this.setState({parsedTweets: response});
+          console.log(this.state.parsedTweets);
             this.saveState();
           }
           else {
@@ -149,7 +164,7 @@ class App extends Component {
               Fetch Timeline
             </button>
           </div>
-          <TweetCard tweetObjects={this.state.rawTweets}/>
+          <TweetCard tweetObjects={this.state.parsedTweets}/>
           <div>
             <button onClick={this.logout} className="button" >
               Log out
