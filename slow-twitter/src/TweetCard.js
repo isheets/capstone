@@ -15,18 +15,22 @@ export default class TweetCard extends Component {
 
         </div>
         }
-        else {
-            return (
-                <div>
-                    {tweetObjects.map((tweet, index) =>
-                        <div className="tweetCard" key={index}>
-                            <h2><img src={tweet.profilePic} alt=""></img> {tweet.userName} </h2>
-                            <h3>{tweet.userHandle}</h3>
-                            <p>{tweet.text}</p>
-                        </div>
-                    )}
-                </div>
-            )
+        else if(tweet.isRT) {
+
         }
+        else {
+            content = <div>
+            {tweetObjects.map((tweet, index) =>
+                <div className="tweetCard">
+                    <h2><img src={tweet.profilePic} alt=""></img> {tweet.userName} </h2>
+                    <h3>{tweet.userHandle}</h3>
+                    <p>{tweet.text}</p>
+                </div>
+            )}
+        </div>
+        }
+        return (
+            
+        )
     }
 }
