@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import TweetCard from "./TweetCard.js";
 import TwitterLogin from 'react-twitter-auth';
 
 class App extends Component {
@@ -11,7 +12,8 @@ class App extends Component {
       isAuthenticated: false,
       user: null,
       token: '',
-      last_tweet: null
+      last_tweet: null,
+      rawTweets: null
     };
   }
 
@@ -31,6 +33,9 @@ class App extends Component {
     if(this.state.last_tweet !== null) {
       localStorage.setItem('last_tweet', this.state.last_tweet);
     }
+    if(this.state.rawTweets !== null) {
+      localStorage.setItem('rawTweets', JSON.stringify(this.state.rawTweets));
+    }
   };
 
   //remove all state info from local storage
@@ -44,6 +49,7 @@ class App extends Component {
     let user = JSON.parse(localStorage.getItem('user'));
     let token = localStorage.getItem('token');
     let last_tweet = localStorage.getItem('last_tweet');
+    let rawTweets = JSON.parse(localStorage.getItem('rawTweets'));
 
     if(auth !== null) {
       this.setState({isAuthenticated: auth});
@@ -56,6 +62,9 @@ class App extends Component {
     }
     if(last_tweet !== null) {
       this.setState({last_tweet: last_tweet});
+    }
+    if(rawTweets !== null) {
+      this.setState({rawTweets: rawTweets});
     }
   };
 
@@ -93,12 +102,14 @@ class App extends Component {
             this.setState({last_tweet: response[0].id});
             this.saveState();
           }
+          this.setState({rawTweets: response});
+          console.log(this.state.rawTweets);
         })
         .catch(err => {
           console.log(err)
         });
     }
-    //else pass id of last tweet consumed as parameter
+    //else pass id of last tweet consumed as parameter in request
     else {
       fetch(`http://localhost:4000/api/v1/timeline?aT=${this.state.user.twitterProvider.token}&aTS=${this.state.user.twitterProvider.tokenSecret}&since=${this.state.last_tweet}`, { headers: { "Content-Type": "application/json; charset=utf-8" } })
         .then(res => res.json())
@@ -107,6 +118,8 @@ class App extends Component {
           //make sure it's not null
           if (response[0].id) {
             this.setState({last_tweet: response[0].id});
+            this.setState({rawTweets: response});
+          console.log(this.state.rawTweets);
             this.saveState();
           }
           else {
@@ -126,16 +139,17 @@ class App extends Component {
         <div>
           <p>Authenticated</p>
           <div>
-            <img src={this.state.user.img}></img>
+            <img src={this.state.user.img} alt="profile"></img>
           </div>
-          <div>
+          <h1>
             {this.state.user.name}
-          </div>
+          </h1>
           <div>
             <button onClick={this.fetchTimeline} className="button" >
               Fetch Timeline
             </button>
           </div>
+          <TweetCard tweetObjects={this.state.rawTweets}/>
           <div>
             <button onClick={this.logout} className="button" >
               Log out
