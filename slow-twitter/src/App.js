@@ -24,16 +24,16 @@ class App extends Component {
   //save state to local storage for fake persistence
   saveState = () => {
     localStorage.setItem('isAuthenticated', this.state.isAuthenticated);
-    if(this.state.user !== null) {
-    localStorage.setItem('user', JSON.stringify(this.state.user));
+    if (this.state.user !== null) {
+      localStorage.setItem('user', JSON.stringify(this.state.user));
     }
-    if(this.state.token !== '') {
+    if (this.state.token !== '') {
       localStorage.setItem('token', this.state.token);
     }
-    if(this.state.last_tweet !== null) {
+    if (this.state.last_tweet !== null) {
       localStorage.setItem('last_tweet', this.state.last_tweet);
     }
-    if(this.state.parsedTweets !== null) {
+    if (this.state.parsedTweets !== null) {
       localStorage.setItem('parsedTweets', JSON.stringify(this.state.parsedTweets));
     }
   };
@@ -42,7 +42,7 @@ class App extends Component {
   unsaveState = () => {
     localStorage.clear();
   };
-//retrieve state info from local storage
+  //retrieve state info from local storage
   retrieveState = () => {
 
     let auth = localStorage.getItem('isAuthenticated');
@@ -51,20 +51,20 @@ class App extends Component {
     let last_tweet = localStorage.getItem('last_tweet');
     let parsedTweets = JSON.parse(localStorage.getItem('parsedTweets'));
 
-    if(auth !== null) {
-      this.setState({isAuthenticated: auth});
+    if (auth !== null) {
+      this.setState({ isAuthenticated: auth });
     }
-    if(user !== null) {
-      this.setState({user: user});
+    if (user !== null) {
+      this.setState({ user: user });
     }
-    if(token !== null) {
-      this.setState({token: token});
+    if (token !== null) {
+      this.setState({ token: token });
     }
-    if(last_tweet !== null) {
-      this.setState({last_tweet: last_tweet});
+    if (last_tweet !== null) {
+      this.setState({ last_tweet: last_tweet });
     }
-    if(parsedTweets !== null) {
-      this.setState({parsedTweets: parsedTweets});
+    if (parsedTweets !== null) {
+      this.setState({ parsedTweets: parsedTweets });
     }
   };
 
@@ -74,7 +74,7 @@ class App extends Component {
     response.json().then(user => {
       //successful auth, update state
       if (token) {
-        this.setState({ isAuthenticated: true, user: user, token: token});
+        this.setState({ isAuthenticated: true, user: user, token: token });
       }
       //save updated state
       this.saveState();
@@ -90,35 +90,48 @@ class App extends Component {
     this.unsaveState();
   };
 
+  parseTweets = (rawTweets) => {
+    let newTweets = [{}];
+    for (let tweet of rawTweets) {
+      let newTweet = {};
+      if (tweet.retweeted_status) {
+        newTweet.text = tweet.retweeted_status.full_text;
+        newTweet.isRT = true;
+      }
+      else {
+        newTweet.text = tweet.full_text;
+        newTweet.isRT = false;
+      }
+      if (tweet.entities.media) {
+        newTweet.media = tweet.entities.media;
+        newTweet.hasMedia = true;
+      }
+      else {
+        newTweet.hasMedia = false;
+      }
+      newTweet.userName = tweet.user.name;
+      newTweet.profilePic = tweet.user.profile_image_url;
+      newTweet.userHandle = tweet.user.screen_name;
+      newTweets.push(newTweet);
+    }
+    console.log(newTweets);
+  return newTweets;
+
+  }
+
   fetchTimeline = () => {
     //if this is the first request then don't include since_id
     if (this.state.last_tweet == null) {
       fetch(`http://localhost:4000/api/v1/timeline?aT=${this.state.user.twitterProvider.token}&aTS=${this.state.user.twitterProvider.tokenSecret}`, { headers: { "Content-Type": "application/json; charset=utf-8" } })
         .then(res => res.json())
         .then(response => {
-          console.log(response);
           //make sure it's not null
           if (response[0].id) {
-            this.setState({last_tweet: response[0].id});
+            this.setState({ last_tweet: response[0].id });
             this.saveState();
           }
-          let newTweets = [{}];
-          for(let tweet of response) {
-            let newTweet = {};
-            if(tweet.retweeted_status) {
-              newTweet.text = tweet.retweeted_status.full_text;
-            }
-            else {
-              newTweet.text = tweet.full_text;
-            }
-            newTweet.userName = tweet.user.name;
-            newTweet.profilePic = tweet.user.profile_image_url;
-            newTweet.userHandle = tweet.user.screen_name;
-            newTweets.push(newTweet);
-          }
-          
-          this.setState({parsedTweets: newTweets});
-          console.log(this.state.parsedTweets);
+          this.setState({ parsedTweets: this.parseTweets(response) });
+          this.saveState();
         })
         .catch(err => {
           console.log(err)
@@ -132,9 +145,8 @@ class App extends Component {
           console.log(response);
           //make sure it's not null
           if (response[0].id) {
-            this.setState({last_tweet: response[0].id});
-            this.setState({parsedTweets: response});
-          console.log(this.state.parsedTweets);
+            this.setState({ last_tweet: response[0].id });
+            this.setState({ parsedTweets: this.parseTweets(response) });
             this.saveState();
           }
           else {
@@ -164,7 +176,7 @@ class App extends Component {
               Fetch Timeline
             </button>
           </div>
-          <TweetCard tweetObjects={this.state.parsedTweets}/>
+          <TweetCard tweet={this.state.parsedTweets[1]} />
           <div>
             <button onClick={this.logout} className="button" >
               Log out

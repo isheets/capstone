@@ -81,7 +81,7 @@ router.get('/timeline', function (req, res) {
 
   //success function
   var returnTimeline = (data) => {
-    console.log(data);
+    //console.log(data);
     return res.send(data);
   }
 
