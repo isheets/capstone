@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import TweetCard from "./TweetCard.js";
 import TwitterLogin from 'react-twitter-auth';
+import TweetNav from './TweetNav.js';
 
 class App extends Component {
   constructor() {
@@ -13,7 +14,8 @@ class App extends Component {
       user: null,
       token: '',
       last_tweet: null,
-      parsedTweets: null
+      parsedTweets: null,
+      curTweet: null
     };
   }
 
@@ -36,6 +38,9 @@ class App extends Component {
     if (this.state.parsedTweets !== null) {
       localStorage.setItem('parsedTweets', JSON.stringify(this.state.parsedTweets));
     }
+    if (this.state.curTweet !== null) {
+      localStorage.setItem('curTweet', this.state.curTweet);
+    }
   };
 
   //remove all state info from local storage
@@ -50,6 +55,7 @@ class App extends Component {
     let token = localStorage.getItem('token');
     let last_tweet = localStorage.getItem('last_tweet');
     let parsedTweets = JSON.parse(localStorage.getItem('parsedTweets'));
+    let curTweet = JSON.parse(localStorage.getItem('curTweet'));
 
     if (auth !== null) {
       this.setState({ isAuthenticated: auth });
@@ -65,6 +71,9 @@ class App extends Component {
     }
     if (parsedTweets !== null) {
       this.setState({ parsedTweets: parsedTweets });
+    }
+    if (curTweet !== null) {
+      this.setState({ curTweet: curTweet });
     }
   };
 
@@ -91,19 +100,21 @@ class App extends Component {
   };
 
   parseTweets = (rawTweets) => {
-    let newTweets = [{}];
+    console.log(rawTweets);
+    let newTweets = [];
     for (let tweet of rawTweets) {
       let newTweet = {};
       if (tweet.retweeted_status) {
         newTweet.text = tweet.retweeted_status.full_text;
+        newTweet.rtStatus = tweet.retweeted_status;
         newTweet.isRT = true;
       }
       else {
         newTweet.text = tweet.full_text;
         newTweet.isRT = false;
       }
-      if (tweet.entities.media) {
-        newTweet.media = tweet.entities.media;
+      if (tweet.extended_entities.media) {
+        newTweet.media = tweet.extended_entities.media;
         newTweet.hasMedia = true;
       }
       else {
@@ -112,12 +123,13 @@ class App extends Component {
       newTweet.userName = tweet.user.name;
       newTweet.profilePic = tweet.user.profile_image_url;
       newTweet.userHandle = tweet.user.screen_name;
-      newTweets.push(newTweet);
+      newTweet.tweetID = tweet.id;
+      newTweets.unshift(newTweet);
     }
     console.log(newTweets);
-  return newTweets;
+    return newTweets;
 
-  }
+  };
 
   fetchTimeline = () => {
     //if this is the first request then don't include since_id
@@ -126,12 +138,12 @@ class App extends Component {
         .then(res => res.json())
         .then(response => {
           //make sure it's not null
-          if (response[0].id) {
+          if (response) {
             this.setState({ last_tweet: response[0].id });
+            this.setState({ parsedTweets: this.parseTweets(response), curTweet: 0 });
             this.saveState();
           }
-          this.setState({ parsedTweets: this.parseTweets(response) });
-          this.saveState();
+
         })
         .catch(err => {
           console.log(err)
@@ -144,9 +156,9 @@ class App extends Component {
         .then(response => {
           console.log(response);
           //make sure it's not null
-          if (response[0].id) {
+          if (response) {
             this.setState({ last_tweet: response[0].id });
-            this.setState({ parsedTweets: this.parseTweets(response) });
+            this.setState({ parsedTweets: this.parseTweets(response), curTweet: 0 });
             this.saveState();
           }
           else {
@@ -158,8 +170,25 @@ class App extends Component {
           alert("sorry, there are no results for your search")
         });
     }
-
   };
+
+  nextTweet = () => {
+    if (this.state.curTweet === this.state.parsedTweets.length - 1) {
+      console.error("no new tweets available. try refetching.")
+    }
+    else {
+      this.setState({ curTweet: this.state.curTweet + 1 });
+    }
+  };
+  prevTweet = () => {
+    if (this.state.curTweet === 0) {
+      console.error("current tweet is already the oldest tweet available")
+    }
+    else {
+      this.setState({ curTweet: this.state.curTweet - 1 });
+    }
+  };
+
   render() {
     let content = !!this.state.isAuthenticated ?
       (
@@ -176,7 +205,11 @@ class App extends Component {
               Fetch Timeline
             </button>
           </div>
-          <TweetCard tweet={this.state.parsedTweets[1]} />
+          <TweetCard
+            tweet={this.state.parsedTweets != null ? this.state.parsedTweets[this.state.curTweet] : null} />
+          <TweetNav
+            nextTweetFunc={this.nextTweet}
+            prevTweetFunc={this.prevTweet} />
           <div>
             <button onClick={this.logout} className="button" >
               Log out

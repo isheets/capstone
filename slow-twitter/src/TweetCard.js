@@ -22,7 +22,13 @@ export default class TweetCard extends Component {
     render() {
         const tweet = this.props.tweet;
         console.log(tweet);
+        if(tweet) {
         const content = this.renderTweet(tweet);
         return (content)
+        }
+        else {
+            console.error("Could not render tweet because this.props.tweet does not exist");
+            return null;
+        }
     }
 }
