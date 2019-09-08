@@ -66,7 +66,12 @@ router.get('/timeline', function (req, res) {
   let aT = req.query.aT;
   let aTS = req.query.aTS;
   let since = req.query.since;
-  console.log(`token: ${aT}, tokenSecret: ${aTS}`);
+  console.log("***********MAKING TIMELINE REQUEST***********");
+  console.log("Using the following credentials:")
+  console.log(`token: ${aT}`);
+  console.log(`tokenSecret: ${aTS}`);
+  console.log('since_id: ' + since);
+  console.log("*********************************************")
 
   //if we haven't intialized twitter connection, do so now
   if (twitter == null) {
@@ -74,7 +79,7 @@ router.get('/timeline', function (req, res) {
       "consumerKey": twitterConfig.consumerKey,
       "consumerSecret": twitterConfig.consumerSecret,
       "accessToken": aT,
-      "accessTokenSecret": aTS,
+      "accessTokenSecret": aTS, 
       "callBackUrl": "http://localhost:4000"
     });
   }
@@ -87,7 +92,7 @@ router.get('/timeline', function (req, res) {
 
   //error function
   var error = (err, response, body) => {
-    //console.log(err, response, body);
+    console.log(err, response, body);
     return res.status(500).send({ message: "whoops, couldn't get the timeline" });
   }
 
@@ -97,7 +102,7 @@ router.get('/timeline', function (req, res) {
   }
   //if no since id, default to fetching 10 most recent tweets
   else {
-    twitter.getHomeTimeline({ count: '11', tweet_mode: "extended" }, error, returnTimeline);
+    twitter.getHomeTimeline({ count: '30', tweet_mode: "extended" }, error, returnTimeline);
   }
 });
 
