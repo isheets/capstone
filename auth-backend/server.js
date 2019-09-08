@@ -66,8 +66,9 @@ router.get('/timeline', function (req, res) {
   let aT = req.query.aT;
   let aTS = req.query.aTS;
   let since = req.query.since;
-  console.log(`token: ${aT}, tokenSecret: ${aTS}`);
-
+  console.log("*********TIMELINE REQUEST**********")
+  console.log(`Using credentials TOKEN: ${aT}, TOKENSECRET: ${aTS}`);
+  console.log("***********************************")
   //if we haven't intialized twitter connection, do so now
   if (twitter == null) {
     twitter = new Twitter({
