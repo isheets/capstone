@@ -28,7 +28,7 @@ export const updateLastTweetFetched = lastFetched => ({
 
 //updates array of objects for store.tweets.parsedTweets
 //expects array of objects
-export const updateParsedTweet = parsedTweets => ({
+export const updateParsedTweets = parsedTweets => ({
   type: 'SET_PARSED_TWEETS',
   parsedTweets
 })

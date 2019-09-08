@@ -87,8 +87,8 @@ router.get('/timeline', function (req, res) {
 
   //error function
   var error = (err, response, body) => {
-    console.log(err, response, body);
-    return res.send(500, { message: "whoops, couldn't get the timeline" });
+    //console.log(err, response, body);
+    return res.status(500).send({ message: "whoops, couldn't get the timeline" });
   }
 
   //if request includes a since_id, use it

@@ -1,7 +1,7 @@
 import React from 'react'
 import TwitterLogin from 'react-twitter-auth';
 import TweetCard from './TweetCard';
-import { updateAuthentication, updateToken, updateUser } from './../actions';
+import { updateAuthentication, updateToken, updateUser, updateParsedTweets } from './../actions';
 import { useSelector, useDispatch } from "react-redux";
 
 let dispatch;
@@ -51,7 +51,34 @@ const refreshFeed = (userToken, userTokenSecret, lastTweetFetched = null) => {
 
 //take raw response from tweets and construct well-formed object with only needed info
 const parseRawTweets = (rawTweets) => {
-  
+  let newTweets = [];
+    for (let tweet of rawTweets) {
+      let newTweet = {};
+      if (tweet.retweeted_status) {
+        newTweet.text = tweet.retweeted_status.full_text;
+        newTweet.rtStatus = tweet.retweeted_status;
+        newTweet.isRT = true;
+      }
+      else {
+        newTweet.text = tweet.full_text;
+        newTweet.isRT = false;
+      }
+      if (tweet.extended_entities.media) {
+        newTweet.media = tweet.extended_entities.media;
+        newTweet.hasMedia = true;
+      }
+      else {
+        newTweet.hasMedia = false;
+      }
+      newTweet.userName = tweet.user.name;
+      newTweet.profilePic = tweet.user.profile_image_url;
+      newTweet.userHandle = tweet.user.screen_name;
+      newTweet.tweetID = tweet.id;
+      newTweets.unshift(newTweet);
+    }
+    console.log(newTweets);
+    dispatch(updateParsedTweets(newTweets));
+
 }
 
 const App = () => {
