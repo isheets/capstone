@@ -57,7 +57,7 @@ const parseRawTweets = (rawTweets) => {
   //first tweet will have id of 0
   let id = 0;
   for (let tweet of rawTweets) {
-    let newTweet = {};
+
     //throw out if the tweet is a retweet
     if (tweet.retweeted_status) {
       console.log("Tweet not parsed; is a retweet")
@@ -66,31 +66,67 @@ const parseRawTweets = (rawTweets) => {
       console.log("Tweet not parsed; is a reply")
     }
     else {
+      //construct the object
+      let newTweet = {};
+      newTweet.id = id;
+      newTweet.date = tweet.created_at;
+      newTweet.tweetID = tweet.id_str;
       newTweet.text = tweet.full_text;
+
+      newTweet.user = {};
+      newTweet.user.name = tweet.user.name;
+      newTweet.user.pic = tweet.user.profile_image_url;
+      newTweet.user.handle = tweet.user.screen_name;
+
       //check for media of any type
       if (tweet.extended_entities) {
-        newTweet.media = tweet.extended_entities.media;
+        newTweet.media = [{}];
         newTweet.hasMedia = true;
+        for (let i = 0; i < tweet.extended_entities.media.length; i++) {
+          newTweet.media[i].type = tweet.extended_entities.media[i].type;
+          newTweet.media[i].url = tweet.extended_entities.media[i].media_url_https;
+        }
       }
       else {
         newTweet.hasMedia = false;
       }
+
       //check for quote tweet
-      if(tweet.is_quote_status === true) {
+      if (tweet.is_quote_status === true) {
         newTweet.isQuote = true;
-        newTweet.quotedTweet.text
-        newTweet.quotedTweet.userName = 
+
+        newTweet.quoteTweet = {};
+        newTweet.quoteTweet.text = tweet.quoted_status.full_text;
+        newTweet.quoteTweet.date = tweet.quoted_status.created_at;
+        newTweet.quoteTweet.tweetID = tweet.quoted_status.id_str;
+
+        newTweet.quoteTweet.user = {};
+        newTweet.quoteTweet.user.name = tweet.quoted_status.user.name;
+        newTweet.quoteTweet.user.pic = tweet.quoted_status.user.profile_image_url;
+        newTweet.quoteTweet.user.handle = tweet.quoted_status.user.screen_name;
 
         //check for quote tweet media
+        //check for media of any type
+        if (tweet.quoted_status.extended_entities) {
+          newTweet.quoteTweet.media = [{}];
+          newTweet.quoteTweet.hasMedia = true;
+          for (let i = 0; i < tweet.quoted_status.extended_entities.media.length; i++) {
+            newTweet.quoteTweet.media[i] = {};
+            newTweet.quoteTweet.media[i].type = tweet.quoted_status.extended_entities.media[i].type;
+            newTweet.quoteTweet.media[i].url = tweet.quoted_status.extended_entities.media[i].media_url_https;
+            console.log(newTweet.quoteTweet.media[i]);
+          }
+          
+        }
+        else {
+          newTweet.quoteTweet.hasMedia = false;
+        }
       }
-      
+      else {
+        newTweet.isQuote = false;
+      }
 
-      //construct the object
-      newTweet.id = id;
-      newTweet.userName = tweet.user.name;
-      newTweet.profilePic = tweet.user.profile_image_url;
-      newTweet.userHandle = tweet.user.screen_name;
-      newTweet.tweetID = tweet.id;
+
       console.log("Parsed the following tweet:");
       console.log(newTweet);
       //put at the beginning of newTweets[] for oldest tweets first
@@ -126,8 +162,8 @@ const App = () => {
         <button onClick={() => refreshFeed(userToken, userTokenSecret, lastTweetFetched)} className="button" >
           Fetch Timeline
         </button>
-       <TweetCard />
-       <TweetNav />
+        <TweetCard />
+        <TweetNav />
       </div>
     ) :
     (

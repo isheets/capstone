@@ -6,8 +6,7 @@ let dispatch;
 let state;
 
 var prevTweet = () => {
-    
-    if(state.game.curTweetId > 0) {
+    if (state.game.curTweetId > 0) {
         dispatch(updateCurTweetId(state.game.curTweetId - 1));
     }
     else {
@@ -15,8 +14,10 @@ var prevTweet = () => {
     }
 }
 var nextTweet = () => {
-    if(state.game.curTweetId < state.tweets.parsedTweets.length - 1) {
-        dispatch(updateCurTweetId(state.game.curTweetId + 1));
+    if (state.tweets.parsedTweets !== null) {
+        if (state.game.curTweetId < state.tweets.parsedTweets.length - 1) {
+            dispatch(updateCurTweetId(state.game.curTweetId + 1));
+        }
     }
     else {
         console.error("Can't go to next tweet, does not exist. curTweetId: " + state.game.curTweetId);
@@ -26,7 +27,7 @@ var nextTweet = () => {
 const TweetNav = () => {
     state = useSelector(state => state);
     dispatch = useDispatch();
-    return(
+    return (
         <div>
             <button onClick={() => prevTweet()}>Prev</button>
             <button onClick={() => nextTweet()}>Next</button>

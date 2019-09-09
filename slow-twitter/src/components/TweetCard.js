@@ -24,13 +24,13 @@ const TweetCard = () => {
             //push the current curTweetId to redux store
             dispatch(updateCurTweetId(allTweets[allTweets.length-1].id));
         }
-        let hasMedia = curTweet.hasMedia;
+        console.log(curTweet);
         //MAKE SURE EACH CHILD OF CONTENT HAS UNIQUE KEY PROP
         content = [
             <h1 key="0">{curTweet.text}</h1>
         ]
         //render media if available
-        if (hasMedia === true) {
+        if (curTweet.hasMedia === true) {
             let mediaAr = curTweet.media;
             for (let i = 0; i < mediaAr.length; i++) {
                 console.log(mediaAr[i].type);
