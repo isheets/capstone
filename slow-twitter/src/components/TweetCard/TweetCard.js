@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from "react-redux";
-import { updateCurTweetId } from './../actions';
+import { updateCurTweetId } from '../../actions';
 
 let dispatch;
 

@@ -3,7 +3,7 @@ import TwitterLogin from 'react-twitter-auth';
 import { updateAuthentication, updateToken, updateUser, updateParsedTweets } from './../actions';
 import { useSelector, useDispatch } from "react-redux";
 
-import TweetCard from './TweetCard';
+import TweetCard from './TweetCard/TweetCard';
 import TweetNav from './TweetNav';
 
 let dispatch;
