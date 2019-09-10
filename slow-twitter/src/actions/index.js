@@ -42,3 +42,8 @@ export const updateCurTweetId = curTweetId => ({
   type: 'SET_CURRENT_TWEET_ID',
   curTweetId
 })
+
+export const setExtractedWords = extractedWords => ({
+  type: 'SET_EXTRACTED_WORDS',
+  curTweetId
+})

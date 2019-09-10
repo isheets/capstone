@@ -14,12 +14,15 @@ const TweetMedia = () => {
             }
             else if (media.type == "video") {
                 content = (
-                    <video width="680" height="383" controls>
+                    <video width="426" height="240" controls>
                         <source src={media.url} type="video/mp4"></source>
                         Your browser does not support inline video viewing.
                         <a href={media.url}>Click here to view.</a>
                     </video>
                 )
+            }
+            else if (media.type == "animated_gif") {
+                console.error("TODO: Caught animated_gif media type, need to render");
             }
             else {
                 console.error("Media Type not caught in switch statement: " + media.type);
@@ -31,9 +34,9 @@ const TweetMedia = () => {
     }
 
     return (
-        <Fragment>
+        <div className="tweet-media">
             {content}
-        </Fragment>
+        </div>
     )
 }
 

@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import TweetProfilePic from './TweetProfilePic';
 import TweetInfo from './TweetInfo';
 import TweetContent from './TweetContent/TweetContent';
+import './TweetCard.css';
 
 
 const TweetCard = () => {
@@ -15,9 +16,11 @@ const TweetCard = () => {
     if (curTweet !== null) {
         content = (
             <Fragment>
-                <TweetProfilePic key="1"/>
-                <TweetInfo />
-                <TweetContent />
+                <TweetProfilePic />
+                <div className="tweet-card-col-2">
+                    <TweetInfo />
+                    <TweetContent />
+                </div>
             </Fragment>
         )
     }
@@ -30,7 +33,7 @@ const TweetCard = () => {
     }
 
     return (
-        <div class="tweet-card">
+        <div className="tweet-card">
             {content}
         </div>
     )

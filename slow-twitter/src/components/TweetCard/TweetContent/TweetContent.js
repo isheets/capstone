@@ -7,10 +7,10 @@ import QuoteTweet from "./QuoteTweet/QuoteTweet"
 const TweetContent = () => {
 
     return(
-        <Fragment>
+        <div className="tweet-content">
             <TweetText/>
             <TweetMedia/>
-        </Fragment>
+        </div>
     )
 }
 

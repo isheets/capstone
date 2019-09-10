@@ -8,11 +8,11 @@ const TweetProfilePic = () => {
         content = (<img src={curTweet.user.pic} className="tweet-profile-pic" alt=""></img>)
     }
     else {
-        content = (<p>No image found</p>)
+        content = null
     }
 
     return (
-        <div>
+        <div className = "tweet-profile-pic-container">
             {content}
         </div>
     )

@@ -101,7 +101,7 @@ router.get('/timeline', function (req, res) {
   }
   //if no since id, default to fetching 10 most recent tweets
   else {
-    twitter.getHomeTimeline({ count: '30', tweet_mode: "extended" }, error, returnTimeline);
+    twitter.getHomeTimeline({ count: '40', tweet_mode: "extended" }, error, returnTimeline);
   }
 });
 
