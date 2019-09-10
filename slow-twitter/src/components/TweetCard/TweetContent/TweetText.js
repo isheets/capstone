@@ -2,12 +2,10 @@ import React from 'react'
 import { useSelector } from "react-redux";
 
 const TweetText = () => {
-    const state = useSelector(state => state);
+    const text = useSelector(state => state.game.curTweet.text);
 
     return(
-        <div>
-
-        </div>
+        <p>{text}</p>
     )
 }
 

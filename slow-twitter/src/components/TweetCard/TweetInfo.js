@@ -1,12 +1,10 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { useSelector } from "react-redux";
 
 const TweetInfo = () => {
-    const state = useSelector(state => state);
-    const curTweet = null;
+    const curTweet = useSelector(state => state.game.curTweet);
     let content;
-    if (state.game.curTweetId !== null) {
-        curTweet = allTweets[state.game.curTweetId];
+    if (curTweet !== null) {
         content = (
             <div>
                 <h3>{curTweet.user.name}</h3>
@@ -19,7 +17,9 @@ const TweetInfo = () => {
         content = (<p>curTweet not found</p>);
     }
     return (
-        { content }
+        <Fragment>
+            {content}
+        </Fragment>
     )
 }
 

@@ -14,8 +14,8 @@ var prevTweet = () => {
     }
 }
 var nextTweet = () => {
-    if (state.tweets.parsedTweets !== null) {
-        if (state.game.curTweetId < state.tweets.parsedTweets.length - 1) {
+    if (state.game.parsedTweets !== null) {
+        if (state.game.curTweetId < state.game.parsedTweets.length - 1) {
             dispatch(updateCurTweetId(state.game.curTweetId + 1));
         }
     }

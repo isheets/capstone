@@ -33,7 +33,12 @@ export const updateParsedTweets = parsedTweets => ({
   parsedTweets
 })
 
-export const updateCurTweetId = curTweetId => ({
+export const updateCurTweet = curTweet => ({
   type: 'SET_CURRENT_TWEET',
+  curTweet
+})
+
+export const updateCurTweetId = curTweetId => ({
+  type: 'SET_CURRENT_TWEET_ID',
   curTweetId
 })

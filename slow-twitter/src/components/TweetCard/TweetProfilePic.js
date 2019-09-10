@@ -2,11 +2,9 @@ import React from 'react'
 import { useSelector } from "react-redux";
 
 const TweetProfilePic = () => {
-    const state = useSelector(state => state);
-    let curTweet = null;
+    const curTweet = useSelector(state => state.game.curTweet);
     let content;
-    if (state.game.curTweetId !== null) {
-        curTweet = allTweets[state.game.curTweetId];
+    if (curTweet !== null) {
         content = (<img src={curTweet.user.pic} className="tweet-profile-pic" alt=""></img>)
     }
     else {

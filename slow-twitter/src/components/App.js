@@ -1,6 +1,6 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import TwitterLogin from 'react-twitter-auth';
-import { updateAuthentication, updateToken, updateUser, updateParsedTweets } from './../actions';
+import { updateCurTweetId, updateAuthentication, updateToken, updateUser, updateParsedTweets } from './../actions';
 import { useSelector, useDispatch } from "react-redux";
 
 import TweetCard from './TweetCard/TweetCard';
@@ -55,7 +55,6 @@ const refreshFeed = (userToken, userTokenSecret, lastTweetFetched = null) => {
 const parseRawTweets = (rawTweets) => {
   let newTweets = [];
   //first tweet will have id of 0
-  let id = 0;
   for (let tweet of rawTweets) {
 
     //throw out if the tweet is a retweet
@@ -68,7 +67,6 @@ const parseRawTweets = (rawTweets) => {
     else {
       //construct the object
       let newTweet = {};
-      newTweet.id = id;
       newTweet.date = tweet.created_at;
       newTweet.tweetID = tweet.id_str;
       newTweet.text = tweet.full_text;
@@ -84,7 +82,13 @@ const parseRawTweets = (rawTweets) => {
         newTweet.hasMedia = true;
         for (let i = 0; i < tweet.extended_entities.media.length; i++) {
           newTweet.media[i].type = tweet.extended_entities.media[i].type;
-          newTweet.media[i].url = tweet.extended_entities.media[i].media_url_https;
+          if(newTweet.media[i].type === "photo") {
+            newTweet.media[i].url = tweet.extended_entities.media[i].media_url_https;
+          }
+          else if(newTweet.media[i].type === "video") {
+            newTweet.media[i].url = tweet.extended_entities.media[i].video_info.variants[0].url;
+          }
+          
         }
       }
       else {
@@ -112,9 +116,12 @@ const parseRawTweets = (rawTweets) => {
           newTweet.quoteTweet.hasMedia = true;
           for (let i = 0; i < tweet.quoted_status.extended_entities.media.length; i++) {
             newTweet.quoteTweet.media[i] = {};
-            newTweet.quoteTweet.media[i].type = tweet.quoted_status.extended_entities.media[i].type;
-            newTweet.quoteTweet.media[i].url = tweet.quoted_status.extended_entities.media[i].media_url_https;
-            console.log(newTweet.quoteTweet.media[i]);
+            if(newTweet.quoteTweet.media[i].type === "photo") {
+              newTweet.quoteTweet.media[i].url = tweet.quoted_status.extended_entities.media[i].media_url_https;
+            }
+            else if(newTweet.quoteTweet.media[i].type === "video") {
+              newTweet.quoteTweet.media[i].url = tweet.quoted_status.extended_entities.media[i].video_info.variants[0].url;
+            }
           }
           
         }
@@ -125,18 +132,13 @@ const parseRawTweets = (rawTweets) => {
       else {
         newTweet.isQuote = false;
       }
-
-
-      console.log("Parsed the following tweet:");
-      console.log(newTweet);
       //put at the beginning of newTweets[] for oldest tweets first
       newTweets.unshift(newTweet);
-      //increment the id
-      id++;
     }
   }
   console.log(newTweets);
   dispatch(updateParsedTweets(newTweets));
+  dispatch(updateCurTweetId(0));
 }
 
 const App = () => {
@@ -148,7 +150,7 @@ const App = () => {
   if (state.user.userDetails !== null) {
     userToken = state.user.userDetails.twitterProvider.token;
     userTokenSecret = state.user.userDetails.twitterProvider.tokenSecret;
-    lastTweetFetched = state.tweets.lastTweetFetched;
+    lastTweetFetched = state.game.lastTweetFetched;
   }
 
   //init reference to dispatch
@@ -172,9 +174,9 @@ const App = () => {
         requestTokenUrl="http://localhost:4000/api/v1/auth/twitter/reverse" />
     );
   return (
-    <div>
+    <Fragment>
       {content}
-    </div>
+    </Fragment>
   );
 
 };
