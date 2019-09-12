@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 import { useSelector } from "react-redux";
+import Blank from './Blank';
 
 var getRandomInt = (max) => {
     return Math.floor(Math.random() * Math.floor(max));
@@ -9,28 +10,36 @@ var extractWords = (text) => {
     //text = "I Stole The Yale Plates And now I want to share my side of the story."
     let wordAr = text.split(/(\s+)/);
     console.log(wordAr);
-    let randIdxs = [];
-    randIdxs[0] = getRandomInt(wordAr.length - 1);
-    let nxtIdx = getRandomInt(wordAr.length - 1);
-    while(nxtIdx === randIdxs[0]) {
-        nxtIdx = getRandomInt(wordAr.length - 1);
+    let randIdx = getRandomInt(wordAr.length - 1);
+    let extractedWord = wordAr[randIdx];
+    while (extractedWord === " ") {
+        randIdx = getRandomInt(wordAr.length - 1);
+        extractedWord = wordAr[randIdx];
     }
-    randIdxs[1] = nxtIdx;
-    let extractedWords = [];
-    for(let randIdx of randIdxs) {
-        extractedWords.push(wordAr[randIdx])
-        wordAr[randIdx] = "{     }";
+
+    console.log("extracted word:"  + extractedWord);
+    var replace = `(\\b${extractedWord}+\\b)`;
+    var reg = new RegExp(replace, "i");
+    console.log(reg);
+
+    var parts = text.split(reg);
+    for (var i = 1; i < parts.length; i += 2) {
+        parts[i] = "[need a blank here plz]";
     }
-    let newText = "";
-    for(let i = 0; i < wordAr.length; i++) {
-        newText += wordAr[i];
-        if(i !== wordAr.length - 1) {
-            newText += " ";
+    console.log("parts array: ");
+    console.log(parts);
+    let jsxAr = [];
+
+    for(let i = 0; i < parts.length; i++) {
+        if( parts[i] === "[need a blank here plz]") {
+            jsxAr.push(<Blank key={i}/>);
+        }
+        else {
+            jsxAr.push(<span key={i}>{parts[i]}</span>);
         }
     }
 
-    console.log(extractedWords);
-    return newText;
+    return jsxAr;
 }
 
 const TweetText = () => {
@@ -38,11 +47,9 @@ const TweetText = () => {
 
     let textMissingWords = extractWords(text);
     console.log(textMissingWords);
-    let parsedText = text.split('\n').map((item, i) => <p key={i}>{item.replace(/ /g, "\u0020")}</p>);
-    console.log(parsedText);
     return (
         <div className="tweet-text">
-            <pre>{`${text}`}</pre>
+            {textMissingWords}
         </div>
 
     )

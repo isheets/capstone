@@ -48,7 +48,7 @@ const TweetInfo = () => {
         content = (
             <div className="tweet-info">
                 <h3 className="tweet-info-name">{curTweet.user.name}</h3>
-                <h4 className="tweet-info-details">{curTweet.user.handle} • {timeSinceTweet(curTweet.date)}</h4>
+                <h4 className="tweet-info-details">@{curTweet.user.handle} • {timeSinceTweet(curTweet.date)}</h4>
             </div>
         )
     }
