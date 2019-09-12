@@ -9,10 +9,10 @@ const TweetMedia = () => {
         console.log(mediaAr);
         //we have some media to render!
         for (let media of mediaAr) {
-            if (media.type == "photo") {
+            if (media.type === "photo") {
                 content = <img src={media.url} alt=""></img>
             }
-            else if (media.type == "video") {
+            else if (media.type === "video") {
                 content = (
                     <video width="426" height="240" controls>
                         <source src={media.url} type="video/mp4"></source>
@@ -21,7 +21,7 @@ const TweetMedia = () => {
                     </video>
                 )
             }
-            else if (media.type == "animated_gif") {
+            else if (media.type === "animated_gif") {
                 console.error("TODO: Caught animated_gif media type, need to render");
             }
             else {

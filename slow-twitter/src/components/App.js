@@ -78,9 +78,10 @@ const parseRawTweets = (rawTweets) => {
 
       //check for media of any type
       if (tweet.extended_entities) {
-        newTweet.media = [{}];
+        newTweet.media = [];
         newTweet.hasMedia = true;
         for (let i = 0; i < tweet.extended_entities.media.length; i++) {
+          newTweet.media[i] = {}
           newTweet.media[i].type = tweet.extended_entities.media[i].type;
           if(newTweet.media[i].type === "photo") {
             newTweet.media[i].url = tweet.extended_entities.media[i].media_url_https;

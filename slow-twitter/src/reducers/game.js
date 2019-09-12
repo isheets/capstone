@@ -3,7 +3,8 @@ const intialGame = {
     parsedTweets: null,
     curTweet: null,
     curTweetId: null,
-    curGame: null
+    curGame: null,
+    extractedWords: null
 }
 
 const game = (state = intialGame, action) => {
@@ -29,6 +30,11 @@ const game = (state = intialGame, action) => {
             return {
                 ...state,
                 parsedTweets: action.parsedTweets
+            }
+        case 'SET_EXTRACTED_WORDS':
+            return {
+                ...state,
+                extractedWords: action.extractedWords
             }
         default:
             return state;
