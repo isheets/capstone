@@ -144,25 +144,25 @@ const parseRawTweets = (rawTweets) => {
 
 const App = () => {
   //get current state
-  const state = useSelector(state => state);
+  const user = useSelector(state => state.user);
   let userToken = null;
   let userTokenSecret = null;
   let lastTweetFetched = null;
-  if (state.user.userDetails !== null) {
-    userToken = state.user.userDetails.twitterProvider.token;
-    userTokenSecret = state.user.userDetails.twitterProvider.tokenSecret;
-    lastTweetFetched = state.game.lastTweetFetched;
+  if (user.userDetails !== null) {
+    userToken = user.userDetails.twitterProvider.token;
+    userTokenSecret = user.userDetails.twitterProvider.tokenSecret;
+    //lastTweetFetched = state.game.lastTweetFetched;
   }
 
   //init reference to dispatch
   dispatch = useDispatch();
 
   //conditionally generate top-level view based on whether user is authenticated or not
-  let content = !!state.user.isAuthenticated ?
+  let content = !!user.isAuthenticated ?
     (
       <div>
         <h1>Authenticated!</h1>
-        <button onClick={() => refreshFeed(userToken, userTokenSecret, lastTweetFetched)} className="button" >
+        <button onClick={() => refreshFeed(userToken, userTokenSecret, null)} className="button" >
           Fetch Timeline
         </button>
         <TweetCard />

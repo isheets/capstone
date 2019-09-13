@@ -4,7 +4,8 @@ const intialGame = {
     curTweet: null,
     curTweetId: null,
     curGame: null,
-    extractedWords: null
+    extractedWord: null,
+    userInput: ""
 }
 
 const game = (state = intialGame, action) => {
@@ -31,10 +32,15 @@ const game = (state = intialGame, action) => {
                 ...state,
                 parsedTweets: action.parsedTweets
             }
-        case 'SET_EXTRACTED_WORDS':
+        case 'SET_EXTRACTED_WORD':
             return {
                 ...state,
-                extractedWords: action.extractedWords
+                extractedWord: action.extractedWord
+            }
+        case 'SET_CURRENT_USER_INPUT':
+            return {
+                ...state,
+                userInput: action.userInput
             }
         default:
             return state;

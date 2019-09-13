@@ -14,6 +14,7 @@ const TweetCard = () => {
 
     console.log(curTweet);
     if (curTweet !== null) {
+        
         content = (
             <Fragment>
                 <TweetProfilePic />

@@ -8,8 +8,7 @@ var getRandomInt = (max) => {
 
 var extractWords = (text) => {
     //text = "I Stole The Yale Plates And now I want to share my side of the story."
-    let wordAr = text.split(/(\s+)/);
-    console.log(wordAr);
+    let wordAr = text.split(" ");
     let randIdx = getRandomInt(wordAr.length - 1);
     let extractedWord = wordAr[randIdx];
     while (extractedWord === " ") {
@@ -32,7 +31,7 @@ var extractWords = (text) => {
 
     for(let i = 0; i < parts.length; i++) {
         if( parts[i] === "[need a blank here plz]") {
-            jsxAr.push(<Blank key={i}/>);
+            jsxAr.push(<Blank key={i} extractedWord={extractedWord}/>);
         }
         else {
             jsxAr.push(<span key={i}>{parts[i]}</span>);
