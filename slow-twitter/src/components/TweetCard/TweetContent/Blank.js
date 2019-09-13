@@ -25,6 +25,7 @@ var handleChange = (event) => {
 const Blank = (props) => {
     dispatch = useDispatch();
     correctWord = props.extractedWord;
+    console.log(correctWord);
     const userInput = useSelector(state => state.game.userInput);
     parsedTweets = useSelector(state => state.game.parsedTweets);
     curTweetId = useSelector(state => state.game.curTweetId);

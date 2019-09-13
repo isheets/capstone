@@ -8,7 +8,9 @@ var getRandomInt = (max) => {
 
 var extractWords = (text) => {
     //text = "I Stole The Yale Plates And now I want to share my side of the story."
-    let wordAr = text.split(" ");
+    let allWordExp = "(\\b\\w*\\b)";
+    let allWordReg = new RegExp(allWordExp, "g")
+    let wordAr = text.split(allWordReg);
     let randIdx = getRandomInt(wordAr.length - 1);
     let extractedWord = wordAr[randIdx];
     while (extractedWord === " ") {
@@ -17,7 +19,7 @@ var extractWords = (text) => {
     }
 
     console.log("extracted word:"  + extractedWord);
-    var replace = `(\\b${extractedWord}+\\b)`;
+    var replace = `\\b(\\w*${extractedWord}\\w*)\\b`;
     var reg = new RegExp(replace, "i");
     console.log(reg);
 
