@@ -7,7 +7,7 @@ let correctWord;
 const Blank = (props) => {
     let extractedWord = props.extractedWord;
     const [{ canDrop, isOver }, drop] = useDrop({
-        accept: "correct",
+        accept: "word",
         drop: () => ({ name: 'Blank' }),
         collect: monitor => ({
             isOver: monitor.isOver(),

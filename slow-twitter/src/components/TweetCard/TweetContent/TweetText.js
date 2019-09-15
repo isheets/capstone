@@ -51,27 +51,7 @@ var extractWords = (text) => {
     }
     let randWordAr = randomWords(3);
     console.log(randWordAr);
-    const wordOptions = [
-        {
-            word: extractedWord,
-            type: "correct"
-
-        },
-        {
-            word: randWordAr[0],
-            type: "incorrect"
-
-        },
-        {
-            word: randWordAr[1],
-            type: "incorrect"
-
-        },
-        {
-            word: randWordAr[2],
-            type: "incorrect"
-
-        }];
+    const wordOptions = [extractedWord, randWordAr[0], randWordAr[1], randWordAr[2]];
     dispatch(setExtractedWord(extractedWord));
     dispatch(setWordOptions(wordOptions));
 

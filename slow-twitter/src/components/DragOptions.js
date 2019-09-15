@@ -30,8 +30,8 @@ const DragOptions = () => {
         wordOptions = shuffle(wordOptions);
         console.log(wordOptions);
         content =
-            wordOptions.map((wordObject, key) =>
-                <Drag wordObject={wordObject} key={key} />
+            wordOptions.map((word, key) =>
+                <Drag word={word} key={key} />
             );
 
     }

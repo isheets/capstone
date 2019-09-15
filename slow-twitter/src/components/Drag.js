@@ -3,15 +3,21 @@ import { useSelector } from "react-redux";
 import { useDrag } from 'react-dnd';
 
 const Drag = (props) => {
-    const wordObject = props.wordObject;
-    console.log(wordObject);
+    let correctWord = useSelector(state => state.game.extractedWord)
+    const word = props.word;
+    console.log(word);
 
     const [{ isDragging }, drag] = useDrag({
-        item: { value: wordObject.word, type: wordObject.type },
+        item: { value: word, type: "word" },
         end: (item, monitor) => {
             const dropResult = monitor.getDropResult()
             if (item && dropResult) {
-                alert(`You dropped ${item.value} into ${dropResult.name}!`)
+                if (item.value === correctWord) {
+                    alert(`Correct!`);
+                }
+                else {
+                    alert("Incorrect!");
+                }
             }
         },
         collect: monitor => ({
@@ -24,11 +30,11 @@ const Drag = (props) => {
 
     let content = null;
 
-    if (wordObject !== null) {
+    if (word !== null) {
         content = (
 
             <div ref={drag} style={{ opacity }} className="word-drag">
-                {wordObject.word}
+                {word}
             </div>
 
         )
