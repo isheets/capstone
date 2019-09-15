@@ -72,3 +72,16 @@ pre {
 h3 {
 
 }
+
+.word-drag{
+  border: 1px solid blue;
+  display: inline-block;
+}
+
+.tweet-blank {
+  display: inline-block;
+  border: 1px dashed blue;
+  min-width: 160px;
+  min-height: 20px;
+}
+

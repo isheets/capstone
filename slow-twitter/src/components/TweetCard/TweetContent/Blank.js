@@ -1,42 +1,33 @@
-import React, { Fragment } from 'react'
-import { useDispatch, useSelector } from "react-redux";
-import { setUserInput, updateCurTweetId } from '../../../actions';
+import React from 'react'
+import { useDrop } from 'react-dnd';
 
-let dispatch;
 let correctWord;
-let parsedTweets;
-let curTweetId;
 
-var handleChange = (event) => {
-    console.log(event.target.value);
-    if(event.target.value == correctWord) {
-        //got it!
-        if (curTweetId < parsedTweets.length - 1) {
-            dispatch(updateCurTweetId(curTweetId + 1));
-            dispatch(setUserInput(""));
-        }
-
-    }
-    else {    
-        dispatch(setUserInput(event.target.value));
-    }
-}
 
 const Blank = (props) => {
-    dispatch = useDispatch();
     correctWord = props.extractedWord;
     console.log(correctWord);
-    const userInput = useSelector(state => state.game.userInput);
-    parsedTweets = useSelector(state => state.game.parsedTweets);
-    curTweetId = useSelector(state => state.game.curTweetId);
+
+    const [{ canDrop, isOver }, drop] = useDrop({
+        accept: "correct-word",
+        drop: () => ({ name: 'Blank' }),
+        collect: monitor => ({
+            isOver: monitor.isOver(),
+            canDrop: monitor.canDrop(),
+        }),
+    })
+
+    const isActive = canDrop && isOver
+    let backgroundColor = '#222'
+    if (isActive) {
+        backgroundColor = 'darkgreen'
+    } else if (canDrop) {
+        backgroundColor = 'darkkhaki'
+    }
 
     return (
-        <input 
-            type="text" 
-            value={userInput} 
-            onChange={(event) => handleChange(event)} 
-            size={correctWord.length}
-        />
+        <span ref={drop} className="tweet-blank" style={{ backgroundColor }}>
+        </span>
     )
 }
 

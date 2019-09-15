@@ -1,10 +1,11 @@
-import React, {Fragment} from 'react'
+import React, { Fragment } from 'react'
 import TwitterLogin from 'react-twitter-auth';
 import { updateCurTweetId, updateAuthentication, updateToken, updateUser, updateParsedTweets } from './../actions';
 import { useSelector, useDispatch } from "react-redux";
 
 import TweetCard from './TweetCard/TweetCard';
 import TweetNav from './TweetNav';
+import Drag from './Drag';
 
 let dispatch;
 
@@ -70,6 +71,15 @@ const parseRawTweets = (rawTweets) => {
       newTweet.date = tweet.created_at;
       newTweet.tweetID = tweet.id_str;
       newTweet.text = tweet.full_text;
+      newTweet.urls = null;
+      if (tweet.entities.urls.length > 0) {
+        newTweet.urls = tweet.entities.urls;
+      }
+      if(newTweet.urls !== null) {
+        for(let url of newTweet.urls) {
+          newTweet.text = newTweet.text.replace(url.url, '');
+        }
+      }
 
       newTweet.user = {};
       newTweet.user.name = tweet.user.name;
@@ -83,13 +93,13 @@ const parseRawTweets = (rawTweets) => {
         for (let i = 0; i < tweet.extended_entities.media.length; i++) {
           newTweet.media[i] = {}
           newTweet.media[i].type = tweet.extended_entities.media[i].type;
-          if(newTweet.media[i].type === "photo") {
+          if (newTweet.media[i].type === "photo") {
             newTweet.media[i].url = tweet.extended_entities.media[i].media_url_https;
           }
-          else if(newTweet.media[i].type === "video") {
+          else if (newTweet.media[i].type === "video") {
             newTweet.media[i].url = tweet.extended_entities.media[i].video_info.variants[0].url;
           }
-          
+
         }
       }
       else {
@@ -104,6 +114,15 @@ const parseRawTweets = (rawTweets) => {
         newTweet.quoteTweet.text = tweet.quoted_status.full_text;
         newTweet.quoteTweet.date = tweet.quoted_status.created_at;
         newTweet.quoteTweet.tweetID = tweet.quoted_status.id_str;
+        newTweet.quoteTweet.urls = null;
+        if (tweet.quoted_status.entities.urls.length > 0) {
+          newTweet.quoteTweet.urls = tweet.quoted_status.entities.urls;
+        }
+        if(newTweet.quoteTweet.urls !== null) {
+          for(let url of newTweet.quoteTweet.urls) {
+            newTweet.quoteTweet.text = newTweet.quoteTweet.text.replace(url.url, '');
+          }
+        }
 
         newTweet.quoteTweet.user = {};
         newTweet.quoteTweet.user.name = tweet.quoted_status.user.name;
@@ -117,14 +136,14 @@ const parseRawTweets = (rawTweets) => {
           newTweet.quoteTweet.hasMedia = true;
           for (let i = 0; i < tweet.quoted_status.extended_entities.media.length; i++) {
             newTweet.quoteTweet.media[i] = {};
-            if(newTweet.quoteTweet.media[i].type === "photo") {
+            if (newTweet.quoteTweet.media[i].type === "photo") {
               newTweet.quoteTweet.media[i].url = tweet.quoted_status.extended_entities.media[i].media_url_https;
             }
-            else if(newTweet.quoteTweet.media[i].type === "video") {
+            else if (newTweet.quoteTweet.media[i].type === "video") {
               newTweet.quoteTweet.media[i].url = tweet.quoted_status.extended_entities.media[i].video_info.variants[0].url;
             }
           }
-          
+
         }
         else {
           newTweet.quoteTweet.hasMedia = false;
@@ -166,6 +185,7 @@ const App = () => {
           Fetch Timeline
         </button>
         <TweetCard />
+        <Drag/>
         <TweetNav />
       </div>
     ) :
