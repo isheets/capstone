@@ -3,11 +3,11 @@ import { useSelector } from "react-redux";
 import { useDrag } from 'react-dnd';
 
 const Drag = (props) => {
-    const extractedWord = useSelector(state => state.game.extractedWord)
     const wordObject = props.wordObject;
+    console.log(wordObject);
 
     const [{ isDragging }, drag] = useDrag({
-        item: { value: extractedWord, type: wordObject.type },
+        item: { value: wordObject.word, type: wordObject.type },
         end: (item, monitor) => {
             const dropResult = monitor.getDropResult()
             if (item && dropResult) {
