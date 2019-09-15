@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import TweetCard from './TweetCard/TweetCard';
 import TweetNav from './TweetNav';
-import Drag from './Drag';
+import DragOptions from './DragOptions';
 
 let dispatch;
 
@@ -164,6 +164,7 @@ const parseRawTweets = (rawTweets) => {
 const App = () => {
   //get current state
   const user = useSelector(state => state.user);
+  
   let userToken = null;
   let userTokenSecret = null;
   let lastTweetFetched = null;
@@ -185,7 +186,7 @@ const App = () => {
           Fetch Timeline
         </button>
         <TweetCard />
-        <Drag/>
+        <DragOptions/>
         <TweetNav />
       </div>
     ) :

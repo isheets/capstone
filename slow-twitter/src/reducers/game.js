@@ -5,6 +5,7 @@ const intialGame = {
     curTweetId: null,
     curGame: null,
     extractedWord: null,
+    wordOptions: [],
     userInput: ""
 }
 
@@ -41,6 +42,11 @@ const game = (state = intialGame, action) => {
             return {
                 ...state,
                 userInput: action.userInput
+            }
+        case 'SET_WORD_OPTIONS':
+            return {
+                ...state,
+                wordOptions: action.wordOptions
             }
         default:
             return state;

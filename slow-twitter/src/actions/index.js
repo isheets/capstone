@@ -52,3 +52,8 @@ export const setUserInput = userInput => ({
   type: 'SET_CURRENT_USER_INPUT',
   userInput
 })
+
+export const setWordOptions = wordOptions => ({
+  type: 'SET_WORD_OPTIONS',
+  wordOptions
+})

@@ -1,7 +1,9 @@
 import React, { Fragment } from 'react'
-import { useSelector, useDispatch} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Blank from './Blank';
-import { setExtractedWord } from '../../../actions';
+import { setExtractedWord, setWordOptions } from '../../../actions';
+
+let randomWords = require('random-words');
 
 let dispatch;
 
@@ -10,7 +12,6 @@ var getRandomInt = (max) => {
 }
 
 var extractWords = (text) => {
-    //text = "I Stole The Yale Plates And now I want to share my side of the story."
     let allWordExp = "(\\w+)";
     let allWordReg = new RegExp(allWordExp, "g");
     console.log("all words regex:");
@@ -48,7 +49,31 @@ var extractWords = (text) => {
             jsxAr.push(<span key={i}>{parts[i]}</span>);
         }
     }
+    let randWordAr = randomWords(3);
+    console.log(randWordAr);
+    const wordOptions = [
+        {
+            word: extractedWord,
+            type: "correct"
+
+        },
+        {
+            word: randWordAr[0],
+            type: "incorrect"
+
+        },
+        {
+            word: randWordAr[1],
+            type: "incorrect"
+
+        },
+        {
+            word: randWordAr[2],
+            type: "incorrect"
+
+        }];
     dispatch(setExtractedWord(extractedWord));
+    dispatch(setWordOptions(wordOptions));
 
     return jsxAr;
 }

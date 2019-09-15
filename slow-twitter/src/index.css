@@ -74,6 +74,7 @@ h3 {
 }
 
 .word-drag{
+  margin: 10px;
   border: 1px solid blue;
   display: inline-block;
 }
