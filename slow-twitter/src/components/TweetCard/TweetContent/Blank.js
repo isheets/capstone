@@ -1,9 +1,6 @@
 import React from 'react'
 import { useDrop } from 'react-dnd';
 
-let correctWord;
-
-
 const Blank = (props) => {
     let extractedWord = props.extractedWord;
     const [{ canDrop, isOver }, drop] = useDrop({

@@ -1,11 +1,31 @@
 import React, { Fragment } from 'react'
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useDrag } from 'react-dnd';
+import { updateCurTweetId } from './../actions';
+
+let parsedTweets;
+let curTweetId;
+let dispatch;
+
+var nextTweet = () => {
+    if (parsedTweets !== null) {
+        if (curTweetId < parsedTweets.length - 1) {
+            dispatch(updateCurTweetId(curTweetId + 1));
+        }
+        else {
+            console.error("Can't go to next tweet, does not exist. curTweetId: " + curTweetId);
+        }
+    }
+}
 
 const Drag = (props) => {
+    dispatch = useDispatch();
     let correctWord = useSelector(state => state.game.extractedWord)
+    parsedTweets = useSelector(state => state.game.parsedTweets)
+    curTweetId = useSelector(state => state.game.curTweetId)
     const word = props.word;
     console.log(word);
+
 
     const [{ isDragging }, drag] = useDrag({
         item: { value: word, type: "word" },
@@ -14,6 +34,7 @@ const Drag = (props) => {
             if (item && dropResult) {
                 if (item.value === correctWord) {
                     alert(`Correct!`);
+                    nextTweet();
                 }
                 else {
                     alert("Incorrect!");

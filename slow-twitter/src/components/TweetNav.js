@@ -3,29 +3,29 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateCurTweetId } from './../actions';
 
 let dispatch;
-let state;
+let game;
 
 var prevTweet = () => {
-    if (state.game.curTweetId > 0) {
-        dispatch(updateCurTweetId(state.game.curTweetId - 1));
+    if (game.curTweetId > 0) {
+        dispatch(updateCurTweetId(game.curTweetId - 1));
     }
     else {
-        console.error("Can't go to prev tweet, does not exist. curTweetId: " + state.game.curTweetId);
+        console.error("Can't go to prev tweet, does not exist. curTweetId: " + game.curTweetId);
     }
 }
 var nextTweet = () => {
-    if (state.game.parsedTweets !== null) {
-        if (state.game.curTweetId < state.game.parsedTweets.length - 1) {
-            dispatch(updateCurTweetId(state.game.curTweetId + 1));
+    if (game.parsedTweets !== null) {
+        if (game.curTweetId < game.parsedTweets.length - 1) {
+            dispatch(updateCurTweetId(game.curTweetId + 1));
         }
     }
     else {
-        console.error("Can't go to next tweet, does not exist. curTweetId: " + state.game.curTweetId);
+        console.error("Can't go to next tweet, does not exist. curTweetId: " + game.curTweetId);
     }
 }
 
 const TweetNav = () => {
-    state = useSelector(state => state);
+    game = useSelector(state => state.game);
     dispatch = useDispatch();
     return (
         <div>
