@@ -7,6 +7,8 @@ import TweetCard from './TweetCard/TweetCard';
 import TweetNav from './TweetNav';
 import DragOptions from './DragOptions';
 
+var he = require('he');
+
 let dispatch;
 
 const onFailedAuth = (error) => {
@@ -70,7 +72,7 @@ const parseRawTweets = (rawTweets) => {
       let newTweet = {};
       newTweet.date = tweet.created_at;
       newTweet.tweetID = tweet.id_str;
-      newTweet.text = tweet.full_text;
+      newTweet.text = he.decode(tweet.full_text); //make sure that the text is unescaped
       newTweet.urls = null;
       if (tweet.entities.urls.length > 0) {
         newTweet.urls = tweet.entities.urls;
@@ -111,7 +113,7 @@ const parseRawTweets = (rawTweets) => {
         newTweet.isQuote = true;
 
         newTweet.quoteTweet = {};
-        newTweet.quoteTweet.text = tweet.quoted_status.full_text;
+        newTweet.quoteTweet.text = he.decode(tweet.quoted_status.full_text); //make sure string is unescaped
         newTweet.quoteTweet.date = tweet.quoted_status.created_at;
         newTweet.quoteTweet.tweetID = tweet.quoted_status.id_str;
         newTweet.quoteTweet.urls = null;
