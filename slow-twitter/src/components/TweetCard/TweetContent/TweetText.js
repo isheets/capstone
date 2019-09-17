@@ -29,14 +29,38 @@ var extractWords = (text) => {
     }
 
     console.log("extracted word:" + extractedWord);
-    var replace = `(\\b${extractedWord}\\b)`;
-    var reg = new RegExp(replace, "g");
-    console.log(reg);
+    var searchExtractedWord = `(\\b${extractedWord}\\b)`;
+    var regSearchExtractedWord = new RegExp(searchExtractedWord);
 
-    var parts = text.split(reg, 3);
-    for (var i = 1; i < parts.length; i += 2) {
-        parts[i] = "[need a blank here plz]";
+
+    var parts = [];
+
+    let startIdxFirst = text.search(regSearchExtractedWord);
+    let endIdxFirst = startIdxFirst + extractedWord.length - 1;
+
+    //extracted word at the beginning
+    if(startIdxFirst === 0) {
+        console.log("extracted word at start of string");
+    }  
+    //extracted word at the end
+    else if (endIdxFirst === text.length - 1) {
+        console.log("extracted word at end of string")
+
     }
+    //extracted word somewhere in the middle; most likely case
+    else {
+        //first part of tweet -> extracted word
+        parts[0] = text.substring(0, startIdxFirst);
+        //extracted word
+        parts[1] = "[need a blank here plz]"
+        //end of extracted word -> end of string
+        parts[2] = text.substring(endIdxFirst + 1)
+    }
+
+
+    // for (var i = 1; i < parts.length; i += 2) {
+    //     parts[i] = "[need a blank here plz]";
+    // }
     console.log("parts array: ");
     console.log(parts);
     let jsxAr = [];

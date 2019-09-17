@@ -1,23 +1,29 @@
-import React, { Fragment } from 'react'
-import TwitterLogin from 'react-twitter-auth';
-import { updateCurTweetId, updateAuthentication, updateToken, updateUser, updateParsedTweets } from './../actions';
+import React, { Fragment } from "react";
+import TwitterLogin from "react-twitter-auth";
+import {
+  updateCurTweetId,
+  updateAuthentication,
+  updateToken,
+  updateUser,
+  updateParsedTweets
+} from "./../actions";
 import { useSelector, useDispatch } from "react-redux";
 
-import TweetCard from './TweetCard/TweetCard';
-import TweetNav from './TweetNav';
-import DragOptions from './DragOptions';
+import TweetCard from "./TweetCard/TweetCard";
+import TweetNav from "./TweetNav";
+import DragOptions from "./DragOptions";
 
-var he = require('he');
+var he = require("he");
 
 let dispatch;
 
-const onFailedAuth = (error) => {
+const onFailedAuth = error => {
   console.log("Twitter auth failed :(");
   console.log(error);
-}
+};
 
-const onSuccessAuth = (response) => {
-  const token = response.headers.get('x-auth-token');
+const onSuccessAuth = response => {
+  const token = response.headers.get("x-auth-token");
   console.log(response);
   response.json().then(user => {
     //successful auth, update store
@@ -28,15 +34,22 @@ const onSuccessAuth = (response) => {
       //dispatch the user object to store
       dispatch(updateUser(user));
       //dispatch the token to store
-      dispatch(updateToken(token))
+      dispatch(updateToken(token));
+      //initial feed fetch
+      refreshFeed(userToken, userTokenSecret, null);
     }
   });
-}
+};
 
-//grabs the feed based on 
+//grabs the feed based on
 const refreshFeed = (userToken, userTokenSecret, lastTweetFetched = null) => {
   if (userToken !== null && userTokenSecret !== null) {
-    fetch(`http://localhost:4000/api/v1/timeline?aT=${userToken}&aTS=${userTokenSecret}${lastTweetFetched ? `&since=${lastTweetFetched}` : ``}`, { headers: { "Content-Type": "application/json; charset=utf-8" } })
+    fetch(
+      `http://localhost:4000/api/v1/timeline?aT=${userToken}&aTS=${userTokenSecret}${
+        lastTweetFetched ? `&since=${lastTweetFetched}` : ``
+      }`,
+      { headers: { "Content-Type": "application/json; charset=utf-8" } }
+    )
       .then(res => res.json())
       .then(response => {
         //make sure it's not null
@@ -46,28 +59,24 @@ const refreshFeed = (userToken, userTokenSecret, lastTweetFetched = null) => {
         }
       })
       .catch(err => {
-        console.log(err)
+        console.log(err);
       });
-  }
-  else {
+  } else {
     console.error("Cannot refreshFeed, bad args");
   }
-}
+};
 
 //take raw response from tweets and construct well-formed object with only needed info
-const parseRawTweets = (rawTweets) => {
+const parseRawTweets = rawTweets => {
   let newTweets = [];
   //first tweet will have id of 0
   for (let tweet of rawTweets) {
-
     //throw out if the tweet is a retweet
     if (tweet.retweeted_status) {
-      console.log("Tweet not parsed; is a retweet")
-    }
-    else if (tweet.in_reply_to_status_id !== null) {
-      console.log("Tweet not parsed; is a reply")
-    }
-    else {
+      console.log("Tweet not parsed; is a retweet");
+    } else if (tweet.in_reply_to_status_id !== null) {
+      console.log("Tweet not parsed; is a reply");
+    } else {
       //construct the object
       let newTweet = {};
       newTweet.date = tweet.created_at;
@@ -77,9 +86,9 @@ const parseRawTweets = (rawTweets) => {
       if (tweet.entities.urls.length > 0) {
         newTweet.urls = tweet.entities.urls;
       }
-      if(newTweet.urls !== null) {
-        for(let url of newTweet.urls) {
-          newTweet.text = newTweet.text.replace(url.url, '');
+      if (newTweet.urls !== null) {
+        for (let url of newTweet.urls) {
+          newTweet.text = newTweet.text.replace(url.url, "");
         }
       }
 
@@ -93,18 +102,17 @@ const parseRawTweets = (rawTweets) => {
         newTweet.media = [];
         newTweet.hasMedia = true;
         for (let i = 0; i < tweet.extended_entities.media.length; i++) {
-          newTweet.media[i] = {}
+          newTweet.media[i] = {};
           newTweet.media[i].type = tweet.extended_entities.media[i].type;
           if (newTweet.media[i].type === "photo") {
-            newTweet.media[i].url = tweet.extended_entities.media[i].media_url_https;
+            newTweet.media[i].url =
+              tweet.extended_entities.media[i].media_url_https;
+          } else if (newTweet.media[i].type === "video") {
+            newTweet.media[i].url =
+              tweet.extended_entities.media[i].video_info.variants[0].url;
           }
-          else if (newTweet.media[i].type === "video") {
-            newTweet.media[i].url = tweet.extended_entities.media[i].video_info.variants[0].url;
-          }
-
         }
-      }
-      else {
+      } else {
         newTweet.hasMedia = false;
       }
 
@@ -120,15 +128,19 @@ const parseRawTweets = (rawTweets) => {
         if (tweet.quoted_status.entities.urls.length > 0) {
           newTweet.quoteTweet.urls = tweet.quoted_status.entities.urls;
         }
-        if(newTweet.quoteTweet.urls !== null) {
-          for(let url of newTweet.quoteTweet.urls) {
-            newTweet.quoteTweet.text = newTweet.quoteTweet.text.replace(url.url, '');
+        if (newTweet.quoteTweet.urls !== null) {
+          for (let url of newTweet.quoteTweet.urls) {
+            newTweet.quoteTweet.text = newTweet.quoteTweet.text.replace(
+              url.url,
+              ""
+            );
           }
         }
 
         newTweet.quoteTweet.user = {};
         newTweet.quoteTweet.user.name = tweet.quoted_status.user.name;
-        newTweet.quoteTweet.user.pic = tweet.quoted_status.user.profile_image_url;
+        newTweet.quoteTweet.user.pic =
+          tweet.quoted_status.user.profile_image_url;
         newTweet.quoteTweet.user.handle = tweet.quoted_status.user.screen_name;
 
         //check for quote tweet media
@@ -136,22 +148,26 @@ const parseRawTweets = (rawTweets) => {
         if (tweet.quoted_status.extended_entities) {
           newTweet.quoteTweet.media = [{}];
           newTweet.quoteTweet.hasMedia = true;
-          for (let i = 0; i < tweet.quoted_status.extended_entities.media.length; i++) {
+          for (
+            let i = 0;
+            i < tweet.quoted_status.extended_entities.media.length;
+            i++
+          ) {
             newTweet.quoteTweet.media[i] = {};
             if (newTweet.quoteTweet.media[i].type === "photo") {
-              newTweet.quoteTweet.media[i].url = tweet.quoted_status.extended_entities.media[i].media_url_https;
-            }
-            else if (newTweet.quoteTweet.media[i].type === "video") {
-              newTweet.quoteTweet.media[i].url = tweet.quoted_status.extended_entities.media[i].video_info.variants[0].url;
+              newTweet.quoteTweet.media[i].url =
+                tweet.quoted_status.extended_entities.media[i].media_url_https;
+            } else if (newTweet.quoteTweet.media[i].type === "video") {
+              newTweet.quoteTweet.media[i].url =
+                tweet.quoted_status.extended_entities.media[
+                  i
+                ].video_info.variants[0].url;
             }
           }
-
-        }
-        else {
+        } else {
           newTweet.quoteTweet.hasMedia = false;
         }
-      }
-      else {
+      } else {
         newTweet.isQuote = false;
       }
       //put at the beginning of newTweets[] for oldest tweets first
@@ -161,14 +177,15 @@ const parseRawTweets = (rawTweets) => {
   console.log(newTweets);
   dispatch(updateParsedTweets(newTweets));
   dispatch(updateCurTweetId(0));
-}
-
+};
+let userToken;
+let userTokenSecret;
 const App = () => {
   //get current state
   const user = useSelector(state => state.user);
-  
-  let userToken = null;
-  let userTokenSecret = null;
+
+  userToken = null;
+  userTokenSecret = null;
   let lastTweetFetched = null;
   if (user.userDetails !== null) {
     userToken = user.userDetails.twitterProvider.token;
@@ -180,28 +197,30 @@ const App = () => {
   dispatch = useDispatch();
 
   //conditionally generate top-level view based on whether user is authenticated or not
-  let content = !!user.isAuthenticated ?
-    (
-      <div>
-        <h1>Authenticated!</h1>
-        <button onClick={() => refreshFeed(userToken, userTokenSecret, null)} className="button" >
-          Fetch Timeline
-        </button>
-        <TweetCard />
-        <DragOptions/>
-        <TweetNav />
-      </div>
-    ) :
-    (
-      <TwitterLogin loginUrl="http://localhost:4000/api/v1/auth/twitter"
-        onFailure={onFailedAuth} onSuccess={onSuccessAuth}
-        requestTokenUrl="http://localhost:4000/api/v1/auth/twitter/reverse" />
-    );
-  return (
-    <Fragment>
-      {content}
-    </Fragment>
+  let content = !!user.isAuthenticated ? (
+    <div>
+      <h1>Authenticated!</h1>
+      <button
+        onClick={() => refreshFeed(userToken, userTokenSecret, null)}
+        className="button"
+      >
+        Refresh Timeline
+      </button>
+      <TweetCard />
+      <DragOptions />
+      <TweetNav />
+    </div>
+  ) : (
+    <div className="twitter-login-container">
+      <TwitterLogin
+        loginUrl="http://localhost:4000/api/v1/auth/twitter"
+        onFailure={onFailedAuth}
+        onSuccess={onSuccessAuth}
+        requestTokenUrl="http://localhost:4000/api/v1/auth/twitter/reverse"
+        className="twitter-login-button"
+      />
+    </div>
   );
-
+  return <Fragment>{content}</Fragment>;
 };
-export default App
+export default App;

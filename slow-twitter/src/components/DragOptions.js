@@ -37,9 +37,9 @@ const DragOptions = () => {
     }
 
     return (
-        <Fragment>
+        <div className="drag-options-container">
             {content}
-        </Fragment>
+        </div>
     )
 }
 export default DragOptions

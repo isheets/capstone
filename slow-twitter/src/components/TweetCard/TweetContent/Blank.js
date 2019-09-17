@@ -13,13 +13,13 @@ const Blank = (props) => {
     })
 
     const isActive = canDrop && isOver
-    let backgroundColor = '#222'
+    let backgroundColor = 'white'
     let color = backgroundColor;
     if (isActive) {
-        backgroundColor = 'darkgreen'
+        backgroundColor = 'grey'
         color = backgroundColor;
     } else if (canDrop) {
-        backgroundColor = 'darkkhaki'
+        backgroundColor = '#38A1F3'
         color = backgroundColor;
     }
 
