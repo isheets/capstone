@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "he": "^1.2.0",
+    "pos": "^0.4.2",
     "react": "^16.9.0",
     "react-dnd": "^9.3.4",
     "react-dnd-html5-backend": "^9.3.4",
