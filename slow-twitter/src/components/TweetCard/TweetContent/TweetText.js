@@ -3,7 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import Blank from "./Blank";
 import { setExtractedWord, setWordOptions } from "../../../actions";
 
+import posMap from '../../../config/pos';
+
 let randomWords = require("random-words");
+var Sentencer = require('sentencer');
 
 var pos = require("pos");
 var tagger = new pos.Tagger();
@@ -33,7 +36,7 @@ var extractWords = text => {
   console.log(taggedWord[0]);
 
 //   //TODO: use RegEx to capture all types of nouns, adverbs, verbs, and adjective in just 4 or statements????
-  while(taggedWord[0][1] !== 'NN' && taggedWord[0][1] !== 'NNS' && taggedWord[0][1] !== 'RB' && taggedWord[0][1] !== 'RBR' && taggedWord[0][1] !== 'RBS' && taggedWord[0][1] !== 'VB' && taggedWord[0][1] !== 'VBD' && taggedWord[0][1] !== 'VBG' && taggedWord[0][1] !== 'VBN' && taggedWord[0][1] !== 'VBP' && taggedWord[0][1] !== 'VBZ' && taggedWord[0][1] !== 'JJ' && taggedWord[0][1] !== 'JJR' && taggedWord[0][1] !== 'JJS') {
+  while(taggedWord[0][1] !== 'NN' && taggedWord[0][1] !== 'NNS' &&  taggedWord[0][1] !== 'JJ' && taggedWord[0][1] !== 'JJR' && taggedWord[0][1] !== 'JJS') {
     randIdx = getRandomInt(wordAr.length - 1);
     extractedWord = wordAr[randIdx];
     words = new pos.Lexer().lex(extractedWord);
@@ -42,8 +45,10 @@ var extractWords = text => {
     console.log(taggedWord[0]);
   }
 
-  console.log("extracted word:" + extractedWord);
+  let extractedWordPOS = posMap[taggedWord[0][1]];
 
+  console.log("extracted word:" + extractedWord);
+  console.log('mapped pos:' + extractedWordPOS);
 
 
   
@@ -87,13 +92,13 @@ var extractWords = text => {
       jsxAr.push(<span key={i}>{parts[i]}</span>);
     }
   }
-  let randWordAr = randomWords(3);
-  console.log(randWordAr);
+  //let randWordAr = randomWords(3);
+  //console.log(randWordAr);
   const wordOptions = [
     extractedWord,
-    randWordAr[0],
-    randWordAr[1],
-    randWordAr[2]
+    Sentencer.make(`{{ ${extractedWordPOS} }}`),
+    Sentencer.make(`{{ ${extractedWordPOS} }}`),
+    Sentencer.make(`{{ ${extractedWordPOS} }}`)
   ];
   dispatch(setExtractedWord(extractedWord));
   dispatch(setWordOptions(wordOptions));
