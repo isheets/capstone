@@ -1,56 +1,56 @@
 const intialGame = {
-    lastTweetFetched: null,
-    parsedTweets: null,
-    curTweet: null,
-    curTweetId: null,
-    curGame: null,
-    extractedWord: null,
-    wordOptions: [],
-    userInput: ""
-}
+  lastTweetFetched: null,
+  parsedTweets: null,
+  curTweet: null,
+  curTweetId: null,
+  curGame: null,
+  extractedWords: null,
+  wordOptions: [],
+  droppedWord: null
+};
 
 const game = (state = intialGame, action) => {
-    switch (action.type) {
-        case 'SET_CURRENT_TWEET':
-            return {
-                ...state,
-                curTweet: action.curTweet
-            }
-        case 'SET_CURRENT_TWEET_ID':
-            console.log(state);
-            return {
-                ...state,
-                curTweet: state.parsedTweets[action.curTweetId],
-                curTweetId: action.curTweetId
-            }
-        case 'SET_LAST_TWEET_FETCHED':
-            return {
-                ...state,
-                lastTweetFetched: action.lastTweetFetched
-            }
-        case 'SET_PARSED_TWEETS':
-            return {
-                ...state,
-                parsedTweets: action.parsedTweets
-            }
-        case 'SET_EXTRACTED_WORD':
-            return {
-                ...state,
-                extractedWord: action.extractedWord
-            }
-        case 'SET_CURRENT_USER_INPUT':
-            return {
-                ...state,
-                userInput: action.userInput
-            }
-        case 'SET_WORD_OPTIONS':
-            return {
-                ...state,
-                wordOptions: action.wordOptions
-            }
-        default:
-            return state;
-    }
-}
+  switch (action.type) {
+    case "SET_CURRENT_TWEET":
+      return {
+        ...state,
+        curTweet: action.curTweet
+      };
+    case "SET_CURRENT_TWEET_ID":
+      console.log(state);
+      return {
+        ...state,
+        curTweet: state.parsedTweets[action.curTweetId],
+        curTweetId: action.curTweetId
+      };
+    case "SET_LAST_TWEET_FETCHED":
+      return {
+        ...state,
+        lastTweetFetched: action.lastTweetFetched
+      };
+    case "SET_PARSED_TWEETS":
+      return {
+        ...state,
+        parsedTweets: action.parsedTweets
+      };
+    case "SET_EXTRACTED_WORDS":
+      return {
+        ...state,
+        extractedWords: action.extractedWords
+      };
+    case "SET_WORD_OPTIONS":
+      return {
+        ...state,
+        wordOptions: action.wordOptions
+      };
+    case "SET_DROPPED_WORD":
+      return {
+        ...state,
+        droppedWord: action.droppedWord
+      };
+    default:
+      return state;
+  }
+};
 
-export default game
+export default game;

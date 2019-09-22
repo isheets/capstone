@@ -3,7 +3,13 @@ var posMap = {
     JJR: 'adjective',
     JJS: 'adjective',
     NN: 'noun',
-    NNS: 'nouns'
+    NNS: 'nouns',
+    VB: 'verb',
+    VBD: 'verb',
+    VBG: 'verb',
+    VBN: 'verb',
+    VBP: 'verb',
+    VBZ: 'verb'
 }
 
 export default posMap;

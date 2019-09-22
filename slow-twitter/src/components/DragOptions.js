@@ -31,7 +31,7 @@ const DragOptions = () => {
         console.log(wordOptions);
         content =
             wordOptions.map((word, key) =>
-                <Drag word={word} key={key} />
+                <Drag word={word.word} order={word.order} key={key} />
             );
 
     }

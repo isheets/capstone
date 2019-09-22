@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { useSelector, useDispatch } from "react-redux";
 import { useDrag } from 'react-dnd';
-import { updateCurTweetId } from './../actions';
+import { updateCurTweetId, setDroppedWord } from './../actions';
 
 let parsedTweets;
 let curTweetId;
@@ -18,27 +18,38 @@ var nextTweet = () => {
     }
 }
 
+//check the order, set the dropped word, and manage game state
+//droppedWord: {
+//  word: droppedWord
+//  droppedIn: order
+//}
+var handleDrop = (droppedWord, droppedIn, correctDrop) => {
+    console.log("droppedWord: " + droppedWord + ", droppedIn: " + droppedIn);
+    if(droppedIn === correctDrop) {
+        alert('Correct!');
+    }
+}
+
 const Drag = (props) => {
     dispatch = useDispatch();
-    let correctWord = useSelector(state => state.game.extractedWord)
+    let extractedWords = useSelector(state => state.game.extractedWords)
     parsedTweets = useSelector(state => state.game.parsedTweets)
     curTweetId = useSelector(state => state.game.curTweetId)
+
     const word = props.word;
-    console.log(word);
+    const order = props.order;
+    //console.log(word);
 
 
     const [{ isDragging }, drag] = useDrag({
-        item: { value: word, type: "word" },
+        item: { value: word, order: order, type: "word"},
+        //called after word is dropped
         end: (item, monitor) => {
-            const dropResult = monitor.getDropResult()
+            const dropResult = monitor.getDropResult();
+            //check if the item and dropResult exist
             if (item && dropResult) {
-                if (item.value === correctWord) {
-                    alert(`Correct!`);
-                    nextTweet();
-                }
-                else {
-                    alert("Incorrect!");
-                }
+                //call function to check order and word correctness
+                handleDrop(item.value, dropResult.order, item.order);
             }
         },
         collect: monitor => ({
@@ -53,7 +64,6 @@ const Drag = (props) => {
 
     if (word !== null) {
         content = (
-
             <div ref={drag} style={{ opacity }} className="word-drag">
                 {word}
             </div>

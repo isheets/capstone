@@ -43,17 +43,17 @@ export const updateCurTweetId = curTweetId => ({
   curTweetId
 })
 
-export const setExtractedWord = extractedWord => ({
-  type: 'SET_EXTRACTED_WORD',
-  extractedWord
-})
-
-export const setUserInput = userInput => ({
-  type: 'SET_CURRENT_USER_INPUT',
-  userInput
+export const setExtractedWords = extractedWords => ({
+  type: 'SET_EXTRACTED_WORDS',
+  extractedWords
 })
 
 export const setWordOptions = wordOptions => ({
   type: 'SET_WORD_OPTIONS',
   wordOptions
+})
+
+export const setDroppedWord = droppedWord => ({
+  type: 'SET_DROPPED_WORD',
+  droppedWord
 })
