@@ -53,7 +53,23 @@ export const setWordOptions = wordOptions => ({
   wordOptions
 })
 
-export const setDroppedWord = droppedWord => ({
-  type: 'SET_DROPPED_WORD',
+export const addDroppedWord = droppedWord => ({
+  type: 'ADD_DROPPED_WORD',
   droppedWord
+})
+
+export const updateDroppedWord = droppedWord => ({
+  type: 'UPDATE_DROPPED_WORD',
+  droppedWord
+})
+
+export const moveDroppedWord = droppedWord => ({
+  type: 'MOVE_DROPPED_WORD',
+  droppedWord
+})
+
+//need an action to clear out dropped word array....
+
+export const clearDroppedWords = () => ({
+  type: 'CLEAR_DROPPED_WORDS'
 })

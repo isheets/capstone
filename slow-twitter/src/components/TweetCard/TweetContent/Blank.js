@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 const Blank = props => {
   let extractedWord = props.extractedWord;
   let blankOrder = props.blankOrder;
-  let droppedWord = useSelector(state => state.game.droppedWord);
+  let droppedWords = useSelector(state => state.game.droppedWords);
   const [{ canDrop, isOver }, drop] = useDrop({
     accept: "word",
     order: blankOrder,
@@ -29,14 +29,23 @@ const Blank = props => {
     color = backgroundColor;
   }
 
-  if (droppedWord == extractedWord) {
+  let wordInBlank = null;
+
+  for (let droppedWord of droppedWords) {
+    if (droppedWord.droppedIn === blankOrder) {
+      wordInBlank = droppedWord;
+    }
+  }
+
+  //render blank or filled in blank
+  if (wordInBlank !== null) {
     content = (
       <span
         ref={drop}
-        className="tweet-blank"
+        className="tweet-blank-filled"
         style={{ backgroundColor: "white", color: "black" }}
       >
-        {extractedWord}
+        {wordInBlank.word}
       </span>
     );
   } else {
@@ -46,7 +55,6 @@ const Blank = props => {
         className="tweet-blank"
         style={{ backgroundColor, color }}
       >
-        {extractedWord}
       </span>
     );
   }

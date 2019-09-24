@@ -104,13 +104,17 @@ const parseRawTweets = rawTweets => {
         for (let i = 0; i < tweet.extended_entities.media.length; i++) {
           newTweet.media[i] = {};
           newTweet.media[i].type = tweet.extended_entities.media[i].type;
+          //remove the in-text media link from the tweet text
+          newTweet.text = newTweet.text.replace(tweet.extended_entities.media[i].url, '');
           if (newTweet.media[i].type === "photo") {
             newTweet.media[i].url =
               tweet.extended_entities.media[i].media_url_https;
+              
           } else if (newTweet.media[i].type === "video") {
             newTweet.media[i].url =
               tweet.extended_entities.media[i].video_info.variants[0].url;
           }
+          //NEED TO CHECK FOR OTHER TYPES OF MEDIA
         }
       } else {
         newTweet.hasMedia = false;
@@ -153,6 +157,8 @@ const parseRawTweets = rawTweets => {
             i < tweet.quoted_status.extended_entities.media.length;
             i++
           ) {
+            //remove the in-text media link from the tweet text
+            newTweet.quoteTweet.text = newTweet.quoteTweet.text.replace(tweet.quoted_status.extended_entities.media[i].url, '');
             newTweet.quoteTweet.media[i] = {};
             if (newTweet.quoteTweet.media[i].type === "photo") {
               newTweet.quoteTweet.media[i].url =
@@ -170,8 +176,19 @@ const parseRawTweets = rawTweets => {
       } else {
         newTweet.isQuote = false;
       }
-      //put at the beginning of newTweets[] for oldest tweets first
-      newTweets.unshift(newTweet);
+
+      //put at the beginning of newTweets[] for oldest tweets first only if we have text to work with
+      if(newTweet.text.length > 0 && newTweet.isQuote === false) {
+        newTweets.unshift(newTweet);
+      }
+      else if (newTweet.isQuote === true) {
+        if(newTweet.text.length > 0 && newTweet.quoteTweet.text.length > 0) {
+          newTweets.unshift(newTweet);
+        }
+      }
+      else {
+        console.log("TWEET PROCESSED BUT HAD NO TEXT AT THE END OF parseRawTweets()");
+      }
     }
   }
   console.log(newTweets);

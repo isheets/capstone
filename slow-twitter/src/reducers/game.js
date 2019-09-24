@@ -6,7 +6,8 @@ const intialGame = {
   curGame: null,
   extractedWords: null,
   wordOptions: [],
-  droppedWord: null
+  numWordsDropped: 0,
+  droppedWords: []
 };
 
 const game = (state = intialGame, action) => {
@@ -43,10 +44,37 @@ const game = (state = intialGame, action) => {
         ...state,
         wordOptions: action.wordOptions
       };
-    case "SET_DROPPED_WORD":
+    case "ADD_DROPPED_WORD":
       return {
         ...state,
-        droppedWord: action.droppedWord
+        droppedWords: [...state.droppedWords, action.droppedWord]
+      };
+    case "UPDATE_DROPPED_WORD":
+      return {
+        ...state,
+        droppedWords: state.droppedWords.map(word =>
+          word.droppedIn === action.droppedWord.droppedIn
+            ? // update the word with the matching dropped in
+              action.droppedWord
+            : // otherwise return original word object
+              word
+        )
+      };
+    case "MOVE_DROPPED_WORD":
+      return {
+        ...state,
+        droppedWords: state.droppedWords.map(word =>
+          word.word === action.droppedWord.word
+            ? // update the word with the matching dropped in
+              action.droppedWord
+            : // otherwise return original word object
+              word
+        )
+      };
+      case "CLEAR_DROPPED_WORDS":
+      return {
+        ...state,
+        droppedWords: []
       };
     default:
       return state;
