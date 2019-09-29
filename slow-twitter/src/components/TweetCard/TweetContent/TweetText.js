@@ -26,7 +26,7 @@ let usedIdx = [];
 var getRandomUniqueIndex = max => {
   console.log("usedIdx: " + usedIdx);
   let newIdx = Math.floor(Math.random() * Math.floor(max));
-  while (usedIdx.includes(newIdx)) {
+  while (usedIdx.includes(newIdx) && usedIdx.length < max) {
     newIdx = Math.floor(Math.random() * Math.floor(max));
   }
   usedIdx.push(newIdx);
