@@ -1,6 +1,8 @@
 import React from 'react'
 import { useSelector } from "react-redux";
 
+
+//convert to props for reusability!!!!!
 const TweetProfilePic = () => {
     const curTweet = useSelector(state => state.game.curTweet);
     let content;

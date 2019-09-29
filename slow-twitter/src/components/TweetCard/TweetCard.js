@@ -13,7 +13,13 @@ const TweetCard = () => {
     let content;
 
     console.log(curTweet);
+    //make sure we have content to render
     if (curTweet !== null) {
+
+        //check if we will need to render a quote tweet
+        if(curTweet.isQuote == true) {
+            
+        }
         
         content = (
             <Fragment>
