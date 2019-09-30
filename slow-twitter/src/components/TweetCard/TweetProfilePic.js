@@ -1,23 +1,17 @@
-import React from 'react'
+import React from "react";
 import { useSelector } from "react-redux";
 
-
 //convert to props for reusability!!!!!
-const TweetProfilePic = () => {
-    const curTweet = useSelector(state => state.game.curTweet);
-    let content;
-    if (curTweet !== null) {
-        content = (<img src={curTweet.user.pic} className="tweet-profile-pic" alt=""></img>)
-    }
-    else {
-        content = null
-    }
+const TweetProfilePic = props => {
+  let profilePicUrl = props.url;
 
-    return (
-        <div className = "tweet-profile-pic-container">
-            {content}
-        </div>
-    )
-}
+  let content;
 
-export default TweetProfilePic
+  content = (
+    <img src={profilePicUrl} className="tweet-profile-pic" alt=""></img>
+  );
+
+  return <div className="tweet-profile-pic-container">{content}</div>;
+};
+
+export default TweetProfilePic;

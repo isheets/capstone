@@ -3,7 +3,7 @@
     margin: auto;
     border-radius: 10px;
     padding: 10px;
-    width: 50%;
+    width: 90%;
     display: grid;
     grid-template-columns: [col1start] 50px [col2start] 1fr [col2dnd];
     background-color: white;
@@ -25,8 +25,6 @@
 .tweet-profile-pic {
     display: inline;
     margin: 0 auto;
-    height: 100%;
-    width: auto;
 }
 
 .tweet-content {

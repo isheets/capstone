@@ -61,8 +61,10 @@ var checkValidWord = word => {
 var extractWords = text => {
   //construct regex to split string into all words
   let allWordExp =
-    "(?<=\\s|^|\\b)(?:[-’.%$#&\\/]\\b|\\b[-’.%$#&\\/]|[A-Za-z0-9]|\\([A-Za-z0-9]+\\))+(?=\\s|$|\\b)";
+    "(?<=\\s|^|\\b)(?:[-’%$#&\\/]\\b|\\b[-’%$#&\\/]|[A-Za-z0-9]|\\([A-Za-z0-9]+\\))+(?=\\s|$|\\b)";
   let allWordReg = new RegExp(allWordExp, "g");
+  console.log("ALL WORD REG");
+  console.log(allWordReg);
 
   //use regex to create array of all words in tweet
   let wordAr = text.match(allWordReg);
@@ -71,6 +73,26 @@ var extractWords = text => {
   let extractedWordArray = [];
 
   let numCheckedWords = 0;
+
+
+  //determine how many words to extract based on number of characters
+  let numChar = text.length;
+  let numWordsToExtract = 1;
+  if(numChar <= 50) {
+    numWordsToExtract = 1;
+  }
+  else if (numChar > 50 && numChar <= 100) {
+    numWordsToExtract = 2;
+  }
+  else if (numChar > 100 && numChar <= 150) {
+    numWordsToExtract = 3;
+  }
+  else if (numChar > 150 && numChar <= 200) {
+    numWordsToExtract = 4;
+  }
+  else {
+    numWordsToExtract = 5;
+  }
 
   //get 2 random words
   for (let i = 0; i < 2; i++) {
@@ -124,6 +146,8 @@ var extractWords = text => {
       end: endIdx,
       pos: word.mappedPOS
     });
+    console.log('FOUND WORD ARRAY');
+    console.log(foundWordArray);
   }
 
   //sort the array so that smallest idx is first

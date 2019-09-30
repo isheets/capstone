@@ -17,7 +17,7 @@ const TweetContent = () => {
             content = (
                 <Fragment>
                     <TweetText />
-                    <TweetMedia />
+                    <TweetMedia quote={false}/>
                     <QuoteTweet />
                 </Fragment>
             )

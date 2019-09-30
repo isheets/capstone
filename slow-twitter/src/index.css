@@ -135,6 +135,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  width: 100%;
+  background-color: #38A1F3;
 }
 
 code {
@@ -154,20 +156,19 @@ h3 {
 }
 
 .word-drag {
-  margin: 10px;
+  margin: auto;
   border: 1px solid #38a1f3;
   border-radius: 5px;
   line-height: 150%;
-  padding: 2px;
+  padding: 4px;
+  white-space: nowrap;
+  width: min-content;
 }
 
 .tweet-blank {
   border: 2px dashed #38a1f3;
-  border-radius: 5px;
-  line-height: 150%;
-  padding: 2px;
-  width: 40px;
-  height: 20px;
+  border-radius: 4px;
+  padding: 5px;
   display:inline-block;
 }
 
@@ -178,16 +179,28 @@ h3 {
   padding: 2px;
 }
 
+.main-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 60% 40%;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
 .drag-options-container {
   border: 1px solid black;
   margin: auto;
-  margin-top: 10px;
   border-radius: 10px;
-  padding: 10px;
-  width: 50%;
+  padding: 20px;
+  width: min-content;
   display: grid;
   grid-template-columns: min-content min-content min-content min-content;
+  row-gap: 10px;
+  column-gap: 10px;
   justify-content: center;
+  align-items: center;
+  background-color: white;
+  box-shadow: 1px 1px 0 0 black;
 }
 
 .twitter-login-container {
@@ -199,4 +212,14 @@ h3 {
 .twitter-login-button {
   display: inline-block;
   margin: auto;
+  padding: 10px;
+  border-radius: 10px;
+  outline: none;
+  background-color: white;
+  border: 1px solid black;
+  box-shadow: 1px 1px 0 0 black;
+}
+
+.twitter-login-button:hover {
+  box-shadow: 3px 3px 0 0 black;
 }

@@ -6,27 +6,38 @@ const Blank = props => {
   let extractedWord = props.extractedWord;
   let blankOrder = props.blankOrder;
   let droppedWords = useSelector(state => state.game.droppedWords);
-  const [{ canDrop, isOver }, drop] = useDrop({
+  const [{ canDrop, isOver, wordBeingDragged }, drop] = useDrop({
     accept: "word",
     order: blankOrder,
     drop: () => ({ name: extractedWord, order: blankOrder }),
     collect: monitor => ({
       isOver: monitor.isOver(),
-      canDrop: monitor.canDrop()
+      canDrop: monitor.canDrop(),
+      wordBeingDragged: monitor.getItem()
     })
   });
 
+  console.log(wordBeingDragged);
+
   let content = null;
+  let blankFiller = ".....";
+  let width = "20px";
 
   const isActive = canDrop && isOver;
   let backgroundColor = "white";
   let color = backgroundColor;
   if (isActive) {
-    backgroundColor = "grey";
+    backgroundColor = "white";
     color = backgroundColor;
+    //size all the blanks according to the word being dragged
+    blankFiller = wordBeingDragged.value;
+    width = 'min-content';
   } else if (canDrop) {
     backgroundColor = "#38A1F3";
     color = backgroundColor;
+    blankFiller = wordBeingDragged.value;
+    width = 'min-content';
+
   }
 
   let wordInBlank = null;
@@ -53,8 +64,9 @@ const Blank = props => {
       <span
         ref={drop}
         className="tweet-blank"
-        style={{ backgroundColor, color }}
+        style={{ backgroundColor, color, width }}
       >
+        {blankFiller}
       </span>
     );
   }

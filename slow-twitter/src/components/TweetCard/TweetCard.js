@@ -4,6 +4,7 @@ import TweetProfilePic from './TweetProfilePic';
 import TweetInfo from './TweetInfo';
 import TweetContent from './TweetContent/TweetContent';
 import './TweetCard.css';
+import { updateCurTweet } from '../../actions';
 
 
 const TweetCard = () => {
@@ -23,7 +24,7 @@ const TweetCard = () => {
         
         content = (
             <Fragment>
-                <TweetProfilePic />
+                <TweetProfilePic url={curTweet.user.pic}/>
                 <div className="tweet-card-col-2">
                     <TweetInfo />
                     <TweetContent />

@@ -1,11 +1,25 @@
 import React, { Fragment } from 'react'
 import { useSelector } from "react-redux";
 
-const TweetMedia = () => {
-    const curTweet = useSelector(state => state.game.curTweet);
-        let content;
-    if (curTweet.hasMedia) {
-        const mediaAr = curTweet.media;
+const TweetMedia = props => {
+    let quote = props.quote;
+
+    let curTweet = useSelector(state => state.game.curTweet);
+
+    let tweetWithMedia;
+
+    //check if tweet with media we are rendering is quote or orginial
+
+    if (quote == true) {
+        tweetWithMedia = curTweet.quote;
+    }
+    else {
+        tweetWithMedia = curTweet;
+    }
+    let content;
+    
+    if (tweetWithMedia.hasMedia) {
+        const mediaAr = tweetWithMedia.media;
         console.log(mediaAr);
         //we have some media to render!
         for (let media of mediaAr) {
