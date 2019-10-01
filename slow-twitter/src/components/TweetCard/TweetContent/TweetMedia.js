@@ -23,20 +23,17 @@ const TweetMedia = props => {
         console.log(mediaAr);
         //we have some media to render!
         for (let media of mediaAr) {
-            if (media.type === "photo") {
+            if (media.type === "photo" || media.type === "animated_gif") {
                 content = <img src={media.url} alt=""></img>
             }
             else if (media.type === "video") {
                 content = (
                     <video width="426" height="240" controls>
-                        <source src={media.url} type="video/mp4"></source>
+                        <source src={media.url} type={media.format}></source>
                         Your browser does not support inline video viewing.
                         <a href={media.url}>Click here to view.</a>
                     </video>
                 )
-            }
-            else if (media.type === "animated_gif") {
-                console.error("TODO: Caught animated_gif media type, need to render");
             }
             else {
                 console.error("Media Type not caught in switch statement: " + media.type);

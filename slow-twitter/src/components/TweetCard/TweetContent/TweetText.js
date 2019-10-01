@@ -23,6 +23,8 @@ let dispatch;
 //array to keep track of all indexes we've generated and checked
 let usedIdx = [];
 
+let extractedWordArray;
+
 var getRandomUniqueIndex = max => {
   console.log("usedIdx: " + usedIdx);
   let newIdx = Math.floor(Math.random() * Math.floor(max));
@@ -34,9 +36,15 @@ var getRandomUniqueIndex = max => {
 };
 
 var checkValidWord = word => {
+  //need word to be at least 2 characters
   if (word.length < 3) {
     return false;
   }
+  //don't get the same word twice
+  if(extractedWordArray.includes(word)) {
+    return false;
+  }
+  //only want nouns, adj, and verbs
   let wordLex = new pos.Lexer().lex(word);
   let taggedWord = tagger.tag(wordLex);
   let wordPos = taggedWord[0][1];
@@ -69,8 +77,18 @@ var extractWords = text => {
   //use regex to create array of all words in tweet
   let wordAr = text.match(allWordReg);
   console.log(wordAr);
+
+  //some issue with getting words - maybe all emojis or excalamation or something else
+  if(wordAr === null) {
+    //log an error and just return the text to avoid crash
+    console.error("NO WORDS IN WORD ARRAY");
+    dispatch(setExtractedWords([]));
+    dispatch(setWordOptions([]));
+    return text;
+
+  }
   //declare array to hold all words we extract
-  let extractedWordArray = [];
+  extractedWordArray = [];
 
   let numCheckedWords = 0;
 
@@ -81,21 +99,17 @@ var extractWords = text => {
   if(numChar <= 50) {
     numWordsToExtract = 1;
   }
-  else if (numChar > 50 && numChar <= 100) {
+  else if (numChar > 50 && numChar <= 150) {
     numWordsToExtract = 2;
   }
-  else if (numChar > 100 && numChar <= 150) {
+  else if (numChar > 150 && numChar <= 2500) {
     numWordsToExtract = 3;
   }
-  else if (numChar > 150 && numChar <= 200) {
+  else {
     numWordsToExtract = 4;
   }
-  else {
-    numWordsToExtract = 5;
-  }
-
   //get 2 random words
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < numWordsToExtract; i++) {
     //get a random index and get the word at that index
     let randIdx = getRandomUniqueIndex(wordAr.length - 1);
     let extractedWord = wordAr[randIdx];

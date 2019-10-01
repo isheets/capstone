@@ -20,8 +20,8 @@ const Blank = props => {
   console.log(wordBeingDragged);
 
   let content = null;
-  let blankFiller = ".....";
-  let width = "20px";
+  let blankFiller = ".......";
+  let width = "fit-content";
 
   const isActive = canDrop && isOver;
   let backgroundColor = "white";

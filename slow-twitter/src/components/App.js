@@ -115,6 +115,7 @@ const parseRawTweets = rawTweets => {
           } else if (newTweet.media[i].type === "video") {
             newTweet.media[i].url =
               tweet.extended_entities.media[i].video_info.variants[0].url;
+            newTweet.media[i].format = tweet.extended_entities.media[i].video_info.variants[0].content_type;
           }
           else if(newTweet.media[i].type === "animated_gif") {
             

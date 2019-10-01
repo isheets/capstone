@@ -160,20 +160,20 @@ h3 {
   border: 1px solid #38a1f3;
   border-radius: 5px;
   line-height: 150%;
-  padding: 4px;
+  padding: 2px;
   white-space: nowrap;
   width: min-content;
 }
 
 .tweet-blank {
-  border: 2px dashed #38a1f3;
+  border: 1px dashed #38a1f3;
   border-radius: 4px;
-  padding: 5px;
+  padding: 2px;
   display:inline-block;
 }
 
 .tweet-blank-filled {
-  border: 2px dashed #38a1f3;
+  border: 1px dashed #38a1f3;
   border-radius: 5px;
   line-height: 150%;
   padding: 2px;
