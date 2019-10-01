@@ -1,9 +1,8 @@
 import React from 'react'
 import { useSelector } from "react-redux";
-import QuoteTweetInfo from './QuoteTweetInfo';
-import QuoteTweetMedia from './QuoteTweetMedia';
-import QuoteTweetText from './QuoteTweetText';
+import TweetInfo from './../../TweetInfo';
 import TweetProfilePic from './../../TweetProfilePic';
+import TweetText from './../TweetText';
 
 const QuoteTweet = () => {
     let quoteTweet = useSelector(state => state.game.curTweet.quoteTweet);
@@ -15,7 +14,8 @@ const QuoteTweet = () => {
                 <TweetProfilePic url={quoteTweet.user.pic}/>
             </div>
             <div className="quote-tweet-content">
-                <QuoteTweetInfo/>
+                <TweetInfo quote={true}/>
+                <TweetText quote={true} />
             </div>
         </div>
     )

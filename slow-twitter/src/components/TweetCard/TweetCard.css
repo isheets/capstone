@@ -31,11 +31,12 @@
     grid-column: col2start / col2end;
 }
 
-.tweet-info {
+.tweet-info, .quote-tweet-info {
     display: flex;
+    align-items: flex-end;
 }
 
-.tweet-info * {
+.tweet-info *, .quote-tweet-info * {
     padding-right: 5px;
 }
 
@@ -43,9 +44,17 @@
     font-size: 110%;
     font-weight: 700;
 }
+.quote-tweet-info-name {
+    font-size: 100%;
+    font-weight: 700;
+}
 
 .tweet-info-details {
     color: gray;
+}
+.quote-tweet-info-details {
+    color: gray;
+    font-size: 90%;
 }
 
 .tweet-text {
@@ -63,6 +72,15 @@
     padding: 5px;
     max-width: 100%;
     max-height: 100%;
+}
+
+.quote-tweet-grid {
+    display: grid;
+    grid-template-columns: [col1start] 50px [col2start] 1fr [col2dnd];
+    border-radius: 10px;
+    background-color: lightgray;
+    padding: 10px;
+
 }
 
 

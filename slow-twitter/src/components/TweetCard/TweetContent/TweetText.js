@@ -222,17 +222,27 @@ var extractWords = text => {
   return jsxAr;
 };
 
-const TweetText = () => {
+const TweetText = (props) => {
   dispatch = useDispatch();
-  const text = useSelector(state => state.game.curTweet.text);
+  const curTweet = useSelector(state => state.game.curTweet);
 
+  //reset used indexes for every new tweet
   usedIdx = [];
 
-  let textMissingWords = extractWords(text);
-  //console.log(textMissingWords);
+  let quote = props.quote;
+  let textToRender;
+
+  //no need to extract words if it's a quote tweet
+  if(quote === true) {
+    textToRender = curTweet.quoteTweet.text;
+  }
+  else {
+    textToRender = extractWords(curTweet.text);
+  }
+
   return (
     <div className="tweet-text">
-      <pre>{textMissingWords}</pre>
+      <pre>{textToRender}</pre>
     </div>
   );
 };

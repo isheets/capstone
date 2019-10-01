@@ -40,15 +40,27 @@ var timeSinceTweet = function( tweetDateString ) {
   }
 
 
-const TweetInfo = () => {
+const TweetInfo = (props) => {
     const curTweet = useSelector(state => state.game.curTweet);
+    let quote = props.quote;
+    let tweetToRender;
+    let classForTweetInfo;
+    //check if we need to render quote tweet info or no
+    if(quote == true) {
+        tweetToRender = curTweet.quoteTweet;
+        classForTweetInfo = "quote-tweet-info";
+    }
+    else {
+        tweetToRender = curTweet;
+        classForTweetInfo = "tweet-info"
+    }
     let content;
-    if (curTweet !== null) {
-        timeSinceTweet(curTweet.date);
+    if (tweetToRender !== null) {
+        timeSinceTweet(tweetToRender.date);
         content = (
-            <div className="tweet-info">
-                <h3 className="tweet-info-name">{curTweet.user.name}</h3>
-                <h4 className="tweet-info-details">@{curTweet.user.handle} • {timeSinceTweet(curTweet.date)}</h4>
+            <div className={classForTweetInfo}>
+                <h3 className={classForTweetInfo + "-name"}>{tweetToRender.user.name}</h3>
+                <h4 className={classForTweetInfo + "-details"}>@{tweetToRender.user.handle} • {timeSinceTweet(tweetToRender.date)}</h4>
             </div>
         )
     }
