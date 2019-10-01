@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "he": "^1.2.0",
+    "lodash.throttle": "^4.1.1",
     "pos": "^0.4.2",
     "react": "^16.10.1",
     "react-dnd": "^9.4.0",

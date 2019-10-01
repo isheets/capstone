@@ -17,6 +17,7 @@ var he = require("he");
 
 let dispatch;
 
+
 const onFailedAuth = error => {
   console.log("Twitter auth failed :(");
   console.log(error);
@@ -207,6 +208,8 @@ const parseRawTweets = rawTweets => {
 let userToken;
 let userTokenSecret;
 const App = () => {
+  
+
   //get current state
   const user = useSelector(state => state.user);
 
