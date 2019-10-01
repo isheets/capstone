@@ -1,0 +1,42 @@
+     _header:
+      'GET /1.1/statuses/home_timeline.json?count=40&tweet_mode=extended HTTP/1.1\r\nAuthorization: OAuth oauth_consumer_key="udZAqEu7OdaBd9WH2oTmjexFA",oauth_nonce="oiY3hDuGE3pyHplgR747kp8v6cnrlkGL",oauth_signature_method="HMAC-SHA1",oauth_timestamp="1569957800",oauth_token="1178755104855322625-nlgJdVtUNCCDZf9WLc5teI9eqVSEU6",oauth_version="1.0",oauth_signature="O989B28PJ4zb2D%2F0EEkfK3WZWHY%3D"\r\nHost: api.twitter.com\r\nAccept: */*\r\nConnection: close\r\nUser-Agent: Node authentication\r\nContent-length: 0\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\n',
+     _onPendingData: [Function: noopPendingOutput],
+     agent:
+      Agent {
+        _events: [Object],
+        _eventsCount: 1,
+        _maxListeners: undefined,
+        defaultPort: 443,
+        protocol: 'https:',
+        options: [Object],
+        requests: {},
+        sockets: [Object],
+        freeSockets: {},
+        keepAliveMsecs: 1000,
+        keepAlive: false,
+        maxSockets: Infinity,
+        maxFreeSockets: 256,
+        maxCachedSessions: 100,
+        _sessionCache: [Object] },
+     socketPath: undefined,
+     timeout: undefined,
+     method: 'GET',
+     path:
+      '/1.1/statuses/home_timeline.json?count=40&tweet_mode=extended',
+     _ended: true,
+     res: [Circular],
+     aborted: undefined,
+     timeoutCb: null,
+     upgradeOrConnect: false,
+     parser: null,
+     maxHeadersCount: null,
+     [Symbol(isCorked)]: false,
+     [Symbol(outHeadersKey)]:
+      [Object: null prototype] {
+        authorization: [Array],
+        host: [Array],
+        accept: [Array],
+        connection: [Array],
+        'user-agent': [Array],
+        'content-length': [Array],
+        'content-type': [Array] } } } '{"errors":[{"code":89,"message":"Invalid or expired token."}]}'
