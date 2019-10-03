@@ -6,7 +6,9 @@ import ExtractedWord from "../../../game/ExtractedWord";
 import verbs from "../../../custom-dict/verbs";
 
 import posMap from "../../../config/pos";
+import Microlink from '@microlink/react'
 
+//get sentencer reference for generating randome words basd on pos
 var Sentencer = require("sentencer");
 Sentencer.configure({
   actions: {
@@ -261,7 +263,7 @@ const TweetText = (props) => {
     textToRender = extractWords(curTweet.text);
     if(curTweet.urls !== null) {
       for(let i = 0; i < curTweet.urls.length; i++) {
-        urlsToRender.push(<a href={curTweet.urls[i].expanded_url} key={i} target="_blank">{curTweet.urls[i].display_url}</a>);
+        urlsToRender.push(<Microlink url={curTweet.urls[i].expanded_url} autoplay={false} size='small' key={i}/>);
       }
     }
   }

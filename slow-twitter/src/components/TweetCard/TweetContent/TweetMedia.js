@@ -24,11 +24,11 @@ const TweetMedia = props => {
         //we have some media to render!
         for (let media of mediaAr) {
             if (media.type === "photo" || media.type === "animated_gif") {
-                content = <img src={media.url} alt=""></img>
+                content = (<img src={media.url} alt="" className="tweet-media-item"></img>);
             }
             else if (media.type === "video") {
                 content = (
-                    <video width="426" height="240" controls>
+                    <video width="426" height="240" controls className="tweet-media-item fit">
                         <source src={media.url} type={media.format}></source>
                         Your browser does not support inline video viewing.
                         <a href={media.url}>Click here to view.</a>
