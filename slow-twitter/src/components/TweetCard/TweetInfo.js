@@ -60,7 +60,7 @@ const TweetInfo = (props) => {
         content = (
             <div className={classForTweetInfo}>
                 <h3 className={classForTweetInfo + "-name"}>{tweetToRender.user.name}</h3>
-                <h4 className={classForTweetInfo + "-details"}>@{tweetToRender.user.handle} • {timeSinceTweet(tweetToRender.date)}</h4>
+                <h4 className={classForTweetInfo + "-details"}>@{tweetToRender.user.handle} / {timeSinceTweet(tweetToRender.date)}</h4>
             </div>
         )
     }

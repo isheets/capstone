@@ -136,12 +136,46 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
-  background-color: #38a1f3;
+  background-color: black;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+/* blue: 38A1F3 */
+
+.top-bar {
+  width: 90%;
+  background-color: #38a1f3;
+  display: grid;
+  grid-template-columns: 58% 37%;
+  column-gap: 5%;
+  margin: auto;
+  margin-top: 15px;
+}
+
+.black-box {
+  margin: 20px;
+  padding: 10px;
+  background-color: black;
+  display: inline-block;
+  width: fit-content;
+}
+
+h1 {
+  color: #f79c83;
+  font-size: 175%;
+  font-family: 'Courier New', Courier, monospace;
+  display: inline-block;
+}
+
+h2 {
+  color: #f79c83;
+  font-size: 150%;
+  font-family: 'Courier New', Courier, monospace;
+  display: inline-block;
 }
 
 pre {
@@ -168,9 +202,8 @@ a:hover {
 }
 
 .word-drag {
-  margin: auto;
-  border: 1px solid #38a1f3;
-  border-radius: 5px;
+  background-color: black;
+  color: #f79c83;
   line-height: 150%;
   padding: 2px;
   padding-top: 0;
@@ -181,44 +214,39 @@ a:hover {
 }
 
 .tweet-blank {
-  border: 1px dashed #38a1f3;
-  border-radius: 4px;
   padding: 2px;
   padding-top: 0;
   margin-top: 2px;
   display: inline-block;
-  box-shadow: 0 0 3px 0 #38a1f3 inset;
 }
 
 .tweet-blank-filled {
-  border: 1px dashed #38a1f3;
-  border-radius: 5px;
-  line-height: 150%;
   padding: 2px;
 }
 
 .main-grid {
-  width: 100%;
+  width: 90%;
   display: grid;
-  grid-template-columns: 60% 40%;
+  grid-template-columns: 58% 37%;
+  column-gap: 5%;
+  margin: auto;
   margin-bottom: 15px;
-  margin-top: 15px;
+  margin-top: 30px;
+}
+
+.drag-options-wrapper {
+
+  background-color: #fac15f;
+  height: min-content;
 }
 
 .drag-options-container {
-  border: 1px solid black;
-  margin: auto;
-  border-radius: 10px;
-  padding: 20px;
-  width: min-content;
+  margin: 20px;
   display: grid;
-  grid-template-columns: min-content min-content min-content min-content;
+  grid-template-columns: minmax(min-content, 1fr) minmax(min-content, 1fr) minmax(min-content, 1fr) minmax(min-content, 1fr);
   row-gap: 10px;
   column-gap: 10px;
-  justify-content: center;
-  align-items: center;
-  background-color: white;
-  box-shadow: 1px 1px 0 0 black;
+  height: min-content;
 }
 
 .twitter-login-container {

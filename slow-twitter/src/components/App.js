@@ -17,7 +17,6 @@ var he = require("he");
 
 let dispatch;
 
-
 const onFailedAuth = error => {
   console.log("Twitter auth failed :(");
   console.log(error);
@@ -116,10 +115,11 @@ const parseRawTweets = rawTweets => {
           } else if (newTweet.media[i].type === "video") {
             newTweet.media[i].url =
               tweet.extended_entities.media[i].video_info.variants[0].url;
-            newTweet.media[i].format = tweet.extended_entities.media[i].video_info.variants[0].content_type;
-          }
-          else if(newTweet.media[i].type === "animated_gif") {
-            
+            newTweet.media[i].format =
+              tweet.extended_entities.media[
+                i
+              ].video_info.variants[0].content_type;
+          } else if (newTweet.media[i].type === "animated_gif") {
           }
           //NEED TO CHECK FOR OTHER TYPES OF MEDIA
         }
@@ -208,8 +208,6 @@ const parseRawTweets = rawTweets => {
 let userToken;
 let userTokenSecret;
 const App = () => {
-  
-
   //get current state
   const user = useSelector(state => state.user);
 
@@ -228,9 +226,19 @@ const App = () => {
   //conditionally generate top-level view based on whether user is authenticated or not
   let content = !!user.isAuthenticated ? (
     <div>
+      <div className="top-bar">
+        <div className="black-box">
+          <h1>SLOW TWITTER</h1>
+        </div>
+        <div className="black-box">
+          <h2>LOGGED IN AS: {user.userDetails.name}</h2>
+        </div>
+      </div>
       <div className="main-grid">
         <TweetCard />
-        <DragOptions />
+        <div className="drag-options-wrapper">
+          <DragOptions />
+        </div>
       </div>
       <TweetNav />
       <button
