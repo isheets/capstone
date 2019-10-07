@@ -263,7 +263,7 @@ const TweetText = (props) => {
     textToRender = extractWords(curTweet.text);
     if(curTweet.urls !== null) {
       for(let i = 0; i < curTweet.urls.length; i++) {
-        urlsToRender.push(<Microlink url={curTweet.urls[i].expanded_url} autoplay={false} size='small' key={i}/>);
+        urlsToRender.push(<a target="_blank" href={curTweet.urls[i].expanded_url} key={i}>-> {curTweet.urls[i].display_url}</a>);
       }
     }
   }

@@ -1,6 +1,10 @@
-.tweet-card {
-    margin: auto;
+.tweet-card-wrapper {
+    width: 100%;
     background-color: #FAC15F;
+}
+.tweet-card {
+    margin: 15px;
+
     color: black;
     font-family: 'Courier New', Courier, monospace;
 }
@@ -20,6 +24,7 @@
 }
 
 .tweet-info, .quote-tweet-info {
+    margin-top: 5px;
 }
 
 .tweet-info *, .quote-tweet-info * {
@@ -51,18 +56,22 @@
 .tweet-urls {
     margin-top: 10px;
 }
+.tweet-url {
+    display: flex;
+}
 
 .tweet-media {
     margin-top: 10px;
     display: grid;
     grid-template-columns: 50% 50%;
     grid-auto-rows: 300px;
+    align-items: center;
 }
 
 .tweet-media-item {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .fit {

@@ -136,7 +136,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
-  background-color: black;
+  background-color: #534741;
 }
 
 code {
@@ -169,13 +169,17 @@ h1 {
   font-size: 175%;
   font-family: 'Courier New', Courier, monospace;
   display: inline-block;
+  font-weight: bold;
+  align-self: center;
 }
 
 h2 {
   color: #f79c83;
-  font-size: 150%;
+  font-size: 110%;
   font-family: 'Courier New', Courier, monospace;
   display: inline-block;
+  font-weight: bold;
+  align-self: center;
 }
 
 pre {
@@ -191,14 +195,14 @@ h3 {
 
 a {
   text-decoration: none;
-  color: #38a1f3;
-  background-color: white;
+  color: black;
+  background-color: #f79c83;
 }
 a:focus {
 }
 a:hover {
-  background-color: #38a1f3;
-  color: white;
+  background-color: black;
+  color: #f79c83;
 }
 
 .word-drag {
@@ -259,13 +263,16 @@ a:hover {
   display: inline-block;
   margin: auto;
   padding: 10px;
-  border-radius: 10px;
+  color: black;
+  background-color: #f79c83;
+  box-shadow: 2px 2px 0 0 #FAC15F;
   outline: none;
-  background-color: white;
-  border: 1px solid black;
-  box-shadow: 1px 1px 0 0 black;
+  border:none;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  font-size: 110%;
 }
 
 .twitter-login-button:hover {
-  box-shadow: 3px 3px 0 0 black;
+  box-shadow: 4px 4px 0 0 #FAC15F;
 }

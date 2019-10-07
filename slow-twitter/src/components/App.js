@@ -29,12 +29,14 @@ const onSuccessAuth = response => {
     //successful auth, update store
     if (token) {
       console.log("User auth successful :)");
-      //dispatch action to update authentication to store
-      dispatch(updateAuthentication(true));
+
       //dispatch the user object to store
       dispatch(updateUser(user));
       //dispatch the token to store
       dispatch(updateToken(token));
+      //dispatch action to update authentication to store
+      dispatch(updateAuthentication(true));
+
       //initial feed fetch
       refreshFeed(userToken, userTokenSecret, null);
     }
@@ -249,14 +251,21 @@ const App = () => {
       </button>
     </div>
   ) : (
-    <div className="twitter-login-container">
-      <TwitterLogin
-        loginUrl="http://localhost:4000/api/v1/auth/twitter"
-        onFailure={onFailedAuth}
-        onSuccess={onSuccessAuth}
-        requestTokenUrl="http://localhost:4000/api/v1/auth/twitter/reverse"
-        className="twitter-login-button"
-      />
+    <div className="top-bar">
+      <div className="black-box">
+        <h1>SLOW TWITTER</h1>
+      </div>
+      <div className="black-box">
+        <TwitterLogin
+          loginUrl="http://localhost:4000/api/v1/auth/twitter"
+          onFailure={onFailedAuth}
+          onSuccess={onSuccessAuth}
+          requestTokenUrl="http://localhost:4000/api/v1/auth/twitter/reverse"
+          className="twitter-login-button"
+          text="SIGN IN TO TWITTER"
+          showIcon={false}
+        />
+      </div>
     </div>
   );
   return <Fragment>{content}</Fragment>;
