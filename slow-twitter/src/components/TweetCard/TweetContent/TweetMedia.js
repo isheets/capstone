@@ -1,54 +1,87 @@
-import React, { Fragment } from 'react'
-import { useSelector } from "react-redux";
+import React, { Fragment, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import FsLightbox from 'fslightbox-react';	
+
+import { setLBSlide, toggleLBVisible } from "./../../../actions";
+
+let dispatch;
+
+var showSlide = slide => {
+  dispatch(toggleLBVisible());
+  dispatch(setLBSlide());
+};
 
 const TweetMedia = props => {
-    let quote = props.quote;
+  let quote = props.quote;
 
-    let curTweet = useSelector(state => state.game.curTweet);
+  let curTweet = useSelector(state => state.game.curTweet);
+  let curSlide = useSelector(state => state.lightbox.slide);
+  let lbVisible = useSelector(state => state.lightbox.isVisible);
 
-    let tweetWithMedia;
+  dispatch = useDispatch();
 
-    //check if tweet with media we are rendering is quote or orginial
+  let tweetWithMedia;
 
-    if (quote == true) {
-        tweetWithMedia = curTweet.quote;
+  //check if tweet with media we are rendering is quote or orginial
+
+  if (quote == true) {
+    tweetWithMedia = curTweet.quote;
+  } else {
+    tweetWithMedia = curTweet;
+  }
+  let content;
+
+  let numMedia = 0;
+
+  let mediaURLs = [];
+  let imgAr = [];
+
+  if (tweetWithMedia.hasMedia) {
+    const mediaAr = tweetWithMedia.media;
+    console.log(mediaAr);
+    numMedia = mediaAr.length;
+    //we have some media to render!
+    for (let i = 0; i < mediaAr.length; i++) {
+	  let media = mediaAr[i];
+		mediaURLs.push(media.url);
+      if (media.type === "photo" || media.type === "animated_gif") {
+        imgAr.push(
+          <img key ={i} src={media.url} alt="" className={"tweet-media-item tweet-media-item-" + i} onClick={() => showSlide(i)}></img>
+        );
+      } else if (media.type === "video") {
+        imgAr.push(
+          <video
+            width="426"
+            height="240"
+            controls
+			className="tweet-media-item fit"
+          >
+            <source src={media.url} type={media.format}></source>
+            Your browser does not support inline video viewing.
+            <a href={media.url}>Click here to view.</a>
+          </video>
+        );
+      } else {
+        console.error(
+          "Media Type not caught in switch statement: " + media.type
+        );
+      }
     }
-    else {
-        tweetWithMedia = curTweet;
-    }
-    let content;
-    
-    if (tweetWithMedia.hasMedia) {
-        const mediaAr = tweetWithMedia.media;
-        console.log(mediaAr);
-        //we have some media to render!
-        for (let media of mediaAr) {
-            if (media.type === "photo" || media.type === "animated_gif") {
-                content = (<img src={media.url} alt="" className="tweet-media-item"></img>);
-            }
-            else if (media.type === "video") {
-                content = (
-                    <video width="426" height="240" controls className="tweet-media-item fit">
-                        <source src={media.url} type={media.format}></source>
-                        Your browser does not support inline video viewing.
-                        <a href={media.url}>Click here to view.</a>
-                    </video>
-                )
-            }
-            else {
-                console.error("Media Type not caught in switch statement: " + media.type);
-            }
-        }
-    }
-    else {
-        content = null;
-    }
+    console.log(mediaURLs);
+    content = (
+      <div className={"tweet-media-grid-" + numMedia}>
+		{imgAr}
+    	
+		<FsLightbox toggler={lbVisible} slide={curSlide} sources={mediaURLs} />
+      </div>
+    );
+    console.log(content);
+  } else {
+    content = null;
+  }
 
-    return (
-        <div className="tweet-media">
-            {content}
-        </div>
-    )
-}
+  //return <div className={`tweet-media-${numMedia}`}>{content}</div>;
+  return <Fragment>{content}</Fragment>;
+};
 
-export default TweetMedia
+export default TweetMedia;

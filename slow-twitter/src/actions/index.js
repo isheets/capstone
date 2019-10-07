@@ -68,8 +68,15 @@ export const moveDroppedWord = droppedWord => ({
   droppedWord
 })
 
-//need an action to clear out dropped word array....
-
 export const clearDroppedWords = () => ({
   type: 'CLEAR_DROPPED_WORDS'
+})
+
+export const toggleLBVisible = () => ({
+  type: 'TOGGLE_LB_VISIBLE',
+})
+
+export const setLBSlide = (slideNum) => ({
+  type: 'SET_LB_SLIDE',
+  slideNum
 })

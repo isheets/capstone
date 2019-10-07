@@ -1,9 +1,9 @@
 import React, { Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Blank from "./Blank";
-import { setExtractedWords, setWordOptions } from "../../../actions";
-import ExtractedWord from "../../../game/ExtractedWord";
-import verbs from "../../../custom-dict/verbs";
+import { setExtractedWords, setWordOptions } from "./../../../actions";
+import ExtractedWord from "./../../../game/ExtractedWord";
+import verbs from "./../../../custom-dict/verbs";
 
 import posMap from "../../../config/pos";
 import Microlink from '@microlink/react'

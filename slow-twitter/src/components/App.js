@@ -5,7 +5,8 @@ import {
   updateAuthentication,
   updateToken,
   updateUser,
-  updateParsedTweets
+  updateParsedTweets, 
+  updateLastTweetFetched
 } from "./../actions";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -204,8 +205,10 @@ const parseRawTweets = rawTweets => {
     }
   }
   console.log(newTweets);
+  //clear out old tweets - need to think about what makes the most sense...maybe clear out tweets older than 1 day or something
+  dispatch(updateParsedTweets([]));
   dispatch(updateParsedTweets(newTweets));
-  dispatch(updateCurTweetId(0));
+  dispatch(updateLastTweetFetched(newTweets[newTweets.length-1].tweetID));
 };
 let userToken;
 let userTokenSecret;
@@ -215,11 +218,10 @@ const App = () => {
 
   userToken = null;
   userTokenSecret = null;
-  let lastTweetFetched = null;
+  let lastTweetFetched = useSelector(state => state.game.lastTweetFetched);
   if (user.userDetails !== null) {
     userToken = user.userDetails.twitterProvider.token;
     userTokenSecret = user.userDetails.twitterProvider.tokenSecret;
-    //lastTweetFetched = state.game.lastTweetFetched;
   }
 
   //init reference to dispatch
@@ -244,7 +246,7 @@ const App = () => {
       </div>
       <TweetNav />
       <button
-        onClick={() => refreshFeed(userToken, userTokenSecret, null)}
+        onClick={() => refreshFeed(userToken, userTokenSecret, lastTweetFetched)}
         className="button"
       >
         Refresh Timeline

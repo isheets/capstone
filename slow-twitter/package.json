@@ -6,16 +6,20 @@
     "@microlink/react": "^4.2.2",
     "he": "^1.2.0",
     "lodash.throttle": "^4.1.1",
+    "mdbreact": "^4.21.0",
     "pos": "^0.4.2",
     "react": "^16.10.1",
     "react-dnd": "^9.4.0",
     "react-dnd-html5-backend": "^9.4.0",
     "react-dom": "^16.10.1",
+    "react-images": "^1.0.0",
+    "react-lightbox-component": "^1.2.1",
     "react-redux": "^7.1.1",
     "react-scripts": "3.1.0",
     "react-twitter-auth": "0.0.9",
     "redux": "^4.0.4",
     "sentencer": "^0.2.0",
+    "simple-lightbox": "^2.1.0",
     "styled-components": "^4.4.0"
   },
   "scripts": {
@@ -38,5 +42,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "fslightbox-react": "^1.4.2"
   }
 }

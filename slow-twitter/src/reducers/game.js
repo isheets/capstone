@@ -2,7 +2,7 @@ const intialGame = {
   lastTweetFetched: null,
   parsedTweets: null,
   curTweet: null,
-  curTweetId: null,
+  curTweetId: 0,
   curGame: null,
   extractedWords: null,
   wordOptions: [],
@@ -27,7 +27,7 @@ const game = (state = intialGame, action) => {
     case "SET_LAST_TWEET_FETCHED":
       return {
         ...state,
-        lastTweetFetched: action.lastTweetFetched
+        lastTweetFetched: action.lastFetched
       };
     case "SET_PARSED_TWEETS":
       return {
