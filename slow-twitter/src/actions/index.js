@@ -33,6 +33,11 @@ export const updateParsedTweets = parsedTweets => ({
   parsedTweets
 })
 
+export const updateCurGame = curGame => ({
+  type: 'SET_CURRENT_GAME',
+  curGame
+})
+
 export const updateCurTweet = curTweet => ({
   type: 'SET_CURRENT_TWEET',
   curTweet

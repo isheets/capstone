@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Blank from "./Blank";
-import { setExtractedWords, setWordOptions } from "./../../../actions";
+import { setExtractedWords, setWordOptions, updateCurGame } from "./../../../actions";
 import verbs from "./../../../custom-dict/verbs";
 
 import posMap from "../../../config/pos";
@@ -257,6 +257,7 @@ const TweetText = props => {
 		}
 	} else {
 		textToRender = myFillBlank.findAndExtractWords();
+		dispatch(updateCurGame(myFillBlank))
 		//textToRender = extractWords(curTweet.text);
 		if (curTweet.urls !== null) {
 			for (let i = 0; i < curTweet.urls.length; i++) {

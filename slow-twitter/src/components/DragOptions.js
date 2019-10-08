@@ -22,7 +22,7 @@ var shuffle = (array) => {
   }
 
 const DragOptions = () => {
-    let wordOptions = useSelector(state => state.game.wordOptions);
+    let wordOptions = useSelector(state => state.game.curGame.wordOptions);
 
     let content = null;
 

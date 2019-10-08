@@ -7,11 +7,17 @@ const intialGame = {
   extractedWords: null,
   wordOptions: [],
   numWordsDropped: 0,
-  droppedWords: []
+  droppedWords: [],
+  currentGame: null
 };
 
 const game = (state = intialGame, action) => {
   switch (action.type) {
+    case "SET_CURRENT_GAME":
+      return {
+        ...state,
+        curGame: action.curGame
+      };
     case "SET_CURRENT_TWEET":
       return {
         ...state,

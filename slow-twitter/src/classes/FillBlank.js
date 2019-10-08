@@ -81,12 +81,10 @@ export default class FillBlank extends Game {
 		let allWordExp =
 			"(?<=\\s|^|\\b)(?:[-’%$#&\\/]\\b|\\b[-’%$#&\\/]|[A-Za-z0-9]|\\([A-Za-z0-9]+\\))+(?=\\s|$|\\b)";
 		let allWordReg = new RegExp(allWordExp, "g");
-		console.log("ALL WORD REG");
-		console.log(allWordReg);
+
 
 		//use regex to create array of all words in tweet
 		let wordAr = text.match(allWordReg);
-		console.log(wordAr);
 
 		//some issue with getting words - maybe all emojis or excalamation or something else
 		if (wordAr === null) {
@@ -173,20 +171,20 @@ export default class FillBlank extends Game {
 				end: endIdx,
 				pos: word.mappedPOS
 			});
-			console.log("FOUND WORD ARRAY");
-			console.log(foundWordArray);
 		}
 
 		//sort the array so that smallest idx is first
 		foundWordArray.sort((a, b) => (a.start > b.start ? 1 : -1));
 
 		//we have a sorted array of words we want to extract and their start/end indexes
-		return this.extractWords(text)
+		return this.extractWords(foundWordArray)
 	}
 
 	extractWords(foundWordArray) {
 		//get the text
 		let text = this.curTweet.text;
+
+		console.log(foundWordArray);
 
 		let extractWordObjs = [];
 
