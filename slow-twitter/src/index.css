@@ -128,6 +128,18 @@ table {
   border-spacing: 0;
 }
 
+/* global vars */
+
+:root{
+  --dark-bg: rgb(48, 39, 40);
+  --tan: rgb(187, 197, 182);
+  --blue: rgb(79, 177, 211);
+  --red: rgb(209, 109, 95);
+  --large-border-radius: 10px;
+  --small-border-radius: 3px;
+}
+
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -136,7 +148,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
-  background-color: #534741;
+  background-color: var(--dark-bg);
 }
 
 code {
@@ -144,11 +156,11 @@ code {
     monospace;
 }
 
-/* blue: 38A1F3 */
+
+
 
 .top-bar {
   width: 90%;
-  background-color: #38a1f3;
   display: grid;
   grid-template-columns: 58% 37%;
   column-gap: 5%;
@@ -156,27 +168,22 @@ code {
   margin-top: 15px;
 }
 
-.black-box {
-  margin: 20px;
-  padding: 10px;
-  background-color: black;
-  display: inline-block;
-  width: fit-content;
-}
-
 h1 {
-  color: #f79c83;
-  font-size: 175%;
-  font-family: 'Courier New', Courier, monospace;
+  color: var(--red);
+  font-size: 200%;
+  font-family: paralucent-stencil, sans-serif;
   display: inline-block;
-  font-weight: bold;
   align-self: center;
+  border-top: 2px dashed var(--blue);
+  border-bottom: 2px dashed var(--blue);
+  border-radius: var(--large-border-radius);
+  padding: 15px;
 }
 
 h2 {
-  color: #f79c83;
+  color: var(--red);
   font-size: 110%;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: paralucent-stencil, sans-serif;
   display: inline-block;
   font-weight: bold;
   align-self: center;
@@ -195,19 +202,25 @@ h3 {
 
 a {
   text-decoration: none;
-  color: black;
-  background-color: #f79c83;
+  color: var(--dark-bg);
+  background-color: var(--red);
+  font-weight: bold;
+  padding: 5px;
+  border-radius: var(--small-border-radius);
 }
 a:focus {
 }
 a:hover {
-  background-color: black;
-  color: #f79c83;
+  background-color: var(--dark-bg);
+  color: var(--red);
+  border: 1px solid var(--red);
 }
 
 .word-drag {
-  background-color: black;
-  color: #f79c83;
+  background-color: var(--dark-bg);
+  color: var(--tan);
+  border: 1px solid var(--red);
+  border-radius: var(--small-border-radius);
   line-height: 150%;
   padding: 2px;
   padding-top: 0;
@@ -218,14 +231,20 @@ a:hover {
 }
 
 .tweet-blank {
+  border: .5px solid var(--red);
   padding: 2px;
   padding-top: 0;
   margin-top: 2px;
   display: inline-block;
+  border-radius: var(--small-border-radius);
 }
 
 .tweet-blank-filled {
+  border: .5px solid var(--red);
   padding: 2px;
+  border-radius: var(--small-border-radius);
+  line-height: calc(150% - 4px);
+  margin-top: 2px;
 }
 
 .main-grid {
@@ -239,8 +258,10 @@ a:hover {
 }
 
 .drag-options-wrapper {
-
-  background-color: #fac15f;
+  position: sticky; 
+  top: 15px;
+  border: 2px solid var(--red);
+  border-radius: var(--large-border-radius);
   height: min-content;
 }
 
@@ -263,9 +284,9 @@ a:hover {
   display: inline-block;
   margin: auto;
   padding: 10px;
-  color: black;
-  background-color: #f79c83;
-  box-shadow: 2px 2px 0 0 #FAC15F;
+  color: var(--tan);
+  background-color: rgba(0,0,0,0);
+  box-shadow: 2px 2px 0 0 var(--red);
   outline: none;
   border:none;
   font-family: 'Courier New', Courier, monospace;
@@ -274,5 +295,5 @@ a:hover {
 }
 
 .twitter-login-button:hover {
-  box-shadow: 4px 4px 0 0 #FAC15F;
+  box-shadow: 4px 4px 0 0 var(--red);
 }

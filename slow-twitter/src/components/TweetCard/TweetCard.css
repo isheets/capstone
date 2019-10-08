@@ -1,11 +1,14 @@
+
+
 .tweet-card-wrapper {
     width: 100%;
-    background-color: #FAC15F;
+    background-color: var(--dark-bg);
+    border: 2px solid var(--red);
+    border-radius: var(--large-border-radius);
 }
 .tweet-card {
     margin: 15px;
-
-    color: black;
+    color: var(--tan);
     font-family: 'Courier New', Courier, monospace;
 }
 
@@ -119,10 +122,11 @@
 
 
 .quote-tweet-grid {
-    display: grid;
-    grid-template-columns: [col1start] 50px [col2start] 1fr [col2dnd];
+    margin-top: 15px;
+    width: calc(100% - 20px);
+    border: 1px solid var(--red);
+    border-radius: var(--large-border-radius);
     border-radius: 10px;
-    background-color: lightgray;
     padding: 10px;
 }
 

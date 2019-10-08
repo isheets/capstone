@@ -20,20 +20,20 @@ const Blank = props => {
   console.log(wordBeingDragged);
 
   let content = null;
-  let blankFiller = ".......";
+  let blankFiller = ".........";
   let width = "fit-content";
 
   const isActive = canDrop && isOver;
-  let backgroundColor = "black";
+  let backgroundColor = "rgb(48, 39, 40)";
   let color = backgroundColor;
   if (isActive) {
-    backgroundColor = "black";
+    backgroundColor = "rgb(48, 39, 40)";
     color = backgroundColor;
     //size all the blanks according to the word being dragged
     blankFiller = wordBeingDragged.value;
     width = 'min-content';
   } else if (canDrop) {
-    backgroundColor = "#38A1F3";
+    backgroundColor = "rgb(79, 177, 211)";
     color = backgroundColor;
     blankFiller = wordBeingDragged.value;
     width = 'min-content';
@@ -54,7 +54,7 @@ const Blank = props => {
       <span
         ref={drop}
         className="tweet-blank-filled"
-        style={{ backgroundColor: "black", color: "#f79c83" }}
+        style={{ backgroundColor: "rgb(48, 39, 40)", color: "rgb(187, 197, 182)" }}
       >
         {wordInBlank.word}
       </span>

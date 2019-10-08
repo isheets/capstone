@@ -206,9 +206,10 @@ const parseRawTweets = rawTweets => {
   }
   console.log(newTweets);
   //clear out old tweets - need to think about what makes the most sense...maybe clear out tweets older than 1 day or something
-  dispatch(updateParsedTweets([]));
+  //dispatch(updateParsedTweets([]));
   dispatch(updateParsedTweets(newTweets));
   dispatch(updateLastTweetFetched(newTweets[newTweets.length-1].tweetID));
+  dispatch(updateCurTweetId(0));
 };
 let userToken;
 let userTokenSecret;
@@ -235,7 +236,7 @@ const App = () => {
           <h1>SLOW TWITTER</h1>
         </div>
         <div className="black-box">
-          <h2>LOGGED IN AS: {user.userDetails.name}</h2>
+          <h2>{user.userDetails.name}</h2>
         </div>
       </div>
       <div className="main-grid">
