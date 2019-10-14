@@ -3,9 +3,10 @@ import { useSelector } from "react-redux";
 import TweetInfo from './../../TweetInfo';
 import TweetProfilePic from './../../TweetProfilePic';
 import TweetText from './../TweetText';
+import TweetMedia from '../TweetMedia';
 
 const QuoteTweet = () => {
-    let quoteTweet = useSelector(state => state.game.curTweet.quoteTweet);
+    let quoteTweet = useSelector(state => state.game.curGame.curTweet.quoteTweet);
 
     return(
         <div className="quote-tweet-grid">
@@ -16,6 +17,7 @@ const QuoteTweet = () => {
             <div className="quote-tweet-content">
                 <TweetInfo quote={true}/>
                 <TweetText quote={true} />
+                <TweetMedia />
             </div>
         </div>
     )

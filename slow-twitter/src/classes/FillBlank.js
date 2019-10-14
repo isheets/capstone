@@ -3,8 +3,9 @@ import Game from "./Game";
 import verbs from "./../custom-dict/verbs";
 import posMap from "./../config/pos";
 import Blank from "./../components/TweetCard/TweetContent/Blank";
-import {updateCurGame} from './../actions';
-import Update from './Update';
+import {nextTweet} from './../components/TweetNav';
+import store from './../index';
+import {updateParsedTweets, updateCurGame} from './../actions';
 
 var pos = require("pos");
 var tagger = new pos.Tagger();
@@ -19,10 +20,11 @@ Sentencer.configure({
 	}
 });
 
-export class FillBlank extends Game {
-	constructor(type, newTweet) {
+export class FillBlank {
+	constructor(newTweet) {
 		//call constructor from super class Game
-		super(type, newTweet);
+		this.curTweet = newTweet;
+		this.type = 'FillBlank'
 
 		//FillBlank specific properties
 		this.extractedWords = []; //array of extracted word objects
@@ -39,7 +41,7 @@ export class FillBlank extends Game {
 
 	//takes a drop and checks if it's true
 	handleDrop(droppedWord, droppedIn, correctDrop) {
-		console.log("droppedWord: " + droppedWord + ", droppedIn: " + droppedIn);
+		//console.log("droppedWord: " + droppedWord + ", droppedIn: " + droppedIn);
 
 		let newWordObj = {
 			word: droppedWord,
@@ -56,36 +58,32 @@ export class FillBlank extends Game {
 
 		//check if we already dropped the word, move it if so and stop
 		if (this.checkMovedWord(droppedWord)) {
-			this.droppedWords = [];
-
-			this.droppedWords.push(this.droppedWords.map(wordObj => {
+			console.log("moved word");
+			for(let i = 0; i < this.droppedWords.length; i++) {
+				let wordObj = this.droppedWords[i];
+				console.log(wordObj);
 				if (wordObj.word === newWordObj.word) {
-					return newWordObj
+					console.log(wordObj);
+					this.droppedWords[i] = newWordObj;
 				}
-				else {
-					return wordObj
-				}
-			}));
+			}
 		}
+
 		//check if already filled the blank, change the word if so
 		else if (this.checkAlreadyDropped(droppedIn)) {
-			this.droppedWords = [];
-			this.droppedWords.push(this.droppedWords.map(wordObj => {
+			console.log("already dropped");
+			for(let i = 0; i < this.droppedWords.length; i++) {
+				let wordObj = this.droppedWords[i];
 				if (wordObj.droppedIn === newWordObj.droppedIn) {
-					return newWordObj;
+					this.droppedWords[i] = newWordObj;
 				}
-				else {
-					return wordObj;
-				}
-
-			}));
+			}
 		}
+
 		//else add the word
 		else {
 			this.droppedWords.push(newWordObj)
 		}
-
-		
 
 		this.checkDone();
 
@@ -143,7 +141,6 @@ export class FillBlank extends Game {
 			if (correct === true) {
 				//tweet completed successfully
 				this.success()
-				alert('great job! you did it!');
 
 			}
 			else {
@@ -162,6 +159,14 @@ export class FillBlank extends Game {
 	success() { 
 		//reset lives
 		//get the next tweet
+		let state = store.getState();
+		let parsedTweets = state.game.parsedTweets;
+		let newTweets = parsedTweets;
+		newTweets.shift();
+		let newGame = new FillBlank;
+		newGame.setCurrentTweet(newTweets[0]);
+		store.dispatch(updateParsedTweets(newTweets));
+		store.dispatch(updateCurGame(newGame));
 	}
 
 	//game is done and not everything is correct
@@ -253,6 +258,7 @@ export class FillBlank extends Game {
 				numCheckedWords++;
 			}
 
+
 			if (numCheckedWords === wordAr.length - 1) {
 				console.log("checked all the words");
 			} else {
@@ -308,8 +314,6 @@ export class FillBlank extends Game {
 	extractWords(foundWordArray) {
 		//get the text
 		let text = this.curTweet.text;
-
-		console.log(foundWordArray);
 
 		let extractWordObjs = [];
 
@@ -376,7 +380,7 @@ export class FillBlank extends Game {
 		this.setWordOptions(wordOptions);
 		this.setExtractedWords(extractWordObjs);
 
-		console.log(jsxAr);
+		//console.log(jsxAr);
 
 		return jsxAr;
 	}
@@ -386,7 +390,7 @@ export class FillBlank extends Game {
 let usedIdx = [];
 
 var getRandomUniqueIndex = max => {
-	console.log("usedIdx: " + usedIdx);
+	//console.log("usedIdx: " + usedIdx);
 	let newIdx = Math.floor(Math.random() * Math.floor(max));
 	while (usedIdx.includes(newIdx) && usedIdx.length < max) {
 		newIdx = Math.floor(Math.random() * Math.floor(max));

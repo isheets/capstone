@@ -41,7 +41,11 @@ var timeSinceTweet = function( tweetDateString ) {
 
 
 const TweetInfo = (props) => {
-    const curTweet = useSelector(state => state.game.curTweet);
+    const curGame = useSelector(state => state.game.curGame);
+    let curTweet = null;
+    if(curGame !== null) {
+        curTweet = curGame.curTweet;
+    }
     let quote = props.quote;
     let tweetToRender;
     let classForTweetInfo;

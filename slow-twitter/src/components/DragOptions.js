@@ -28,7 +28,7 @@ const DragOptions = () => {
     if (game !== null) {
         if (game.wordOptions.length > 0) {
             game.wordOptions = shuffle(game.wordOptions);
-            console.log(game.wordOptions);
+            //console.log(game.wordOptions);
             content =
                 game.wordOptions.map((word, key) =>
                     <Drag word={word.word} order={word.order} key={key} />

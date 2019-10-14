@@ -18,8 +18,6 @@ const Blank = props => {
     })
   });
 
-  console.log(wordBeingDragged);
-
   let content = null;
   let blankFiller = ".........";
   let width = "fit-content";

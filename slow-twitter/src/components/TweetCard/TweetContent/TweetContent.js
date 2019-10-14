@@ -6,7 +6,11 @@ import QuoteTweet from "./QuoteTweet/QuoteTweet";
 
 const TweetContent = () => {
 
-    let curTweet = useSelector(state => state.game.curTweet);
+    let curGame = useSelector(state => state.game.curGame);
+    let curTweet = null;
+    if (curGame !== null) {
+        curTweet = curGame.curTweet;
+    }
 
     let content = null;
 
@@ -27,7 +31,7 @@ const TweetContent = () => {
             content = (
                 <Fragment>
                     <TweetText />
-                    <TweetMedia />
+                    <TweetMedia quote={false}/>
                 </Fragment>
             )
         }

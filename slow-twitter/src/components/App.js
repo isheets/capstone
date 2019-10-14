@@ -211,9 +211,8 @@ const parseRawTweets = rawTweets => {
   //dispatch(updateParsedTweets([]));
   dispatch(updateParsedTweets(newTweets));
   dispatch(updateLastTweetFetched(newTweets[newTweets.length-1].tweetID));
-  dispatch(updateCurTweetId(0));
   
-  let newGame = new FillBlank('FillBlank', newTweets[0]);
+  let newGame = new FillBlank(newTweets[0]);
   dispatch(updateCurGame(newGame))
 };
 let userToken;

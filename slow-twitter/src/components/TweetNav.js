@@ -1,24 +1,23 @@
 import React from 'react'
 import { useSelector, useDispatch } from "react-redux";
-import { updateCurTweetId, updateCurGame } from './../actions';
+import { updateCurTweetId, updateCurGame, updateParsedTweets } from './../actions';
+import {FillBlank} from './../classes/FillBlank';
 
 let dispatch;
 let game;
-let curGame;
 
-export var prevTweet = () => {
-    if (game.curTweetId > 0) {
-        dispatch(updateCurTweetId(game.curTweetId - 1));
-        curGame.setCurrentTweet(game.parsedTweets[game.curTweetId - 1])
-    }
-    else {
-        console.error("Can't go to prev tweet, does not exist. curTweetId: " + game.curTweetId);
-    }
-}
+
 export var nextTweet = () => {
     if (game.parsedTweets !== null) {
-        if (game.curTweetId < game.parsedTweets.length - 1) {
-            dispatch(updateCurTweetId(game.curTweetId + 1));
+        if (game.parsedTweets.length > 1) {
+            console.log(game.parsedTweets);
+            let newTweets = game.parsedTweets;
+            newTweets.shift();
+            console.log(newTweets);
+            dispatch(updateParsedTweets(newTweets));
+            let newGame = new FillBlank;
+            newGame.setCurrentTweet(newTweets[0]);
+            dispatch(updateCurGame(newGame));
         }
     }
     else {
@@ -28,11 +27,9 @@ export var nextTweet = () => {
 
 const TweetNav = () => {
     game = useSelector(state => state.game);
-    curGame = useSelector(state => state.game.curGame)
     dispatch = useDispatch();
     return (
         <div>
-            <button onClick={() => prevTweet()}>Prev</button>
             <button onClick={() => nextTweet()}>Next</button>
         </div>
     )

@@ -5,10 +5,8 @@ import { updateCurGame } from "./../../../actions";
 const TweetText = props => {
 	let dispatch = useDispatch();
 	const game = useSelector(state => state.game.curGame);
-
 	if (game !== null) {
 		let curTweet = game.curTweet;
-		console.log(game)
 
 		//reset used indexes for every new tweet
 		//usedIdx = [];

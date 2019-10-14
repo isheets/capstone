@@ -15,7 +15,6 @@ const game = (state = intialGame, action) => {
     case "SET_CURRENT_TWEET_ID":
       return {
         ...state,
-        curTweet: state.parsedTweets[action.curTweetId],
         curTweetId: action.curTweetId
       };
     case "SET_LAST_TWEET_FETCHED":

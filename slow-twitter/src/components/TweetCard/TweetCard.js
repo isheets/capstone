@@ -13,8 +13,7 @@ const TweetCard = () => {
 
   if (game != null) {
     let curTweet = game.curTweet;
-
-    console.log(curTweet);
+    
     //make sure we have content to render
     if (curTweet !== null) {
       //check if we will need to render a quote tweet
