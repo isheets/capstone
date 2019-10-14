@@ -6,9 +6,11 @@ import {
   updateToken,
   updateUser,
   updateParsedTweets, 
-  updateLastTweetFetched
+  updateLastTweetFetched,
+  updateCurGame
 } from "./../actions";
 import { useSelector, useDispatch } from "react-redux";
+import {FillBlank} from './../classes/FillBlank'
 
 import TweetCard from "./TweetCard/TweetCard";
 import TweetNav from "./TweetNav";
@@ -210,6 +212,9 @@ const parseRawTweets = rawTweets => {
   dispatch(updateParsedTweets(newTweets));
   dispatch(updateLastTweetFetched(newTweets[newTweets.length-1].tweetID));
   dispatch(updateCurTweetId(0));
+  
+  let newGame = new FillBlank('FillBlank', newTweets[0]);
+  dispatch(updateCurGame(newGame))
 };
 let userToken;
 let userTokenSecret;

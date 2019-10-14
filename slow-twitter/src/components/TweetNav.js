@@ -1,19 +1,21 @@
 import React from 'react'
 import { useSelector, useDispatch } from "react-redux";
-import { updateCurTweetId } from './../actions';
+import { updateCurTweetId, updateCurGame } from './../actions';
 
 let dispatch;
 let game;
+let curGame;
 
-var prevTweet = () => {
+export var prevTweet = () => {
     if (game.curTweetId > 0) {
         dispatch(updateCurTweetId(game.curTweetId - 1));
+        curGame.setCurrentTweet(game.parsedTweets[game.curTweetId - 1])
     }
     else {
         console.error("Can't go to prev tweet, does not exist. curTweetId: " + game.curTweetId);
     }
 }
-var nextTweet = () => {
+export var nextTweet = () => {
     if (game.parsedTweets !== null) {
         if (game.curTweetId < game.parsedTweets.length - 1) {
             dispatch(updateCurTweetId(game.curTweetId + 1));
@@ -26,6 +28,7 @@ var nextTweet = () => {
 
 const TweetNav = () => {
     game = useSelector(state => state.game);
+    curGame = useSelector(state => state.game.curGame)
     dispatch = useDispatch();
     return (
         <div>

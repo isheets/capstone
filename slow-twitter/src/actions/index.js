@@ -38,43 +38,9 @@ export const updateCurGame = curGame => ({
   curGame
 })
 
-export const updateCurTweet = curTweet => ({
-  type: 'SET_CURRENT_TWEET',
-  curTweet
-})
-
 export const updateCurTweetId = curTweetId => ({
   type: 'SET_CURRENT_TWEET_ID',
   curTweetId
-})
-
-export const setExtractedWords = extractedWords => ({
-  type: 'SET_EXTRACTED_WORDS',
-  extractedWords
-})
-
-export const setWordOptions = wordOptions => ({
-  type: 'SET_WORD_OPTIONS',
-  wordOptions
-})
-
-export const addDroppedWord = droppedWord => ({
-  type: 'ADD_DROPPED_WORD',
-  droppedWord
-})
-
-export const updateDroppedWord = droppedWord => ({
-  type: 'UPDATE_DROPPED_WORD',
-  droppedWord
-})
-
-export const moveDroppedWord = droppedWord => ({
-  type: 'MOVE_DROPPED_WORD',
-  droppedWord
-})
-
-export const clearDroppedWords = () => ({
-  type: 'CLEAR_DROPPED_WORDS'
 })
 
 export const toggleLBVisible = () => ({

@@ -8,24 +8,27 @@ import { updateCurTweet } from "../../actions";
 
 const TweetCard = () => {
   //hook into state to get the current tweet to display
-  let curTweet = useSelector(state => state.game.curTweet);
-
+  let game = useSelector(state => state.game.curGame);
   let content;
 
-  console.log(curTweet);
-  //make sure we have content to render
-  if (curTweet !== null) {
-    //check if we will need to render a quote tweet
-    if (curTweet.isQuote == true) {
-    }
+  if (game != null) {
+    let curTweet = game.curTweet;
 
-    content = (
-      <Fragment>
-        <TweetProfilePic url={curTweet.user.pic} />
-        <TweetInfo />
-        <TweetContent />
-      </Fragment>
-    );
+    console.log(curTweet);
+    //make sure we have content to render
+    if (curTweet !== null) {
+      //check if we will need to render a quote tweet
+      if (curTweet.isQuote == true) {
+      }
+
+      content = (
+        <Fragment>
+          <TweetProfilePic url={curTweet.user.pic} />
+          <TweetInfo />
+          <TweetContent />
+        </Fragment>
+      );
+    }
   }
 
   //no tweets view

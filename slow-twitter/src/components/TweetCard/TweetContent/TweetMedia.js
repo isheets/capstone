@@ -8,7 +8,7 @@ let dispatch;
 
 var showSlide = slide => {
   dispatch(toggleLBVisible());
-  dispatch(setLBSlide());
+  dispatch(setLBSlide(slide));
 };
 
 const TweetMedia = props => {
@@ -19,7 +19,6 @@ const TweetMedia = props => {
   let lbVisible = useSelector(state => state.lightbox.isVisible);
 
   dispatch = useDispatch();
-
   let tweetWithMedia;
 
   //check if tweet with media we are rendering is quote or orginial

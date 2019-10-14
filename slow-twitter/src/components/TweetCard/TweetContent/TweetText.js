@@ -1,281 +1,53 @@
 import React, { Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Blank from "./Blank";
-import { setExtractedWords, setWordOptions, updateCurGame } from "./../../../actions";
-import verbs from "./../../../custom-dict/verbs";
-
-import posMap from "../../../config/pos";
-
-import FillBlank from "./../../../classes/FillBlank";
-
-//get sentencer reference for generating randome words basd on pos
-var Sentencer = require("sentencer");
-Sentencer.configure({
-	actions: {
-		verb: function () {
-			return verbs[Math.floor(Math.random() * (verbs.length - 1))];
-		}
-	}
-});
-
-var pos = require("pos");
-var tagger = new pos.Tagger();
-let dispatch;
-
-//array to keep track of all indexes we've generated and checked
-let usedIdx = [];
-
-let extractedWordArray;
-
-var getRandomUniqueIndex = max => {
-	console.log("usedIdx: " + usedIdx);
-	let newIdx = Math.floor(Math.random() * Math.floor(max));
-	while (usedIdx.includes(newIdx) && usedIdx.length < max) {
-		newIdx = Math.floor(Math.random() * Math.floor(max));
-	}
-	usedIdx.push(newIdx);
-	return newIdx;
-};
-
-var checkValidWord = word => {
-	//need word to be at least 2 characters
-	if (word.length < 3) {
-		return false;
-	}
-	//don't get the same word twice
-	if (extractedWordArray.includes(word)) {
-		return false;
-	}
-	//only want nouns, adj, and verbs
-	let wordLex = new pos.Lexer().lex(word);
-	let taggedWord = tagger.tag(wordLex);
-	let wordPos = taggedWord[0][1];
-	if (
-		wordPos !== "NN" &&
-		wordPos !== "NNS" &&
-		wordPos !== "JJ" &&
-		wordPos !== "JJR" &&
-		wordPos !== "JJS" &&
-		wordPos !== "VB" &&
-		wordPos !== "VBN" &&
-		wordPos !== "VBD" &&
-		wordPos !== "VBG" &&
-		wordPos !== "VBP" &&
-		wordPos !== "VBZ"
-	) {
-		return false;
-	}
-	return true;
-};
-
-var extractWords = text => {
-	//construct regex to split string into all words
-	let allWordExp =
-		"(?<=\\s|^|\\b)(?:[-’%$#&\\/]\\b|\\b[-’%$#&\\/]|[A-Za-z0-9]|\\([A-Za-z0-9]+\\))+(?=\\s|$|\\b)";
-	let allWordReg = new RegExp(allWordExp, "g");
-	console.log("ALL WORD REG");
-	console.log(allWordReg);
-
-	//use regex to create array of all words in tweet
-	let wordAr = text.match(allWordReg);
-	console.log(wordAr);
-
-	//some issue with getting words - maybe all emojis or excalamation or something else
-	if (wordAr === null) {
-		//log an error and just return the text to avoid crash
-		console.error("NO WORDS IN WORD ARRAY");
-		dispatch(setExtractedWords([]));
-		dispatch(setWordOptions([]));
-		return text;
-	}
-	//declare array to hold all words we extract
-	extractedWordArray = [];
-
-	let numCheckedWords = 0;
-
-	//determine how many words to extract based on number of characters
-	let numChar = text.length;
-	let numWordsToExtract = 1;
-	if (numChar <= 50) {
-		numWordsToExtract = 1;
-	} else if (numChar > 50 && numChar <= 150) {
-		numWordsToExtract = 2;
-	} else if (numChar > 150 && numChar <= 2500) {
-		numWordsToExtract = 3;
-	} else {
-		numWordsToExtract = 4;
-	}
-	//get 2 random words
-	for (let i = 0; i < numWordsToExtract; i++) {
-		//get a random index and get the word at that index
-		let randIdx = getRandomUniqueIndex(wordAr.length - 1);
-		let extractedWord = wordAr[randIdx];
-
-		while (
-			checkValidWord(extractedWord) == false &&
-			numCheckedWords < wordAr.length - 1
-		) {
-			randIdx = getRandomUniqueIndex(wordAr.length - 1);
-			extractedWord = wordAr[randIdx];
-			numCheckedWords++;
-		}
-
-		if (numCheckedWords === wordAr.length - 1) {
-			console.log("checked all the words");
-		} else {
-			let wordLex = new pos.Lexer().lex(extractedWord);
-			let taggedWord = tagger.tag(wordLex);
-			let wordPos = taggedWord[0][1];
-
-			let mappedPos = posMap[wordPos];
-
-			extractedWordArray.push({
-				word: extractedWord,
-				mappedPOS: mappedPos
-			});
-
-			console.log("extractedWord" + i + ": " + extractedWord);
-		}
-	}
-
-	//declare array to keep track of words as we find them in the tweet
-	let foundWordArray = [];
-
-	for (let word of extractedWordArray) {
-		//construct regex to search for the current word
-		var searchExtractedWord = `\\b${word.word}\\b`;
-		var regSearchExtractedWord = new RegExp(searchExtractedWord);
-
-		//determine the indices of beginning and end of word
-		let startIdx = text.search(regSearchExtractedWord);
-		let endIdx = startIdx + word.word.length - 1;
-
-		//push an object containing the found indices and the word itself
-		foundWordArray.push({
-			word: word.word,
-			start: startIdx,
-			end: endIdx,
-			pos: word.mappedPOS
-		});
-		console.log("FOUND WORD ARRAY");
-		console.log(foundWordArray);
-	}
-
-	//sort the array so that smallest idx is first
-	foundWordArray.sort((a, b) => (a.start > b.start ? 1 : -1));
-
-	let extractWordObjs = [];
-
-	//loop through sorted found words and extract accordingly
-	for (let i = 0; i < foundWordArray.length; i++) {
-		let foundWord = foundWordArray[i];
-		extractWordObjs.push({
-			word: foundWord.word,
-			order: i,
-			pos: foundWord.pos
-		});
-
-		var searchFoundWord = `(\\b${foundWord.word})`;
-		var foundWordRegex = new RegExp(searchFoundWord);
-
-		//replace the word with a blank placeholder
-		text = text.replace(foundWordRegex, "*!*!%[need a blank here plzz]*!*!%");
-		//console.log("text after replace:" + text);
-	}
-
-	//split text into array at seperators
-	let parts = text.split("*!*!%");
-
-	//array to hold all the jsx
-	let jsxAr = [];
-
-	//iterator to keep track of how what word we're replacing
-	let curWordIdx = 0;
-
-	for (let i = 0; i < parts.length; i++) {
-		//insert fill in the blank compenent in at placeholder
-		if (parts[i] === "[need a blank here plzz]") {
-			jsxAr.push(
-				<Blank
-					key={i}
-					extractedWord={extractWordObjs[curWordIdx].word}
-					blankOrder={extractWordObjs[curWordIdx].order}
-				/>
-			);
-			//increment curWordIdx iterator
-			curWordIdx++;
-		}
-		//or just put the text
-		else {
-			jsxAr.push(<span key={i}>{parts[i]}</span>);
-		}
-	}
-
-	//this should probably go in seperate function (or file)
-
-	let wordOptions = [];
-	for (let word of extractWordObjs) {
-		wordOptions.push({
-			word: word.word,
-			order: word.order
-		});
-		for (let i = 0; i < 3; i++) {
-			wordOptions.push({
-				word: Sentencer.make(`{{ ${word.pos} }}`),
-				order: -1
-			});
-		}
-	}
-
-	dispatch(setExtractedWords(extractWordObjs));
-	dispatch(setWordOptions(wordOptions));
-
-	return jsxAr;
-};
+import { updateCurGame } from "./../../../actions";
 
 const TweetText = props => {
-	dispatch = useDispatch();
-	const curTweet = useSelector(state => state.game.curTweet);
+	let dispatch = useDispatch();
+	const game = useSelector(state => state.game.curGame);
 
-	const myFillBlank = new FillBlank("FillBlank", curTweet);
-	myFillBlank.setCurTweet(curTweet);
+	if (game !== null) {
+		let curTweet = game.curTweet;
+		console.log(game)
 
-	//reset used indexes for every new tweet
-	//usedIdx = [];
+		//reset used indexes for every new tweet
+		//usedIdx = [];
 
-	let quote = props.quote;
-	let textToRender;
-	let urlsToRender = [];
+		let quote = props.quote;
+		let textToRender;
+		let urlsToRender = [];
 
-	//no need to extract words if it's a quote tweet
-	if (quote === true) {
-		textToRender = curTweet.quoteTweet.text;
-		if (curTweet.quoteTweet.urls !== null) {
-			for (let url of curTweet.quoteTweet.urls) {
-				urlsToRender += <a href={url.display_url}></a>;
+		//no need to extract words if it's a quote tweet
+		if (quote === true) {
+			textToRender = curTweet.quoteTweet.text;
+			if (curTweet.quoteTweet.urls !== null) {
+				for (let url of curTweet.quoteTweet.urls) {
+					urlsToRender += <a href={url.display_url}></a>;
+				}
+			}
+		} else {
+			textToRender = game.findAndExtractWords();
+			dispatch(updateCurGame(game))
+			//textToRender = extractWords(curTweet.text);
+			if (curTweet.urls !== null) {
+				for (let i = 0; i < curTweet.urls.length; i++) {
+					urlsToRender.push(
+						<a target="_blank" href={curTweet.urls[i].expanded_url} key={i}>
+							-> {curTweet.urls[i].display_url}
+						</a>
+					);
+				}
 			}
 		}
-	} else {
-		textToRender = myFillBlank.findAndExtractWords();
-		dispatch(updateCurGame(myFillBlank))
-		//textToRender = extractWords(curTweet.text);
-		if (curTweet.urls !== null) {
-			for (let i = 0; i < curTweet.urls.length; i++) {
-				urlsToRender.push(
-					<a target="_blank" href={curTweet.urls[i].expanded_url} key={i}>
-						-> {curTweet.urls[i].display_url}
-					</a>
-				);
-			}
-		}
+
+		return (
+			<div className="tweet-text">
+				<pre>{textToRender}</pre>
+				<div className="tweet-urls">{urlsToRender}</div>
+			</div>
+		);
 	}
-
-	return (
-		<div className="tweet-text">
-			<pre>{textToRender}</pre>
-			<div className="tweet-urls">{urlsToRender}</div>
-		</div>
-	);
+	else return null;
 };
 
 export default TweetText;

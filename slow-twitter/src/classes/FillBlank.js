@@ -3,6 +3,8 @@ import Game from "./Game";
 import verbs from "./../custom-dict/verbs";
 import posMap from "./../config/pos";
 import Blank from "./../components/TweetCard/TweetContent/Blank";
+import {updateCurGame} from './../actions';
+import Update from './Update';
 
 var pos = require("pos");
 var tagger = new pos.Tagger();
@@ -17,32 +19,150 @@ Sentencer.configure({
 	}
 });
 
-export default class FillBlank extends Game {
+export class FillBlank extends Game {
 	constructor(type, newTweet) {
 		//call constructor from super class Game
 		super(type, newTweet);
 
 		//FillBlank specific properties
-		this.extractedWords = null;
-		this.wordOptions = null;
+		this.extractedWords = []; //array of extracted word objects
+		this.wordOptions = []; //array of word options objects
 		this.numBlanks = 0;
 		this.numDropped = 0; //intially equal to zero
+		this.droppedWords = []; // array of dropped words
+		this.lives = 3;
+	}
+
+	setCurrentTweet(tweet) {
+		this.curTweet = tweet;
 	}
 
 	//takes a drop and checks if it's true
-	checkDrop() { }
+	handleDrop(droppedWord, droppedIn, correctDrop) {
+		console.log("droppedWord: " + droppedWord + ", droppedIn: " + droppedIn);
+
+		let newWordObj = {
+			word: droppedWord,
+			droppedIn: droppedIn
+		};
+
+		if (droppedIn === correctDrop) {
+			newWordObj.correct = true;
+		} else {
+			newWordObj.correct = false;
+		}
+
+
+
+		//check if we already dropped the word, move it if so and stop
+		if (this.checkMovedWord(droppedWord)) {
+			this.droppedWords = [];
+
+			this.droppedWords.push(this.droppedWords.map(wordObj => {
+				if (wordObj.word === newWordObj.word) {
+					return newWordObj
+				}
+				else {
+					return wordObj
+				}
+			}));
+		}
+		//check if already filled the blank, change the word if so
+		else if (this.checkAlreadyDropped(droppedIn)) {
+			this.droppedWords = [];
+			this.droppedWords.push(this.droppedWords.map(wordObj => {
+				if (wordObj.droppedIn === newWordObj.droppedIn) {
+					return newWordObj;
+				}
+				else {
+					return wordObj;
+				}
+
+			}));
+		}
+		//else add the word
+		else {
+			this.droppedWords.push(newWordObj)
+		}
+
+		
+
+		this.checkDone();
+
+	}
+
+	checkMovedWord(word) {
+		//check to see if we have the word in our dropped word array
+		for (let wordObj of this.droppedWords) {
+			if (wordObj.word === word) {
+				//we already have the word
+				return true;
+			}
+		}
+		//new word
+		return false;
+	}
+
+	//checks to see if the blank is alrFieady filled
+	//returns true with already dropped, so need to update word
+	//or false and need to add word
+	checkAlreadyDropped(dropID) {
+		//check to see if we already dropped a word in this spot
+		for (let wordObj of this.droppedWords) {
+			if (wordObj.droppedIn === dropID) {
+				//we already filled the blank
+				return true;
+			}
+		}
+		//blank is empty
+		return false
+	}
+
+
 
 	//handles a correct drop
 	correctDrop() { }
 
 	//handles an incorrect drop
-	incorrectDrop() { }
+	incorrectDrop() {
+		//subtract lives
+		//remove word from blank
+	 }
 
 	//checks if we have filled all the blanks
-	checkDone() { }
+	checkDone() {
+		//finally check if we've finished completing the tweet
+		console.log('checking to see if we completed the entire tweet');
+		if (this.droppedWords.length === this.extractedWords.length) {
+			let correct = true;
+			for (let wordObj of this.droppedWords) {
+				if (wordObj.correct === false) {
+					correct = false;
+				}
+			}
+			if (correct === true) {
+				//tweet completed successfully
+				this.success()
+				alert('great job! you did it!');
+
+			}
+			else {
+				//tweet completed incorrectly
+				this.fail()
+				alert("that would be INCORRECT!!!!! IDIOT!");
+
+			}
+		}
+		else {
+			//NOT DONE CODE HERE
+		}
+	}
 
 	//game is done and everything is correct
-	success() { }
+	success() { 
+		//reset lives
+		//get the next tweet
+	}
 
 	//game is done and not everything is correct
 	fail() { }
@@ -68,6 +188,11 @@ export default class FillBlank extends Game {
 	setDone(done) {
 		this.done = done;
 	}
+
+	static fromJSON(serializedJson) {
+		let newInstance = Object.assign(new FillBlank(), serializedJson);
+		return newInstance;
+	} 
 
 	findAndExtractWords() {
 		return this.getRandomWords();

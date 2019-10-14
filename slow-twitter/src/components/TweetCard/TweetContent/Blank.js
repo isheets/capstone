@@ -5,7 +5,8 @@ import { useSelector, useDispatch } from "react-redux";
 const Blank = props => {
   let extractedWord = props.extractedWord;
   let blankOrder = props.blankOrder;
-  let droppedWords = useSelector(state => state.game.droppedWords);
+  let game = useSelector(state => state.game.curGame);
+
   const [{ canDrop, isOver, wordBeingDragged }, drop] = useDrop({
     accept: "word",
     order: blankOrder,
@@ -42,9 +43,12 @@ const Blank = props => {
 
   let wordInBlank = null;
 
-  for (let droppedWord of droppedWords) {
-    if (droppedWord.droppedIn === blankOrder) {
-      wordInBlank = droppedWord;
+  if (game !== null) {
+    let droppedWords = game.droppedWords;
+    for (let droppedWord of droppedWords) {
+      if (droppedWord.droppedIn === blankOrder) {
+        wordInBlank = droppedWord;
+      }
     }
   }
 
