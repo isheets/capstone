@@ -35,8 +35,34 @@ export class FillBlank {
 		this.lives = 3;
 	}
 
-	setCurrentTweet(tweet) {
-		this.curTweet = tweet;
+	getLives() {
+		return this.lives;
+	}
+
+	setCurrentTweet(newTweet) {
+		console.log(newTweet);
+		this.curTweet = newTweet;
+	}
+
+	updateTweets(tweets) {
+		store.dispatch(updateParsedTweets(tweets));
+	}
+
+	updateGame(game) {
+		store.dispatch(updateCurGame(game));
+	}
+
+	newGame() {
+		let state = store.getState();
+		let parsedTweets = state.game.parsedTweets;
+		let newTweets = parsedTweets;
+		console.log(newTweets);
+		newTweets.splice(0, 1);
+		console.log(newTweets);
+		let newGame = new FillBlank;
+		newGame.curTweet = newTweets[0];
+		this.updateTweets(newTweets);
+		this.updateGame(newGame);
 	}
 
 	//takes a drop and checks if it's true
@@ -50,8 +76,11 @@ export class FillBlank {
 
 		if (droppedIn === correctDrop) {
 			newWordObj.correct = true;
-		} else {
+		} 
+		//incorrect drop, subtract life and return false
+		else {
 			newWordObj.correct = false;
+			return this.incorrectDrop();
 		}
 
 
@@ -85,7 +114,7 @@ export class FillBlank {
 			this.droppedWords.push(newWordObj)
 		}
 
-		this.checkDone();
+		return this.correctDrop();
 
 	}
 
@@ -119,12 +148,20 @@ export class FillBlank {
 
 
 	//handles a correct drop
-	correctDrop() { }
+	correctDrop() { 
+		//probably add word here
+		this.checkDone();
+		return true;
+	}
 
 	//handles an incorrect drop
 	incorrectDrop() {
-		//subtract lives
-		//remove word from blank
+		//subtract life
+		this.lives = this.lives - 1;
+		if(this.lives === 0) {
+			return this.fail();
+		}
+		return false;
 	 }
 
 	//checks if we have filled all the blanks
@@ -132,26 +169,7 @@ export class FillBlank {
 		//finally check if we've finished completing the tweet
 		console.log('checking to see if we completed the entire tweet');
 		if (this.droppedWords.length === this.extractedWords.length) {
-			let correct = true;
-			for (let wordObj of this.droppedWords) {
-				if (wordObj.correct === false) {
-					correct = false;
-				}
-			}
-			if (correct === true) {
-				//tweet completed successfully
-				this.success()
-
-			}
-			else {
-				//tweet completed incorrectly
-				this.fail()
-				alert("that would be INCORRECT!!!!! IDIOT!");
-
-			}
-		}
-		else {
-			//NOT DONE CODE HERE
+			this.success();
 		}
 	}
 
@@ -159,18 +177,17 @@ export class FillBlank {
 	success() { 
 		//reset lives
 		//get the next tweet
-		let state = store.getState();
-		let parsedTweets = state.game.parsedTweets;
-		let newTweets = parsedTweets;
-		newTweets.shift();
-		let newGame = new FillBlank;
-		newGame.setCurrentTweet(newTweets[0]);
-		store.dispatch(updateParsedTweets(newTweets));
-		store.dispatch(updateCurGame(newGame));
+		this.newGame();
 	}
+	
+
 
 	//game is done and not everything is correct
-	fail() { }
+	fail() {
+		//display some sort of failure message
+		//proceed to next tweet
+		return "fail"
+	}
 
 
 	//takes an array of extracted words (objects) and updates numExtracted words

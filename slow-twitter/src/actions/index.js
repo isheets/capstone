@@ -38,11 +38,6 @@ export const updateCurGame = curGame => ({
   curGame
 })
 
-export const updateCurTweetId = curTweetId => ({
-  type: 'SET_CURRENT_TWEET_ID',
-  curTweetId
-})
-
 export const toggleLBVisible = () => ({
   type: 'TOGGLE_LB_VISIBLE',
 })
