@@ -20,6 +20,10 @@ passportConfig();
 
 var app = express();
 
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
 // enable cors
 var corsOption = {
   origin: true,
@@ -166,7 +170,12 @@ router.route('/auth/twitter')
 
 app.use('/api/v1', router);
 
-app.listen(4000);
+const server = app.listen(8080, () => {
+  const host = server.address().address;
+  const port = server.address().port;
+
+  console.log(`Example app listening at http://${host}:${port}`);
+});
+
 module.exports = app;
 
-console.log('Server running at http://localhost:4000/');

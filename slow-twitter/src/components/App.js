@@ -5,12 +5,12 @@ import {
   updateAuthentication,
   updateToken,
   updateUser,
-  updateParsedTweets, 
+  updateParsedTweets,
   updateLastTweetFetched,
   updateCurGame
 } from "./../actions";
 import { useSelector, useDispatch } from "react-redux";
-import {FillBlank} from './../classes/FillBlank'
+import { FillBlank } from './../classes/FillBlank'
 
 import TweetCard from "./TweetCard/TweetCard";
 import TweetNav from "./TweetNav";
@@ -50,8 +50,8 @@ const onSuccessAuth = response => {
 const refreshFeed = (userToken, userTokenSecret, lastTweetFetched = null) => {
   if (userToken !== null && userTokenSecret !== null) {
     fetch(
-      `http://localhost:4000/api/v1/timeline?aT=${userToken}&aTS=${userTokenSecret}${
-        lastTweetFetched ? `&since=${lastTweetFetched}` : ``
+      `http://localhost:8080/api/v1/timeline?aT=${userToken}&aTS=${userTokenSecret}${
+      lastTweetFetched ? `&since=${lastTweetFetched}` : ``
       }`,
       { headers: { "Content-Type": "application/json; charset=utf-8" } }
     )
@@ -210,8 +210,8 @@ const parseRawTweets = rawTweets => {
   //clear out old tweets - need to think about what makes the most sense...maybe clear out tweets older than 1 day or something
   //dispatch(updateParsedTweets([]));
   dispatch(updateParsedTweets(newTweets));
-  dispatch(updateLastTweetFetched(newTweets[newTweets.length-1].tweetID));
-  
+  dispatch(updateLastTweetFetched(newTweets[newTweets.length - 1].tweetID));
+
   let newGame = new FillBlank(newTweets[0]);
   dispatch(updateCurGame(newGame))
 };
@@ -258,23 +258,23 @@ const App = () => {
       </button>
     </div>
   ) : (
-    <div className="top-bar">
-      <div className="black-box">
-        <h1>SLOW TWITTER</h1>
+      <div className="top-bar">
+        <div className="black-box">
+          <h1>SLOW TWITTER</h1>
+        </div>
+        <div className="black-box">
+          <TwitterLogin
+            loginUrl="http://localhost:8080/api/v1/auth/twitter"
+            onFailure={onFailedAuth}
+            onSuccess={onSuccessAuth}
+            requestTokenUrl="http://localhost:8080/api/v1/auth/twitter/reverse"
+            className="twitter-login-button"
+            text="SIGN IN TO TWITTER"
+            showIcon={false}
+          />
+        </div>
       </div>
-      <div className="black-box">
-        <TwitterLogin
-          loginUrl="http://localhost:4000/api/v1/auth/twitter"
-          onFailure={onFailedAuth}
-          onSuccess={onSuccessAuth}
-          requestTokenUrl="http://localhost:4000/api/v1/auth/twitter/reverse"
-          className="twitter-login-button"
-          text="SIGN IN TO TWITTER"
-          showIcon={false}
-        />
-      </div>
-    </div>
-  );
+    );
   return <Fragment>{content}</Fragment>;
 };
 export default App;
