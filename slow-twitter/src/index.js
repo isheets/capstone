@@ -7,6 +7,7 @@ import { createStore, compose } from "redux";
 import rootReducer from "./reducers";
 import { DndProvider } from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
+import { toast } from 'react-toastify';
 
 import { loadState, saveState } from "./local-storage/localStorage";
 import throttle from "lodash.throttle";
@@ -14,6 +15,8 @@ import throttle from "lodash.throttle";
 let persistedState = loadState();
 console.log(persistedState);
 let store;
+
+toast.configure();
 
 //use persisted state if avail
 if (persistedState !== undefined) {

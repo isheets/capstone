@@ -156,6 +156,17 @@ code {
     monospace;
 }
 
+.good-toast {
+  padding: 15px;
+  display: flex;
+  position: fixed;
+  border-radius: var(--small-border-radius);
+  bottom: 5%;
+  left: 50%;
+  width: min-content;
+  background-color: var(--tan);
+  color: var(--dark-bg);
+}
 
 
 
@@ -237,6 +248,7 @@ a:hover {
   margin-top: 2px;
   display: inline-block;
   border-radius: var(--small-border-radius);
+  white-space: nowrap;
 }
 
 .tweet-blank-filled {

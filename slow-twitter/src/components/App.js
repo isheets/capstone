@@ -1,12 +1,10 @@
 import React, { Fragment } from "react";
 import TwitterLogin from "react-twitter-auth";
 import {
-  updateCurTweetId,
   updateAuthentication,
   updateToken,
   updateUser,
   updateParsedTweets,
-  updateLastTweetFetched,
   updateCurGame
 } from "./../actions";
 import { useSelector, useDispatch } from "react-redux";
@@ -47,7 +45,7 @@ const onSuccessAuth = response => {
 };
 
 //grabs the feed based on
-const refreshFeed = (userToken, userTokenSecret, lastTweetFetched = null) => {
+export const refreshFeed = (userToken, userTokenSecret, lastTweetFetched = null) => {
   if (userToken !== null && userTokenSecret !== null) {
     fetch(
       `http://localhost:8080/api/v1/timeline?aT=${userToken}&aTS=${userTokenSecret}${
@@ -210,7 +208,6 @@ const parseRawTweets = rawTweets => {
   //clear out old tweets - need to think about what makes the most sense...maybe clear out tweets older than 1 day or something
   //dispatch(updateParsedTweets([]));
   dispatch(updateParsedTweets(newTweets));
-  dispatch(updateLastTweetFetched(newTweets[newTweets.length - 1].tweetID));
 
   let newGame = new FillBlank(newTweets[0]);
   dispatch(updateCurGame(newGame))

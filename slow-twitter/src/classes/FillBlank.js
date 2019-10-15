@@ -3,9 +3,11 @@ import Game from "./Game";
 import verbs from "./../custom-dict/verbs";
 import posMap from "./../config/pos";
 import Blank from "./../components/TweetCard/TweetContent/Blank";
-import {nextTweet} from './../components/TweetNav';
+import { nextTweet } from './../components/TweetNav';
 import store from './../index';
-import {updateParsedTweets, updateCurGame} from './../actions';
+import { updateParsedTweets, updateCurGame } from './../actions';
+import { toast, Zoom } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 var pos = require("pos");
 var tagger = new pos.Tagger();
@@ -76,7 +78,7 @@ export class FillBlank {
 
 		if (droppedIn === correctDrop) {
 			newWordObj.correct = true;
-		} 
+		}
 		//incorrect drop, subtract life and return false
 		else {
 			newWordObj.correct = false;
@@ -88,7 +90,7 @@ export class FillBlank {
 		//check if we already dropped the word, move it if so and stop
 		if (this.checkMovedWord(droppedWord)) {
 			console.log("moved word");
-			for(let i = 0; i < this.droppedWords.length; i++) {
+			for (let i = 0; i < this.droppedWords.length; i++) {
 				let wordObj = this.droppedWords[i];
 				console.log(wordObj);
 				if (wordObj.word === newWordObj.word) {
@@ -101,7 +103,7 @@ export class FillBlank {
 		//check if already filled the blank, change the word if so
 		else if (this.checkAlreadyDropped(droppedIn)) {
 			console.log("already dropped");
-			for(let i = 0; i < this.droppedWords.length; i++) {
+			for (let i = 0; i < this.droppedWords.length; i++) {
 				let wordObj = this.droppedWords[i];
 				if (wordObj.droppedIn === newWordObj.droppedIn) {
 					this.droppedWords[i] = newWordObj;
@@ -148,7 +150,7 @@ export class FillBlank {
 
 
 	//handles a correct drop
-	correctDrop() { 
+	correctDrop() {
 		//probably add word here
 		this.checkDone();
 		return true;
@@ -158,11 +160,22 @@ export class FillBlank {
 	incorrectDrop() {
 		//subtract life
 		this.lives = this.lives - 1;
-		if(this.lives === 0) {
-			return this.fail();
+		if (this.lives === 0) {
+			this.fail();
 		}
-		return false;
-	 }
+		else {
+			toast.error('Wrong! ' + this.lives + " lives remaining.", {
+				position: "top-center",
+				autoClose: 2000,
+				hideProgressBar: false,
+				closeButton: false,
+				pauseOnHover: true,
+				draggable: false,
+				transition: Zoom,
+				hideProgressBar: true
+			});
+		}
+	}
 
 	//checks if we have filled all the blanks
 	checkDone() {
@@ -174,19 +187,40 @@ export class FillBlank {
 	}
 
 	//game is done and everything is correct
-	success() { 
+	success() {
 		//reset lives
 		//get the next tweet
+		toast.success('Tweet completed correctly!', {
+			position: "top-center",
+			autoClose: 2000,
+			hideProgressBar: false,
+			closeButton: false,
+			pauseOnHover: true,
+			draggable: false,
+			transition: Zoom,
+			hideProgressBar: true
+		});
 		this.newGame();
 	}
-	
+
 
 
 	//game is done and not everything is correct
 	fail() {
 		//display some sort of failure message
 		//proceed to next tweet
-		return "fail"
+		toast.error('Game over, man. Game over.', {
+			position: "top-center",
+			autoClose: 2000,
+			hideProgressBar: false,
+			closeButton: false,
+			pauseOnHover: true,
+			draggable: false,
+			transition: Zoom,
+			hideProgressBar: true
+		});
+
+		this.newGame();
 	}
 
 
@@ -214,7 +248,7 @@ export class FillBlank {
 	static fromJSON(serializedJson) {
 		let newInstance = Object.assign(new FillBlank(), serializedJson);
 		return newInstance;
-	} 
+	}
 
 	findAndExtractWords() {
 		return this.getRandomWords();
@@ -387,8 +421,10 @@ export class FillBlank {
 				order: word.order
 			});
 			for (let i = 0; i < 3; i++) {
+				let randWord = Sentencer.make(`{{ ${word.pos} }}`);
+				let normedWord = normalizeCap(word.word, randWord);
 				wordOptions.push({
-					word: Sentencer.make(`{{ ${word.pos} }}`),
+					word: normedWord,
 					order: -1
 				});
 			}
@@ -401,6 +437,46 @@ export class FillBlank {
 
 		return jsxAr;
 	}
+}
+
+var normalizeCap = (modelWord, normWord) => {
+	console.log("model: " + modelWord + ", to norm: " + normWord);
+	let character = '';
+	let i = 0;
+	let allCaps = true;
+	let normedChars = [];
+	while (i < modelWord.length) {
+		character = modelWord.charAt(i);
+		console.log(character);
+		if (!isNaN(character * 1)) {
+			alert('character is numeric');
+		} else {
+			if (character == character.toUpperCase()) {
+				//character is uppercase
+				//need to make sure normWord is not shorter than modelWord
+				if(normWord[i]) {
+					normedChars[i] = normWord[i].toUpperCase();
+				}
+			}
+			if (character == character.toLowerCase()) {
+				//character is lowercase
+				allCaps = false;
+				if(normWord[i]){
+					normedChars[i] = normWord[i].toLowerCase();
+				}
+			}
+		}
+		i++;
+	}
+	//capitalize the rest of normWord if the model word is all caps
+	if(allCaps) {
+		while(i < normWord.length) {
+			normedChars[i] = normWord[i].toUpperCase();
+			i++;
+		}
+	}
+	
+	return normedChars.join('');
 }
 
 //private function to get a random index from the text word array
