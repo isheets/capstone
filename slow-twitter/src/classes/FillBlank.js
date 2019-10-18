@@ -174,6 +174,7 @@ export class FillBlank {
 				transition: Zoom,
 				hideProgressBar: true
 			});
+			this.updateGame(this);
 		}
 	}
 

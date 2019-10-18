@@ -13,6 +13,7 @@ import { FillBlank } from './../classes/FillBlank'
 import TweetCard from "./TweetCard/TweetCard";
 import TweetNav from "./TweetNav";
 import DragOptions from "./DragOptions";
+import Lives from './Lives';
 
 var he = require("he");
 
@@ -242,8 +243,11 @@ const App = () => {
       </div>
       <div className="main-grid">
         <TweetCard />
-        <div className="drag-options-wrapper">
-          <DragOptions />
+        <div className="main-grid-col-2">
+          <div className="drag-options-wrapper">
+            <DragOptions />
+          </div>
+          <Lives />
         </div>
       </div>
       <TweetNav />

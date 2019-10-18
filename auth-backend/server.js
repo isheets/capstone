@@ -109,6 +109,10 @@ router.get('/timeline', function (req, res) {
   }
 });
 
+router.get('/friends/list', function(req, res) {
+  
+});
+
 //first step in authentication
 router.route('/auth/twitter/reverse')
   .post(function (req, res) {
