@@ -439,15 +439,16 @@ export class FillBlank {
 	}
 }
 
+//function that transforms the randomly generated word to match the case of the correct choice it corresponds to
 var normalizeCap = (modelWord, normWord) => {
-	console.log("model: " + modelWord + ", to norm: " + normWord);
+	
 	let character = '';
 	let i = 0;
 	let allCaps = true;
 	let normedChars = [];
 	while (i < modelWord.length) {
 		character = modelWord.charAt(i);
-		console.log(character);
+		
 		if (!isNaN(character * 1)) {
 			alert('character is numeric');
 		} else {
