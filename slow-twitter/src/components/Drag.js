@@ -44,20 +44,7 @@ const Drag = props => {
       if (item && dropResult) {
         strike = true;
         //call function to check order and word correctness
-        let goodDrop = game.handleDrop(item.value, dropResult.order, item.order);
-
-        if(goodDrop === true) {
-          alert('goodDrop')
-        }
-        else if(goodDrop === false){
-          //bad drop but still lives remaining
-          console.log(game);
-          alert(game.lives + " lives left");
-        }
-        else if(goodDrop === "fail") {
-          //failed game
-          alert('game over man')
-        }
+        game.handleDrop(item.value, dropResult.order, item.order);
       }
     },
     collect: monitor => ({
