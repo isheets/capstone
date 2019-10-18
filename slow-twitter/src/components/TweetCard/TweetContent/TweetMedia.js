@@ -59,6 +59,7 @@ const TweetMedia = props => {
               height="240"
               controls
               className="tweet-media-item fit"
+              key={i}
             >
               <source src={media.url} type={media.format}></source>
               Your browser does not support inline video viewing.

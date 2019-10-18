@@ -260,7 +260,7 @@ export class FillBlank {
 		let text = this.curTweet.text;
 		//construct regex to split string into all words
 		let allWordExp =
-			"(?<=\\s|^|\\b)(?:[-’%$#&\\/]\\b|\\b[-’%$#&\\/]|[A-Za-z0-9]|\\([A-Za-z0-9]+\\))+(?=\\s|$|\\b)";
+			"(?<!@)(?<=\\s|^|\\b)(?:[-’%$#&\\/]\\b|\\b[-’%$#&\\/]|[A-Za-z0-9]|\\([A-Za-z0-9]+\\))+(?=\\s|$|\\b)";
 		let allWordReg = new RegExp(allWordExp, "g");
 
 
@@ -470,9 +470,15 @@ var normalizeCap = (modelWord, normWord) => {
 		i++;
 	}
 	//capitalize the rest of normWord if the model word is all caps
-	if(allCaps) {
+	if(allCaps == true) {
 		while(i < normWord.length) {
 			normedChars[i] = normWord[i].toUpperCase();
+			i++;
+		}
+	}
+	else {
+		while(i < normWord.length) {
+			normedChars[i] = normWord[i];
 			i++;
 		}
 	}
