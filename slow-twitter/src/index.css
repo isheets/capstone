@@ -249,6 +249,7 @@ a:hover {
   display: inline-block;
   border-radius: var(--small-border-radius);
   white-space: nowrap;
+  cursor: pointer;
 }
 
 .tweet-blank-filled {
@@ -275,6 +276,7 @@ a:hover {
   border: 2px solid var(--red);
   border-radius: var(--large-border-radius);
   height: min-content;
+  cursor: pointer;
 }
 
 .drag-options-container {

@@ -96,7 +96,7 @@ router.get('/timeline', function (req, res) {
   //error function
   var error = (err, response, body) => {
     console.log(err, response, body);
-    return res.status(500).send({ message: "whoops, couldn't get the timeline" });
+    return res.status(500).send({ message: "whoops, couldn't get the timeline", details: body });
   }
 
   //if request includes a since_id, use it
@@ -109,8 +109,19 @@ router.get('/timeline', function (req, res) {
   }
 });
 
+//ENDPOINT FOR GETTING LIST OF FRIENDS NEEDS TO BE ACCESSED AFTER FEtCH TIMELINE
 router.get('/friends/list', function(req, res) {
-  
+
+  var successFN = (data) => {
+      console.log(data);
+      return res.send(data)
+  }
+
+  var error = (error, response, body) => {
+    console.log(error, response, body);
+  }
+
+  twitter.getCustomApiCall('/friends/list.json', {}, error, successFN);
 });
 
 //first step in authentication

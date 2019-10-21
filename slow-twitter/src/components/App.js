@@ -45,6 +45,29 @@ const onSuccessAuth = response => {
   });
 };
 
+//get friends for the authenticated user
+const fetchFriends = (cursor) => {
+  fetch(
+    `http://localhost:8080/api/v1/friends/list`,
+    { headers: { "Content-Type": "application/json; charset=utf-8" } }
+  )
+    .then(res => res.json())
+    .then(response => {
+      //make sure it's not null
+      if (response) {
+        console.log(response);
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}
+
+//keeps track of cursor so we make sure we can make all requests
+const getAllFriends = () => {
+
+}
+
 //grabs the feed based on
 export const refreshFeed = (userToken, userTokenSecret, lastTweetFetched = null) => {
   if (userToken !== null && userTokenSecret !== null) {
@@ -256,6 +279,12 @@ const App = () => {
         className="button"
       >
         Refresh Timeline
+      </button>
+      <button
+        onClick={() => getFriends()}
+        className="button"
+      >
+        Get Friends
       </button>
     </div>
   ) : (
