@@ -1,4 +1,5 @@
 import {FillBlank} from './../classes/FillBlank';
+import { GuessAuthor } from '../classes/GuessAuthor';
 
 export const loadState = () => {
     console.log("ATTEMPTING TO LOAD STATE");
@@ -8,11 +9,24 @@ export const loadState = () => {
         return undefined;
       }
       let parsedState = JSON.parse(serializedState);
+      console.log(parsedState);
       //need to reconstruct the class instance based on persisted properties
-      const gameFromJson = FillBlank.fromJSON(parsedState.game.curGame);
+      let gameFromJson;
+      if(parsedState.game.curGame.type === 'FillBlank'){
+        gameFromJson = FillBlank.fromJSON(parsedState.game.curGame);
+      }
+      else if(parsedState.game.curGame.type === 'GuessAuthor') {
+        console.log('constructing new GuessAuthor game');
+        gameFromJson = GuessAuthor.fromJSON(parsedState.game.curGame);
+      }
+      else {
+        console.error("Game type not caught in localStorage.js");
+      }
+      
       parsedState.game.curGame = gameFromJson;
       return parsedState;
     } catch (err) {
+      console.error(err);
       return undefined;
     }
   };

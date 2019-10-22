@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from "react-redux";
-import Drag from './Drag';
+import DragWord from './DragWord';
 
 var shuffle = (array) => {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -26,14 +26,22 @@ const DragOptions = () => {
 
     let content = null;
     if (game !== null) {
-        if (game.wordOptions.length > 0) {
-            game.wordOptions = shuffle(game.wordOptions);
-            //console.log(game.wordOptions);
-            content =
-                game.wordOptions.map((word, key) =>
-                    <Drag word={word.word} order={word.order} key={key} />
-                );
+        if (game.type === 'FillBlank') {
+            if (game.wordOptions.length > 0) {
+                game.wordOptions = shuffle(game.wordOptions);
+                //console.log(game.wordOptions);
+                content =
+                    game.wordOptions.map((word, key) =>
+                        <DragWord word={word.word} order={word.order} key={key} />
+                    );
+            }
+        }
 
+        else if (game.type === "GuessAuthor") {
+
+        }
+        else {
+            console.error("Game type not recognized in DragOptions")
         }
     }
 

@@ -1,7 +1,7 @@
 import React from "react";
 import verbs from "./../custom-dict/verbs";
 import posMap from "./../config/pos";
-import Blank from "./../components/TweetCard/TweetContent/Blank";
+import Blank from "../components/TweetCard/TweetContent/WordBlank";
 import store from './../index';
 import { updateParsedTweets, updateCurGame } from './../actions';
 import { toast, Zoom } from 'react-toastify';

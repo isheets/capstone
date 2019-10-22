@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { useSelector } from "react-redux";
 
-var timeSinceTweet = function( tweetDateString ) {
+export var timeSinceTweet = function( tweetDateString ) {
   
     // Convert both dates to milliseconds
     var tweetDate = new Date(tweetDateString);

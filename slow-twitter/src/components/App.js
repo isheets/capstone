@@ -15,6 +15,7 @@ import TweetCard from "./TweetCard/TweetCard";
 import TweetNav from "./TweetNav";
 import DragOptions from "./DragOptions";
 import Lives from './Lives';
+import { GuessAuthor } from "../classes/GuessAuthor";
 
 var he = require("he");
 
@@ -282,7 +283,7 @@ const parseRawTweets = rawTweets => {
   //dispatch(updateParsedTweets([]));
   dispatch(updateParsedTweets(newTweets));
 
-  let newGame = new FillBlank(newTweets[0]);
+  let newGame = new GuessAuthor(newTweets[0]);
   dispatch(updateCurGame(newGame));
 };
 

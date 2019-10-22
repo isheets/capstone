@@ -1,10 +1,9 @@
 import React, { Fragment } from "react";
 import { useSelector } from "react-redux";
 import { useDrag } from "react-dnd";
-import 'react-toastify/dist/ReactToastify.css';
 
-const Drag = props => {
-  let game = useSelector(state => state.game.curGame);
+const DragWord = props => {
+  let fibGame = useSelector(state => state.game.curGame);
 
 
   const word = props.word;
@@ -13,9 +12,9 @@ const Drag = props => {
 
   let content = null;
 
-  if (game !== null) {
+  if (fibGame !== null) {
     //check if word is one of the already dropped ones, and if so then strike it out
-    for (let wordObj of game.droppedWords) {
+    for (let wordObj of fibGame.droppedWords) {
       if (wordObj.word === word) {
         strike = true;
       }
@@ -31,7 +30,7 @@ const Drag = props => {
       if (item && dropResult) {
         strike = true;
         //call function to check order and word correctness
-        game.handleDrop(item.value, dropResult.order, item.order);
+        fibGame.handleDrop(item.value, dropResult.order, item.order);
       }
     },
     collect: monitor => ({
@@ -57,4 +56,4 @@ const Drag = props => {
   return <Fragment>{content}</Fragment>;
 };
 
-export default Drag;
+export default DragWord;
