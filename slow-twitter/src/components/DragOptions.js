@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector } from "react-redux";
 import DragWord from './DragWord';
 import DragAuthor from './DragAuthor';
+import {timeSinceTweet} from './TweetCard/TweetInfo';
 
 var shuffle = (array) => {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -25,10 +26,13 @@ var shuffle = (array) => {
 const DragOptions = () => {
     let game = useSelector(state => state.game.curGame);
 
+    
+
     let className = 'drag-options-container';
 
     let content = null;
     if (game !== null) {
+        let tweetTime = timeSinceTweet(game.curTweet.date);
         if (game.type === 'FillBlank') {
             if (game.wordOptions.length > 0) {
                 game.wordOptions = shuffle(game.wordOptions);
@@ -45,7 +49,7 @@ const DragOptions = () => {
                 className = 'drag-options-container double'
                 game.friendOptions = shuffle(game.friendOptions);
                 content = game.friendOptions.map((user, key) => 
-                    <DragAuthor key={key} name={user.name} url={user.pic} handle={user.handle} time="10m" correct={user.correct} />
+                    <DragAuthor key={key} name={user.name} url={user.pic} handle={user.handle} time={tweetTime} correct={user.correct} />
                 );
                 
             }

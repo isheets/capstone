@@ -58,6 +58,10 @@ export class GuessAuthor {
             for (let i = 0; i < 5; i++) {
                 let randIdx = getRandomUniqueIndex(friends.length - 1);
                 let randFriend = friends[randIdx];
+                while(randFriend.handle === correctAuthor.handle) {
+                    randIdx = getRandomUniqueIndex(friends.length - 1);
+                    randFriend = friends[randIdx];
+                }
                 randFriend.correct = false;
                 friendOptions.push(randFriend);
             }
