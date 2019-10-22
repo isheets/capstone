@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from "react-redux";
 import DragWord from './DragWord';
+import DragAuthor from './DragAuthor';
 
 var shuffle = (array) => {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -38,7 +39,13 @@ const DragOptions = () => {
         }
 
         else if (game.type === "GuessAuthor") {
-
+            if (game.friendOptions.length > 0) {
+                game.friendOptions = shuffle(game.friendOptions);
+                content = game.friendOptions.map((user, key) => 
+                    <DragAuthor name={user.name} url={user.pic} handle={user.handle} time="10m" correct={user.correct} />
+                );
+                
+            }
         }
         else {
             console.error("Game type not recognized in DragOptions")

@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import TweetProfilePic from "./TweetProfilePic";
 import TweetInfo from "./TweetInfo";
 import TweetContent from "./TweetContent/TweetContent";
+import AuthorBlank from './TweetContent/AuthorBlank';
 import "./TweetCard.css";
 
 const TweetCard = () => {
@@ -12,21 +13,34 @@ const TweetCard = () => {
 
   if (game !== null) {
     let curTweet = game.curTweet;
-    
+
     //make sure we have content to render
     if (curTweet !== null) {
-      //check if we will need to render a quote tweet
-      if (curTweet.isQuote === true) {
-      }
+      //render the info and everything if its FillBlank
+      if (game.type === 'FillBlank') {
 
-      content = (
-        <Fragment>
-          <TweetProfilePic url={curTweet.user.pic} />
-          <TweetInfo />
-          <TweetContent />
-        </Fragment>
-      );
+        content = (
+          <Fragment>
+            <TweetProfilePic url={curTweet.user.pic} />
+            <TweetInfo />
+            <TweetContent />
+          </Fragment>
+        );
+      }
+      //put in blank instead of info
+      else if (game.type === 'GuessAuthor') {
+        content = (
+          <Fragment>
+            <AuthorBlank />
+            <TweetContent />
+          </Fragment>
+        )
+      }
+      else {
+        console.error('Game type not caught in TweetCard');
+      }
     }
+
   }
 
   //no tweets view

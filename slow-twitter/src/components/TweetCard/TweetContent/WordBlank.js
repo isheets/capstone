@@ -19,7 +19,7 @@ const Blank = props => {
   });
 
   let content = null;
-  let blankFiller = ".........";
+  let blankFiller = ".......";
   let width = "fit-content";
 
   const isActive = canDrop && isOver;
