@@ -241,6 +241,25 @@ a:hover {
   cursor: pointer;
 }
 
+.author-drag {
+  background-color: var(--dark-bg);
+  color: var(--tan);
+  border: 1px solid var(--red);
+  border-radius: var(--small-border-radius);
+  line-height: 150%;
+  padding: 5px;
+  white-space: nowrap;
+  width: calc(100% - 20px);
+  cursor: pointer;
+}
+
+.author-blank {
+  border: .5px solid var(--red);
+  border-radius: var(--small-border-radius);
+  padding: 5px;
+  height: 110px;
+}
+
 .tweet-blank {
   border: .5px solid var(--red);
   padding: 2px;
@@ -286,6 +305,11 @@ a:hover {
   row-gap: 10px;
   column-gap: 10px;
   height: min-content;
+  color: var(--tan);
+}
+
+.double {
+  grid-template-columns: 50% 50%;
 }
 
 .twitter-login-container {

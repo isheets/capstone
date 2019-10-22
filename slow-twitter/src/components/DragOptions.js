@@ -25,6 +25,8 @@ var shuffle = (array) => {
 const DragOptions = () => {
     let game = useSelector(state => state.game.curGame);
 
+    let className = 'drag-options-container';
+
     let content = null;
     if (game !== null) {
         if (game.type === 'FillBlank') {
@@ -40,9 +42,10 @@ const DragOptions = () => {
 
         else if (game.type === "GuessAuthor") {
             if (game.friendOptions.length > 0) {
+                className = 'drag-options-container double'
                 game.friendOptions = shuffle(game.friendOptions);
                 content = game.friendOptions.map((user, key) => 
-                    <DragAuthor name={user.name} url={user.pic} handle={user.handle} time="10m" correct={user.correct} />
+                    <DragAuthor key={key} name={user.name} url={user.pic} handle={user.handle} time="10m" correct={user.correct} />
                 );
                 
             }
@@ -53,7 +56,7 @@ const DragOptions = () => {
     }
 
     return (
-        <div className="drag-options-container">
+        <div className={className}>
             {content}
         </div>
     )

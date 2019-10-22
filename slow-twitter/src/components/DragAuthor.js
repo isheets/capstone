@@ -20,7 +20,7 @@ const DragAuthor = props => {
         end: (item, monitor) => {
             console.log(item);
             //call function to check order and word correctness
-            //authorGame.handleDrop(item.correct);
+            authorGame.handleDrop(item.correct);
         },
         collect: monitor => ({
             isDragging: monitor.isDragging()

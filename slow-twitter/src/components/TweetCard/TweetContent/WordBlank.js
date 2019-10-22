@@ -36,7 +36,6 @@ const Blank = props => {
     color = backgroundColor;
     blankFiller = wordBeingDragged.value;
     width = 'min-content';
-
   }
 
   let wordInBlank = null;
