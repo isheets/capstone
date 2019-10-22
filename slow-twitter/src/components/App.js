@@ -134,8 +134,8 @@ export const refreshFeed = (userToken, userTokenSecret, lastTweetFetched = null)
           parseRawTweets(response);
         }
       })
-      .catch(err => {
-        console.log(err);
+      .catch(res => {
+        console.log(res);
       });
   } else {
     console.error("Cannot refreshFeed, bad args");
@@ -283,8 +283,10 @@ const parseRawTweets = rawTweets => {
   dispatch(updateParsedTweets(newTweets));
 
   let newGame = new FillBlank(newTweets[0]);
-  dispatch(updateCurGame(newGame))
+  dispatch(updateCurGame(newGame));
 };
+
+
 let userToken;
 let userTokenSecret;
 const App = () => {

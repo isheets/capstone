@@ -2,7 +2,8 @@ const intialGame = {
   lastTweetFetched: null,
   parsedTweets: null,
   curGame: null,
-  parsedFriends: null
+  parsedFriends: null,
+  lastTweetFetchDate: null
 };
 
 const game = (state = intialGame, action) => {
@@ -20,14 +21,15 @@ const game = (state = intialGame, action) => {
     case "SET_PARSED_TWEETS":
       return {
         ...state,
-        parsedTweets: action.parsedTweets
+        parsedTweets: action.parsedTweets,
+        lastTweetFetchDate: Date.now()
+
       };
     case "SET_PARSED_FRIENDS":
-        return {
-          ...state,
-          parsedFriends: action.parsedFriends
-          
-        };
+      return {
+        ...state,
+        parsedFriends: action.parsedFriends
+      };
     default:
       return state;
   }
