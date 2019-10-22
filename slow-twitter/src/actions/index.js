@@ -38,6 +38,11 @@ export const updateCurGame = curGame => ({
   curGame
 })
 
+export const updateParsedFriends = parsedFriends => ({
+  type: 'SET_PARSED_FRIENDS',
+  parsedFriends
+})
+
 export const toggleLBVisible = () => ({
   type: 'TOGGLE_LB_VISIBLE',
 })

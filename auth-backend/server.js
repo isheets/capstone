@@ -109,8 +109,9 @@ router.get('/timeline', function (req, res) {
   }
 });
 
-//ENDPOINT FOR GETTING LIST OF FRIENDS NEEDS TO BE ACCESSED AFTER FEtCH TIMELINE
+//ENDPOINT FOR GETTING LIST OF FRIENDS ****NEEDS TO BE ACCESSED AFTER FETCH TIMELINE****
 router.get('/friends/list', function(req, res) {
+  let cursor = req.query.cursor;
 
   var successFN = (data) => {
       console.log(data);
@@ -121,7 +122,12 @@ router.get('/friends/list', function(req, res) {
     console.log(error, response, body);
   }
 
-  twitter.getCustomApiCall('/friends/list.json', {}, error, successFN);
+  if(cursor){
+    twitter.getCustomApiCall('/friends/list.json', {cursor: cursor}, error, successFN);
+  }
+  else {
+    twitter.getCustomApiCall('/friends/list.json', {}, error, successFN);
+  }
 });
 
 //first step in authentication

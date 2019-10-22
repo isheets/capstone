@@ -5,7 +5,8 @@ import {
   updateToken,
   updateUser,
   updateParsedTweets,
-  updateCurGame
+  updateCurGame,
+  updateParsedFriends
 } from "./../actions";
 import { useSelector, useDispatch } from "react-redux";
 import { FillBlank } from './../classes/FillBlank'
@@ -46,26 +47,74 @@ const onSuccessAuth = response => {
 };
 
 //get friends for the authenticated user
-const fetchFriends = (cursor) => {
-  fetch(
-    `http://localhost:8080/api/v1/friends/list`,
+const fetchFriends = async (cursor) => {
+  return await fetch(
+    `http://localhost:8080/api/v1/friends/list${cursor ? `?cursor=${cursor}` : ``}`,
     { headers: { "Content-Type": "application/json; charset=utf-8" } }
   )
     .then(res => res.json())
     .then(response => {
       //make sure it's not null
       if (response) {
-        console.log(response);
+        return response;
       }
     })
     .catch(err => {
       console.log(err);
+      return null
     });
+
 }
 
-//keeps track of cursor so we make sure we can make all requests
-const getAllFriends = () => {
+//keeps track of cursor so we make sure we can get all friends
+var getAllFriends = async () => {
+  let allUserData = [];
 
+  //get first page of 20 users (wait for async fetch funtion)
+  let response = await fetchFriends();
+  let cursor;
+
+  //get susequent pages of users
+  while (response.next_cursor !== -1) {
+    for (let user of response.users) {
+      allUserData.push(user);
+    }
+    cursor = response.next_cursor_str;
+    response = await fetchFriends(cursor);
+  }
+
+  //make sure we got some data
+  if(allUserData.length > 0) {
+    //send to parser function
+    parseRawFriends(allUserData);
+  }
+  else {
+    console.error("allUserData empty after getAllFriends()");
+  }
+
+}
+
+
+var parseRawFriends = (rawFriends) => {
+  let parsedFriends = [];
+  //make sure we got em
+  if(rawFriends) {
+    for(let user of rawFriends){
+      parsedFriends.push({
+        name: user.name,
+        pic: user.profile_image_url,
+        handle: user.screen_name
+      });
+    }
+
+    //push to store
+    dispatch(updateParsedFriends(parsedFriends));
+
+  }
+
+  else{
+    console.error("rawFriends empty in parseRawFriends()")
+  }
 }
 
 //grabs the feed based on
@@ -281,7 +330,7 @@ const App = () => {
         Refresh Timeline
       </button>
       <button
-        onClick={() => getFriends()}
+        onClick={() => getAllFriends()}
         className="button"
       >
         Get Friends
