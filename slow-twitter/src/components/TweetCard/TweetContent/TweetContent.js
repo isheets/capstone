@@ -17,7 +17,7 @@ const TweetContent = () => {
     //make sure we have content to render
     if (curTweet !== null) {
         //check if we need to render a quote tweet
-        if(curTweet.isQuote == true) {
+        if(curTweet.isQuote === true) {
             content = (
                 <Fragment>
                     <TweetText />

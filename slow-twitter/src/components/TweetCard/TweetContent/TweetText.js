@@ -1,9 +1,8 @@
-import React, { Fragment } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { updateCurGame } from "./../../../actions";
+import React from "react";
+import { useSelector} from "react-redux";
+
 
 const TweetText = props => {
-	let dispatch = useDispatch();
 	const game = useSelector(state => state.game.curGame);
 	if (game !== null) {
 		let curTweet = game.curTweet;
@@ -19,18 +18,21 @@ const TweetText = props => {
 		if (quote === true) {
 			textToRender = curTweet.quoteTweet.text;
 			if (curTweet.quoteTweet.urls !== null) {
-				for (let url of curTweet.quoteTweet.urls) {
-					urlsToRender += <a href={url.display_url}></a>;
+				for (let i = 0; i < curTweet.quoteTweet.urls.length; i++) {
+					urlsToRender.push(
+						<a target="_blank" href={curTweet.quoteTweet.urls[i].expanded_url} rel="noopener noreferrer" key={i}>
+							-> {curTweet.quoteTweet.urls[i].display_url}
+						</a>
+					);
 				}
 			}
 		} else {
 			textToRender = game.findAndExtractWords();
-			dispatch(updateCurGame(game))
 			//textToRender = extractWords(curTweet.text);
 			if (curTweet.urls !== null) {
 				for (let i = 0; i < curTweet.urls.length; i++) {
 					urlsToRender.push(
-						<a target="_blank" href={curTweet.urls[i].expanded_url} key={i}>
+						<a target="_blank" href={curTweet.urls[i].expanded_url} rel="noopener noreferrer" key={i}>
 							-> {curTweet.urls[i].display_url}
 						</a>
 					);

@@ -2,8 +2,6 @@ import React, { Fragment } from 'react'
 import { useSelector } from "react-redux";
 
 var timeSinceTweet = function( tweetDateString ) {
-    //Get 1 day in milliseconds
-    var one_day=1000*60*60*24;
   
     // Convert both dates to milliseconds
     var tweetDate = new Date(tweetDateString);
@@ -50,7 +48,7 @@ const TweetInfo = (props) => {
     let tweetToRender;
     let classForTweetInfo;
     //check if we need to render quote tweet info or no
-    if(quote == true) {
+    if(quote === true) {
         tweetToRender = curTweet.quoteTweet;
         classForTweetInfo = "quote-tweet-info";
     }

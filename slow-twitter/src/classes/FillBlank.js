@@ -1,9 +1,7 @@
-import React, { Fragment } from "react";
-import Game from "./Game";
+import React from "react";
 import verbs from "./../custom-dict/verbs";
 import posMap from "./../config/pos";
 import Blank from "./../components/TweetCard/TweetContent/Blank";
-import { nextTweet } from './../components/TweetNav';
 import store from './../index';
 import { updateParsedTweets, updateCurGame } from './../actions';
 import { toast, Zoom } from 'react-toastify';
@@ -61,7 +59,7 @@ export class FillBlank {
 		console.log(newTweets);
 		newTweets.splice(0, 1);
 		console.log(newTweets);
-		let newGame = new FillBlank;
+		let newGame = new FillBlank();
 		newGame.curTweet = newTweets[0];
 		this.updateTweets(newTweets);
 		this.updateGame(newGame);
@@ -167,7 +165,6 @@ export class FillBlank {
 			toast.error('Wrong! ' + this.lives + " lives remaining.", {
 				position: "top-center",
 				autoClose: 2000,
-				hideProgressBar: false,
 				closeButton: false,
 				pauseOnHover: true,
 				draggable: false,
@@ -194,7 +191,6 @@ export class FillBlank {
 		toast.success('Tweet completed correctly!', {
 			position: "top-center",
 			autoClose: 2000,
-			hideProgressBar: false,
 			closeButton: false,
 			pauseOnHover: true,
 			draggable: false,
@@ -213,7 +209,6 @@ export class FillBlank {
 		toast.error('Game over, man. Game over.', {
 			position: "top-center",
 			autoClose: 2000,
-			hideProgressBar: false,
 			closeButton: false,
 			pauseOnHover: true,
 			draggable: false,
@@ -302,7 +297,7 @@ export class FillBlank {
 			let extractedWord = wordAr[randIdx];
 
 			while (
-				checkValidWord(extractedWord, extractedWordArray) == false &&
+				checkValidWord(extractedWord, extractedWordArray) === false &&
 				numCheckedWords < wordAr.length - 1
 			) {
 				randIdx = getRandomUniqueIndex(wordAr.length - 1);
@@ -453,14 +448,14 @@ var normalizeCap = (modelWord, normWord) => {
 		if (!isNaN(character * 1)) {
 			alert('character is numeric');
 		} else {
-			if (character == character.toUpperCase()) {
+			if (character === character.toUpperCase()) {
 				//character is uppercase
 				//need to make sure normWord is not shorter than modelWord
 				if(normWord[i]) {
 					normedChars[i] = normWord[i].toUpperCase();
 				}
 			}
-			if (character == character.toLowerCase()) {
+			if (character === character.toLowerCase()) {
 				//character is lowercase
 				allCaps = false;
 				if(normWord[i]){
@@ -471,7 +466,7 @@ var normalizeCap = (modelWord, normWord) => {
 		i++;
 	}
 	//capitalize the rest of normWord if the model word is all caps
-	if(allCaps == true) {
+	if(allCaps === true) {
 		while(i < normWord.length) {
 			normedChars[i] = normWord[i].toUpperCase();
 			i++;

@@ -3,7 +3,7 @@ import { render } from "react-dom";
 import "./index.css";
 import App, {refreshFeed} from "./components/App";
 import { Provider } from "react-redux";
-import { createStore, compose } from "redux";
+import { createStore } from "redux";
 import rootReducer from "./reducers";
 import { DndProvider } from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";

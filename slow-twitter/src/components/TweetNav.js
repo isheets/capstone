@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from "react-redux";
-import { updateCurTweetId, updateCurGame, updateParsedTweets } from './../actions';
+import { updateCurGame, updateParsedTweets } from './../actions';
 import {FillBlank} from './../classes/FillBlank';
 
 let dispatch;
@@ -15,7 +15,7 @@ export var nextTweet = () => {
             newTweets.shift();
             console.log(newTweets);
             dispatch(updateParsedTweets(newTweets));
-            let newGame = new FillBlank;
+            let newGame = new FillBlank();
             newGame.setCurrentTweet(newTweets[0]);
             dispatch(updateCurGame(newGame));
         }

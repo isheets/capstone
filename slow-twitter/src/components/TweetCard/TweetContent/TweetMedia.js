@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import FsLightbox from 'fslightbox-react';
 
@@ -28,7 +28,7 @@ const TweetMedia = props => {
 
   //check if tweet with media we are rendering is quote or orginial
 
-  if (quote == true) {
+  if (quote === true) {
     tweetWithMedia = curTweet.quote;
   } else {
     tweetWithMedia = curTweet;

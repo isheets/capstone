@@ -1,21 +1,9 @@
 import React, { Fragment } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useDrag } from "react-dnd";
-import { toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { NONAME } from "dns";
-
-let parsedTweets;
-let curTweetId;
-let dispatch;
-let droppedWords;
-let extractedWords;
-
-
-
 const Drag = props => {
-  dispatch = useDispatch();
   let game = useSelector(state => state.game.curGame);
 
 

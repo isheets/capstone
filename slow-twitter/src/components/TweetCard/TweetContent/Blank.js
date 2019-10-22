@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { useDrop } from "react-dnd";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const Blank = props => {
   let extractedWord = props.extractedWord;
