@@ -2,10 +2,9 @@ import React from "react";
 import verbs from "./../custom-dict/verbs";
 import posMap from "./../config/pos";
 import Blank from "../components/TweetCard/TweetContent/WordBlank";
-import store from './../index';
-import { updateParsedTweets, updateCurGame } from './../actions';
 import { toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import GameController from "./GameController";
 
 var pos = require("pos");
 var tagger = new pos.Tagger();
@@ -20,7 +19,7 @@ Sentencer.configure({
 	}
 });
 
-export class FillBlank {
+export default class FillBlank {
 	constructor(newTweet) {
 		//call constructor from super class Game
 		this.curTweet = newTweet;
@@ -33,36 +32,16 @@ export class FillBlank {
 		this.numDropped = 0; //intially equal to zero
 		this.droppedWords = []; // array of dropped words
 		this.lives = 3;
+		this.parent = new GameController();
 	}
 
 	getLives() {
 		return this.lives;
 	}
 
-	setCurrentTweet(newTweet) {
-		console.log(newTweet);
-		this.curTweet = newTweet;
-	}
-
-	updateTweets(tweets) {
-		store.dispatch(updateParsedTweets(tweets));
-	}
-
-	updateGame(game) {
-		store.dispatch(updateCurGame(game));
-	}
 
 	newGame() {
-		let state = store.getState();
-		let parsedTweets = state.game.parsedTweets;
-		let newTweets = parsedTweets;
-		console.log(newTweets);
-		newTweets.splice(0, 1);
-		console.log(newTweets);
-		let newGame = new FillBlank();
-		newGame.curTweet = newTweets[0];
-		this.updateTweets(newTweets);
-		this.updateGame(newGame);
+		this.parent.newGame();
 	}
 
 	//takes a drop and checks if it's true
@@ -171,7 +150,7 @@ export class FillBlank {
 				transition: Zoom,
 				hideProgressBar: true
 			});
-			this.updateGame(this);
+			this.parent.updateGame(this);
 		}
 	}
 
@@ -186,7 +165,6 @@ export class FillBlank {
 
 	//game is done and everything is correct
 	success() {
-		//reset lives
 		//get the next tweet
 		toast.success('Tweet completed correctly!', {
 			position: "top-center",
@@ -242,7 +220,8 @@ export class FillBlank {
 	}
 
 	static fromJSON(serializedJson) {
-		let newInstance = Object.assign(new FillBlank(), serializedJson);
+		let newInstance = Object.assign(new FillBlank(serializedJson.curTweet), serializedJson);
+		newInstance.parent = new GameController();
 		return newInstance;
 	}
 
@@ -267,8 +246,6 @@ export class FillBlank {
 		if (wordAr === null) {
 			//log an error and just return the text to avoid crash
 			console.error("NO WORDS IN WORD ARRAY");
-			//dispatch(setExtractedWords([]));
-			//dispatch(setWordOptions([]));
 			return text;
 		}
 		//declare array to hold all words we extract

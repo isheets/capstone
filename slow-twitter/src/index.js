@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
 import "./index.css";
-import App, {refreshFeed} from "./components/App";
+import App from "./components/App";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import rootReducer from "./reducers";
@@ -12,6 +12,10 @@ import { toast } from 'react-toastify';
 import { loadState, saveState } from "./local-storage/localStorage";
 import throttle from "lodash.throttle";
 
+import GameController from './classes/GameController';
+
+let gameController = new GameController();
+
 let persistedState = loadState();
 console.log(persistedState);
 let store;
@@ -21,17 +25,6 @@ toast.configure();
 //use persisted state if avail
 if (persistedState !== undefined) {
 
-  //refresh feed if cache is older than 6 hours
-  if(persistedState.user) {
-      if(persistedState.user.isAuthenticated === true) {
-        const sixHours =  5 * 60 * 60 * 1000;
-        if(Date.now() - persistedState.game.lastTweetFetchDate > sixHours){
-          console.log("tweet fetched more than six hours, re-fetching now")
-          refreshFeed(persistedState.game.lastTweetFetched);
-        }
-      }
-  }
-
   store = createStore(
     rootReducer,
     persistedState,
@@ -39,6 +32,17 @@ if (persistedState !== undefined) {
       trace: true
     })
   );
+
+    //refresh feed if cache is older than 6 hours
+    if(persistedState.user) {
+      if(persistedState.user.isAuthenticated === true) {
+        const sixHours =  5 * 60 * 60 * 1000;
+        if(Date.now() - persistedState.game.lastTweetFetchDate > sixHours){
+          console.log("tweet fetched more than six hours, re-fetching now")
+          gameController.fetchNewTweets();
+        }
+      }
+  }
 } 
 //no state in local storage
 else {

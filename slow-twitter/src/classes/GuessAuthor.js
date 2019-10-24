@@ -1,9 +1,16 @@
 import store from './../index';
-import { updateCurGame, updateParsedTweets } from './../actions';
 import { toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import GameController from './GameController';
 
-export class GuessAuthor {
+/*
+TODO
+remove links until author is guessed
+
+*/
+
+
+export default class GuessAuthor {
     constructor(newTweet) {
 
         console.log("constructing GuessAuthor");
@@ -13,32 +20,16 @@ export class GuessAuthor {
         this.friendOptions = [];
         this.lives = 3;
 
-        this.getRandomFriends();
+        this.parent = new GameController();
     }
 
     getLives() {
         return this.lives;
     }
 
-    updateTweets(tweets) {
-        store.dispatch(updateParsedTweets(tweets));
-    }
-
-    updateGame(game) {
-        store.dispatch(updateCurGame(game));
-    }
-
     newGame() {
-        let state = store.getState();
-
-		let parsedTweets = state.game.parsedTweets;
-		let newTweets = parsedTweets;
-        newTweets.splice(0, 1);
-        
-        let newGame = new GuessAuthor(newTweets[0]);
-        
-		this.updateTweets(newTweets);
-		this.updateGame(newGame);
+        //invoke method from GameController
+        this.parent.newGame();
     }
 
     //return 5 random friends
@@ -67,7 +58,7 @@ export class GuessAuthor {
             }
 
             this.friendOptions = friendOptions;
-            store.dispatch(updateCurGame(this));
+            this.parent.updateGame(this);
         }
         else {
             console.error("store empty in getRandomFriends() GuessAuthor");
@@ -101,7 +92,7 @@ export class GuessAuthor {
 				transition: Zoom,
 				hideProgressBar: true
 			});
-			this.updateGame(this);
+			this.parent.updateGame(this);
 		}
     }
 
@@ -137,6 +128,7 @@ export class GuessAuthor {
 
     static fromJSON(serializedJson) {
         let newInstance = Object.assign(new GuessAuthor(serializedJson.curTweet), serializedJson);
+        newInstance.parent = new GameController();
         return newInstance;
     }
 
