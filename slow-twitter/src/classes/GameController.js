@@ -17,12 +17,21 @@ add some pause or something between tweets - wait for user to press next or time
 */
 
 export default class GameController {
+
+  //fetch data and create a new game
+  async init() {
+    console.log("init")
+    await this.fetchAllFriends();
+    await this.fetchNewTweets();
+    this.newGame();
+  }
+
   newGame() {
     //determine FillBlank or GuessAuthor psuedo randomly and instantiate
     let state = store.getState();
     //get all the tweets
     let allTweets = state.game.parsedTweets;
-    if (allTweets.length > 0) {
+    if (allTweets && allTweets.length > 0) {
       //remove the first one and save it (will be used to create new game)
       let firstTweet = allTweets.splice(0, 1);
       //determine FillBlank or GuessAuthor
@@ -47,6 +56,7 @@ export default class GameController {
     }
   }
 
+
   updateTweets(tweets) {
     store.dispatch(updateParsedTweets(tweets));
   }
@@ -56,7 +66,9 @@ export default class GameController {
   }
 
   async fetchNewTweets() {
+
     let state = store.getState();
+    console.log("fetchNewTweets");
 
     //only fetch if we have authenticated
     if (state.user.userDetails !== null) {
@@ -78,10 +90,15 @@ export default class GameController {
             //make sure response not null
             if (response) {
               console.log(response);
-              let parsedTweets = parseRawTweets(response);
+              if(response.errors) {
+                console.error('erros fetching new tweets');
+              }
+              else {
+                let parsedTweets = parseRawTweets(response);
+                //push to store
+                this.updateTweets(parsedTweets);
+              }
 
-              //push to store
-              store.dispatch(updateParsedTweets(parsedTweets));
             }
           })
           .catch(res => {
@@ -99,15 +116,17 @@ export default class GameController {
 
     //get first page of 20 users (wait for async fetch funtion)
     let response = await fetchFriends();
+    console.log(response);
     let cursor;
 
     //get susequent pages of users
-    while (response.next_cursor !== -1) {
+    while (!response.errors && response.next_cursor !== -1) {
       for (let user of response.users) {
         allUserData.push(user);
       }
       cursor = response.next_cursor_str;
       response = await fetchFriends(cursor);
+      console.log(response);
     }
 
     //make sure we got some data
@@ -132,21 +151,36 @@ var pickRandomNumber = () => {
 }
 
 const fetchFriends = async (cursor) => {
-  return await fetch(
-    `http://localhost:8080/api/v1/friends/list${cursor ? `?cursor=${cursor}` : ``}`,
-    { headers: { "Content-Type": "application/json; charset=utf-8" } }
-  )
-    .then(res => res.json())
-    .then(response => {
-      //make sure it's not null
-      if (response) {
-        return response;
-      }
-    })
-    .catch(err => {
-      console.log(err);
-      return null
-    });
+
+  let state = store.getState();
+
+  let userToken = state.user.userDetails.twitterProvider.token;
+  let userTokenSecret = state.user.userDetails.twitterProvider.tokenSecret;
+
+  if (userToken !== null && userTokenSecret !== null) {
+    return await fetch(
+      `http://localhost:8080/api/v1/friends/list?aT=${userToken}&aTS=${userTokenSecret}${cursor ? `&cursor=${cursor}` : ``}`,
+      { headers: { "Content-Type": "application/json; charset=utf-8" } }
+    )
+      .then(res => res.json())
+      .then(response => {
+        //make sure it's not null
+        if (response.errors) {
+          console.error('could not fetch response');
+          console.error(response.errors);
+          return null;
+        }
+        else return response;
+      })
+      .catch(err => {
+        console.error(err);
+        return null
+      });
+  }
+  else {
+    console.error("user not auth in fetchFriends()");
+    return Promise.resolve();
+  }
 
 }
 

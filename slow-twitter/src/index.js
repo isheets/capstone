@@ -33,16 +33,6 @@ if (persistedState !== undefined) {
     })
   );
 
-    //refresh feed if cache is older than 6 hours
-    if(persistedState.user) {
-      if(persistedState.user.isAuthenticated === true) {
-        const sixHours =  5 * 60 * 60 * 1000;
-        if(Date.now() - persistedState.game.lastTweetFetchDate > sixHours){
-          console.log("tweet fetched more than six hours, re-fetching now")
-          gameController.fetchNewTweets();
-        }
-      }
-  }
 } 
 //no state in local storage
 else {
@@ -53,6 +43,8 @@ else {
     })
   );
 }
+
+export default store;
 
 //save state a maximum of once every second
 store.subscribe(
@@ -72,5 +64,3 @@ render(
   </Provider>,
   document.getElementById("root")
 );
-
-export default store;

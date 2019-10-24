@@ -39,12 +39,8 @@ const onSuccessAuth = (response) => {
       //dispatch action to update authentication to store
       dispatch(updateAuthentication(true));
 
-      //fetch friends list and wait
-      await gameController.fetchAllFriends();
-      //fetch intial tweets and wait
-      await gameController.fetchNewTweets();
-      //make new game after tweets are fetched
-      gameController.newGame();
+      //make a new game after authentication
+      gameController.init();
       
     }
   });
@@ -54,6 +50,22 @@ const onSuccessAuth = (response) => {
 const App = () => {
   //get current state
   const user = useSelector(state => state.user);
+  const game = useSelector(state => state.game);
+
+  if(!!user.isAuthenticated) {
+    if(game.curGame !== null) {
+      const sixHours =  5 * 60 * 60 * 1000;
+        if(Date.now() - game.lastTweetFetchDate > sixHours){
+          console.log("last fetched more than six hours ago, re-fetching and creating new game now now")
+          gameController.init();
+        }
+    }
+    else {
+      gameController.init();
+    }
+  }
+
+  //check to see if we need to refresh
 
   //init reference to dispatch
   dispatch = useDispatch();
