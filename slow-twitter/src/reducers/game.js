@@ -8,6 +8,16 @@ const intialGame = {
 
 const game = (state = intialGame, action) => {
   switch (action.type) {
+    case "INIT_GAME":
+      console.log(action);
+      return {
+        ...state,
+        curGame: action.curGame,
+        parsedFriends: action.parsedFriends,
+        parsedTweets: action.parsedTweets,
+        lastTweetFetchDate: action.lastTweetFetchDate,
+        lastTweetFetched: action.lastTweetFetched
+      }
     case "SET_CURRENT_GAME":
       return {
         ...state,
@@ -22,8 +32,8 @@ const game = (state = intialGame, action) => {
       return {
         ...state,
         parsedTweets: action.parsedTweets,
-        lastTweetFetchDate: Date.now()
-
+        lastTweetFetchDate: action.lastTweetFetchDate,
+        lastTweetFetched: action.lastTweetFetched
       };
     case "SET_PARSED_FRIENDS":
       return {

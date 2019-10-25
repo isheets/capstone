@@ -19,6 +19,15 @@ export const updateToken = token => ({
   token
 })
 
+export const setDataAndInitGame = (curGame, parsedFriends, parsedTweets) => ({
+  type: 'INIT_GAME',
+  curGame,
+  parsedFriends,
+  parsedTweets,
+  lastTweetFetchDate: Date.now(),
+  lastTweetFetched: parsedTweets[parsedTweets.length - 1].tweetID
+})
+
 //action creator for setting the value of store.tweets.lastTweetFetched for timeline fetching management
 //expects lastFetched to be a string (id of tweet)
 export const updateLastTweetFetched = lastFetched => ({
@@ -28,9 +37,11 @@ export const updateLastTweetFetched = lastFetched => ({
 
 //updates array of objects for store.tweets.parsedTweets
 //expects array of objects
-export const updateParsedTweets = parsedTweets => ({
+export const updateParsedTweets = (parsedTweets, lastTweetFetched) => ({
   type: 'SET_PARSED_TWEETS',
-  parsedTweets
+  parsedTweets: parsedTweets,
+  lastTweetFetchDate: Date.now(),
+  lastTweetFetched: parsedTweets[parsedTweets.length - 1].tweetID
 })
 
 export const updateCurGame = curGame => ({

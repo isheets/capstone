@@ -20,7 +20,7 @@ Sentencer.configure({
 });
 
 export default class FillBlank {
-	constructor(newTweet) {
+	constructor(newTweet, foundWords) {
 		//call constructor from super class Game
 		this.curTweet = newTweet;
 		this.type = 'FillBlank'
@@ -33,6 +33,14 @@ export default class FillBlank {
 		this.droppedWords = []; // array of dropped words
 		this.lives = 3;
 		this.parent = new GameController();
+		if (foundWords) {
+			this.foundWords = foundWords;
+			this.textToRender = this.extractWords();
+		}
+		else {
+			this.foundWords = null;
+			this.textToRender = this.findAndExtractWords();
+		}
 	}
 
 	getLives() {
@@ -220,8 +228,17 @@ export default class FillBlank {
 	}
 
 	static fromJSON(serializedJson) {
-		let newInstance = Object.assign(new FillBlank(serializedJson.curTweet), serializedJson);
+		let newInstance = new FillBlank(serializedJson.curTweet, serializedJson.foundWords);
+
+		newInstance.type = 'FillBlank'
+		newInstance.extractedWords = serializedJson.extractedWords; //array of extracted word objects
+		newInstance.wordOptions = serializedJson.wordOptions; //array of word options objects
+		newInstance.numBlanks = serializedJson.numBlanks;
+		newInstance.numDropped = serializedJson.numDropped; //intially equal to zero
+		newInstance.droppedWords = serializedJson.droppedWords; // array of dropped words
+		newInstance.lives = serializedJson.lives;
 		newInstance.parent = new GameController();
+
 		return newInstance;
 	}
 
@@ -285,6 +302,8 @@ export default class FillBlank {
 
 			if (numCheckedWords === wordAr.length - 1) {
 				console.log("checked all the words");
+				//can't do FIB so resort to GuessAuthor
+				this.parent.newGuessAuthor(this.curTweet);
 			} else {
 				let wordLex = new pos.Lexer().lex(extractedWord);
 				let taggedWord = tagger.tag(wordLex);
@@ -298,6 +317,7 @@ export default class FillBlank {
 				});
 			}
 		}
+
 
 		//we picked out words, next up: find them
 		return this.findWordsInText(extractedWordArray);
@@ -331,13 +351,19 @@ export default class FillBlank {
 		//sort the array so that smallest idx is first
 		foundWordArray.sort((a, b) => (a.start > b.start ? 1 : -1));
 
+		//set property incase we need to re-extract later
+		console.log('setting foundWords')
+		this.foundWords = foundWordArray;
+
 		//we have a sorted array of words we want to extract and their start/end indexes
-		return this.extractWords(foundWordArray)
+		return this.extractWords()
 	}
 
-	extractWords(foundWordArray) {
+	extractWords() {
+		console.log('extractingWords');
 		//get the text
 		let text = this.curTweet.text;
+		let foundWordArray = this.foundWords;
 
 		let extractWordObjs = [];
 
@@ -403,10 +429,11 @@ export default class FillBlank {
 			}
 		}
 
+
 		this.setWordOptions(wordOptions);
 		this.setExtractedWords(extractWordObjs);
 
-		//console.log(jsxAr);
+		console.log(jsxAr);
 
 		return jsxAr;
 	}
@@ -414,28 +441,28 @@ export default class FillBlank {
 
 //function that transforms the randomly generated word to match the case of the correct choice it corresponds to
 var normalizeCap = (modelWord, normWord) => {
-	
+
 	let character = '';
 	let i = 0;
 	let allCaps = true;
 	let normedChars = [];
 	while (i < modelWord.length) {
 		character = modelWord.charAt(i);
-		
+
 		if (!isNaN(character * 1)) {
 			alert('character is numeric');
 		} else {
 			if (character === character.toUpperCase()) {
 				//character is uppercase
 				//need to make sure normWord is not shorter than modelWord
-				if(normWord[i]) {
+				if (normWord[i]) {
 					normedChars[i] = normWord[i].toUpperCase();
 				}
 			}
 			if (character === character.toLowerCase()) {
 				//character is lowercase
 				allCaps = false;
-				if(normWord[i]){
+				if (normWord[i]) {
 					normedChars[i] = normWord[i].toLowerCase();
 				}
 			}
@@ -443,19 +470,19 @@ var normalizeCap = (modelWord, normWord) => {
 		i++;
 	}
 	//capitalize the rest of normWord if the model word is all caps
-	if(allCaps === true) {
-		while(i < normWord.length) {
+	if (allCaps === true) {
+		while (i < normWord.length) {
 			normedChars[i] = normWord[i].toUpperCase();
 			i++;
 		}
 	}
 	else {
-		while(i < normWord.length) {
+		while (i < normWord.length) {
 			normedChars[i] = normWord[i];
 			i++;
 		}
 	}
-	
+
 	return normedChars.join('');
 }
 

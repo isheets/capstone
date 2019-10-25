@@ -33,11 +33,20 @@ export default class GuessAuthor {
     }
 
     //return 5 random friends
-    getRandomFriends() {
+    getRandomFriends(friendList) {
         if (store !== undefined) {
             let state = store.getState();
 
-            let friends = state.game.parsedFriends;
+            let friends;
+            if(friendList !== undefined) {
+                friends = friendList;
+            }
+            else {
+                friends = state.game.parsedFriends;
+            }
+            console.log(friendList);
+            console.log(friends);
+
             let correctAuthor = this.curTweet.user;
 
             correctAuthor.correct = true;

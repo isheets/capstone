@@ -24,7 +24,7 @@ const onFailedAuth = error => {
   console.log(error);
 };
 
-const onSuccessAuth = (response) => {
+const onSuccessAuth = async (response) => {
   const token = response.headers.get("x-auth-token");
   console.log(response);
   response.json().then(async user => {
@@ -38,9 +38,6 @@ const onSuccessAuth = (response) => {
       dispatch(updateToken(token));
       //dispatch action to update authentication to store
       dispatch(updateAuthentication(true));
-
-      //make a new game after authentication
-      gameController.init();
       
     }
   });
@@ -54,7 +51,7 @@ const App = () => {
 
   if(!!user.isAuthenticated) {
     if(game.curGame !== null) {
-      const sixHours =  5 * 60 * 60 * 1000;
+      const sixHours =  6 * 60 * 60 * 1000;
         if(Date.now() - game.lastTweetFetchDate > sixHours){
           console.log("last fetched more than six hours ago, re-fetching and creating new game now now")
           gameController.init();

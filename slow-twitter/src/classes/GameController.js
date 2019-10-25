@@ -4,7 +4,8 @@ import store from '../index';
 import {
   updateParsedTweets,
   updateCurGame,
-  updateParsedFriends
+  updateParsedFriends,
+  setDataAndInitGame
 } from "../actions";
 
 var he = require('he');
@@ -21,16 +22,34 @@ export default class GameController {
   //fetch data and create a new game
   async init() {
     console.log("init")
-    await this.fetchAllFriends();
-    await this.fetchNewTweets();
-    this.newGame();
+    let tweets =  await this.fetchNewTweets();
+    let friends = await this.fetchAllFriends();
+    let newGame = await this.newGame(true, tweets, friends);
+    if(newGame && tweets && friends) {
+      store.dispatch(setDataAndInitGame(newGame, friends, tweets));
+    }
+    else {
+      console.error('problem in GameController.init()');
+    }
+    return Promise.resolve(); 
   }
 
-  newGame() {
+  pickGame() {
+    
+  }
+
+  async newGame(shouldReturn, tweets, friends) {
     //determine FillBlank or GuessAuthor psuedo randomly and instantiate
     let state = store.getState();
     //get all the tweets
-    let allTweets = state.game.parsedTweets;
+    let allTweets;
+    if(tweets) {
+      allTweets = tweets;
+    }
+    else {
+      allTweets = state.game.parsedTweets;
+    }
+    
     if (allTweets && allTweets.length > 0) {
       //remove the first one and save it (will be used to create new game)
       let firstTweet = allTweets.splice(0, 1);
@@ -44,18 +63,35 @@ export default class GameController {
       else {
         //instantiate GuessAuthor game and make sure we get some random friends
         newGame = new GuessAuthor(firstTweet[0]);
+        if(friends) {
+          newGame.getRandomFriends(friends)
+        }
         newGame.getRandomFriends();
       }
+      if (shouldReturn) {
+        return newGame;
+      }
 
-      //call methods to update the store accordingly
-      this.updateTweets(allTweets);
-      this.updateGame(newGame)
+      else {
+        //call methods to update the store accordingly
+        this.updateTweets(allTweets);
+        this.updateGame(newGame);
+      }
+
+
     }
     else {
       console.error('Out of tweets in GameController.newGame()');
+      return null
     }
   }
 
+  newGuessAuthor(tweet) {
+    let newGame = new GuessAuthor(tweet);
+    newGame.getRandomFriends();
+
+    this.updateGame(newGame);
+  }
 
   updateTweets(tweets) {
     store.dispatch(updateParsedTweets(tweets));
@@ -96,7 +132,7 @@ export default class GameController {
               else {
                 let parsedTweets = parseRawTweets(response);
                 //push to store
-                this.updateTweets(parsedTweets);
+                return parsedTweets;
               }
 
             }
@@ -120,7 +156,7 @@ export default class GameController {
     let cursor;
 
     //get susequent pages of users
-    while (!response.errors && response.next_cursor !== -1) {
+    while (response && !response.errors && response.next_cursor !== -1) {
       for (let user of response.users) {
         allUserData.push(user);
       }
@@ -134,12 +170,11 @@ export default class GameController {
       //send to parser function
       let parsedFriends = parseRawFriends(allUserData);
       //update store
-      store.dispatch(updateParsedFriends(parsedFriends));
-      return Promise.resolve();
+      return Promise.resolve(parsedFriends);
     }
     else {
       console.error("allUserData empty after getAllFriends()");
-      return Promise.resolve();
+      return Promise.resolve(null);
     }
   }
 

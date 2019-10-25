@@ -29,8 +29,8 @@ const TweetText = props => {
 		} 
 		//extract words and such if its a fillblank game
 		else if (game.type === 'FillBlank'){
-			textToRender = game.findAndExtractWords();
-			//textToRender = extractWords(curTweet.text);
+			textToRender = game.textToRender;
+			console.log(textToRender);
 			if (curTweet.urls !== null) {
 				for (let i = 0; i < curTweet.urls.length; i++) {
 					urlsToRender.push(
