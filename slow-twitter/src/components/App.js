@@ -91,7 +91,7 @@ const App = () => {
 
   let content = null;
 
-  if (user.isAuthenticated) {
+  if (game.curGame !== null) {
     content = (
       <div>
         <div className="top-bar">
@@ -118,7 +118,7 @@ const App = () => {
           </div>
         </div>
 
-
+        <TweetNav />
         <button
           onClick={() => gameController.fetchAllFriends()}
           className="button"
@@ -127,6 +127,10 @@ const App = () => {
         </button>
       </div>
     );
+
+  }
+  else if (user.isAuthenticated) {
+    content = <h1>Loading game</h1>;
 
   }
   else {

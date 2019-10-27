@@ -68,7 +68,7 @@ export default class GameController {
         //instantiate GuessAuthor game and make sure we get some random friends
         newGame = new GuessAuthor(firstTweet[0]);
         if (friends) {
-          newGame.getRandomFriends(friends)
+          newGame.getRandomFriends(friends);
         }
         newGame.getRandomFriends();
       }
@@ -101,10 +101,11 @@ export default class GameController {
       if (newTweets === null || newTweets.length < 1) {
         console.error('Out of tweets in GameController.newGame()');
         state.game.curGame.type = 'NoTweets';
+        this.updateGame(state.game.curGame);
       }
       else {
         console.log('Got ' + newTweets.length + ' new tweets.')
-        this.newGame(false, allTweets);
+        this.newGame(false, newTweets);
       }
 
     }
@@ -117,7 +118,6 @@ export default class GameController {
 
   newGuessAuthor(tweet) {
     let newGame = new GuessAuthor(tweet);
-    newGame.getRandomFriends();
 
     this.updateGame(newGame);
   }

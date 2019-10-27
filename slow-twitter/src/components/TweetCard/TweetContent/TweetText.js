@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector} from "react-redux";
+import Typing from 'react-typing-animation';
 
 
 const TweetText = props => {
@@ -29,7 +30,7 @@ const TweetText = props => {
 		}
 		//extract words and such if its a fillblank game
 		else if (game.type === 'FillBlank'){
-			textToRender = game.textToRender;
+			textToRender = <Typing>{game.textToRender}</Typing>;
 			console.log(textToRender);
 			if (curTweet.urls !== null) {
 				for (let i = 0; i < curTweet.urls.length; i++) {
@@ -43,7 +44,7 @@ const TweetText = props => {
 		}
 		//no need to extract words if game is guess author
 		else if (game.type === 'GuessAuthor') {
-			textToRender = curTweet.text;
+			textToRender = <Typing>{curTweet.text}</Typing>;
 			if (curTweet.urls !== null) {
 				for (let i = 0; i < curTweet.urls.length; i++) {
 					urlsToRender.push(

@@ -231,7 +231,9 @@ export default class FillBlank {
 	static fromJSON(serializedJson) {
 		let newInstance = new FillBlank(serializedJson.curTweet, serializedJson.foundWords);
 
-		newInstance.type = 'FillBlank'
+		if(newInstance.type !== 'NoWords') {
+			newInstance.type = 'FillBlank'
+		}
 		newInstance.extractedWords = serializedJson.extractedWords; //array of extracted word objects
 		newInstance.wordOptions = serializedJson.wordOptions; //array of word options objects
 		newInstance.numBlanks = serializedJson.numBlanks;
@@ -304,7 +306,8 @@ export default class FillBlank {
 			if (numCheckedWords === wordAr.length - 1) {
 				console.log("checked all the words");
 				//can't do FIB so resort to GuessAuthor
-				this.parent.newGuessAuthor(this.curTweet);
+				this.type = 'NoWords';
+				return null;
 			} else {
 				let wordLex = new pos.Lexer().lex(extractedWord);
 				let taggedWord = tagger.tag(wordLex);
@@ -317,11 +320,13 @@ export default class FillBlank {
 					mappedPOS: mappedPos
 				});
 			}
-		}
 
+		}
 
 		//we picked out words, next up: find them
 		return this.findWordsInText(extractedWordArray);
+
+
 	}
 
 	//take the words we want to find and then....find them in the text
@@ -413,6 +418,11 @@ export default class FillBlank {
 			}
 		}
 
+		if(jsxAr.length < 2) {
+			this.parent.newGuessAuthor(this.curTweet);
+			return null;
+		}
+
 		//one correct word and three matching random incorrect words
 		let wordOptions = [];
 		for (let word of extractWordObjs) {
@@ -430,6 +440,7 @@ export default class FillBlank {
 			}
 		}
 
+		
 
 		this.setWordOptions(wordOptions);
 		this.setExtractedWords(extractWordObjs);

@@ -15,6 +15,12 @@ export const loadState = () => {
       let gameFromJson = {};
       if (parsedState.game.curGame.type === 'FillBlank') {
         gameFromJson = FillBlank.fromJSON(parsedState.game.curGame);
+        console.log(gameFromJson);
+        if(gameFromJson.type === 'NoWords') {
+          
+          gameFromJson = GuessAuthor.fromJSON(parsedState.game.curGame);
+          gameFromJson.getRandomFriends(parsedState.game.parsedFriends, true);
+        }
       }
       else if (parsedState.game.curGame.type === 'GuessAuthor') {
         console.log('constructing new GuessAuthor game');
