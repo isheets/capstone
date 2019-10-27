@@ -95,6 +95,7 @@ export default class GameController {
         return null;
       }
       else {
+        this.updateTweets(allTweets);
         this.newGame();
       }
 
