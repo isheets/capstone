@@ -26,7 +26,7 @@ const TweetText = props => {
 					);
 				}
 			}
-		} 
+		}
 		//extract words and such if its a fillblank game
 		else if (game.type === 'FillBlank'){
 			textToRender = game.textToRender;
@@ -43,6 +43,18 @@ const TweetText = props => {
 		}
 		//no need to extract words if game is guess author
 		else if (game.type === 'GuessAuthor') {
+			textToRender = curTweet.text;
+			if (curTweet.urls !== null) {
+				for (let i = 0; i < curTweet.urls.length; i++) {
+					urlsToRender.push(
+						<a target="_blank" href={curTweet.urls[i].expanded_url} rel="noopener noreferrer" key={i}>
+							-> {curTweet.urls[i].display_url}
+						</a>
+					);
+				}
+			}
+		}
+		else if(game.type === "Complete") {
 			textToRender = curTweet.text;
 			if (curTweet.urls !== null) {
 				for (let i = 0; i < curTweet.urls.length; i++) {

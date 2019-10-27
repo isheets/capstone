@@ -12,13 +12,17 @@ export const loadState = () => {
     console.log(parsedState);
     //need to reconstruct the class instance based on persisted properties if it exists
     if (parsedState.game.curGame !== null) {
-      let gameFromJson;
+      let gameFromJson = {};
       if (parsedState.game.curGame.type === 'FillBlank') {
         gameFromJson = FillBlank.fromJSON(parsedState.game.curGame);
       }
       else if (parsedState.game.curGame.type === 'GuessAuthor') {
         console.log('constructing new GuessAuthor game');
         gameFromJson = GuessAuthor.fromJSON(parsedState.game.curGame);
+      }
+      else if(parsedState.game.curGame.type === 'Complete') {
+        gameFromJson.type = 'Complete';
+        gameFromJson.curTweet = parsedState.game.curGame.curTweet;
       }
       else {
         console.error("Game type not caught in localStorage.js");

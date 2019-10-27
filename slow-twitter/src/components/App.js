@@ -38,7 +38,7 @@ const onSuccessAuth = async (response) => {
       dispatch(updateToken(token));
       //dispatch action to update authentication to store
       dispatch(updateAuthentication(true));
-      
+
     }
   });
 };
@@ -49,13 +49,13 @@ const App = () => {
   const user = useSelector(state => state.user);
   const game = useSelector(state => state.game);
 
-  if(!!user.isAuthenticated) {
-    if(game.curGame !== null) {
-      const sixHours =  6 * 60 * 60 * 1000;
-        if(Date.now() - game.lastTweetFetchDate > sixHours){
-          console.log("last fetched more than six hours ago, re-fetching and creating new game now now")
-          gameController.init();
-        }
+  if (!!user.isAuthenticated) {
+    if (game.curGame !== null) {
+      const sixHours = 6 * 60 * 60 * 1000;
+      if (Date.now() - game.lastTweetFetchDate > sixHours) {
+        console.log("last fetched more than six hours ago, re-fetching and creating new game now now")
+        gameController.init();
+      }
     }
     else {
       gameController.init();
@@ -67,41 +67,53 @@ const App = () => {
   //init reference to dispatch
   dispatch = useDispatch();
 
-  //conditionally generate top-level view based on whether user is authenticated or not
-  let content = !!user.isAuthenticated ? (
-    <div>
-      <div className="top-bar">
-        <div className="black-box">
-          <h1>SLOW TWITTER</h1>
-        </div>
-        <div className="black-box">
-          <h2>{user.userDetails.name}</h2>
-        </div>
-      </div>
-      <div className="main-grid">
-        <TweetCard />
-        <div className="main-grid-col-2">
-          <div className="drag-options-wrapper">
-            <DragOptions />
+  let content = null;
+
+  if (user.isAuthenticated) {
+    content = (
+      <div>
+        <div className="top-bar">
+          <div className="black-box">
+            <h1>SLOW TWITTER</h1>
           </div>
-          <Lives />
+          <div className="black-box">
+            <h2>{user.userDetails.name}</h2>
+          </div>
         </div>
+        <div className="main-grid">
+          <TweetCard />
+          <div className="main-grid-col-2">
+            {game.curGame.type === 'Complete' ?
+              <TweetNav />
+              :
+              <Fragment>
+                <div className="drag-options-wrapper">
+                  <DragOptions />
+                </div>
+                <Lives />
+              </Fragment>
+            }
+          </div>
+        </div>
+
+        <button
+          onClick={() => gameController.fetchNewTweets()}
+          className="button"
+        >
+          Refresh Timeline
+        </button>
+        <button
+          onClick={() => gameController.fetchAllFriends()}
+          className="button"
+        >
+          Get Friends
+        </button>
       </div>
-      <TweetNav />
-      <button
-        onClick={() => gameController.fetchNewTweets()}
-        className="button"
-      >
-        Refresh Timeline
-      </button>
-      <button
-        onClick={() => gameController.fetchAllFriends()}
-        className="button"
-      >
-        Get Friends
-      </button>
-    </div>
-  ) : (
+    );
+
+  }
+  else {
+    content = (
       <div className="top-bar">
         <div className="black-box">
           <h1>SLOW TWITTER</h1>
@@ -119,6 +131,8 @@ const App = () => {
         </div>
       </div>
     );
+  }
+
   return <Fragment>{content}</Fragment>;
 };
 export default App;

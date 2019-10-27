@@ -36,6 +36,15 @@ const TweetCard = () => {
           </Fragment>
         )
       }
+      else if(game.type === 'Complete') {
+        content = (
+          <Fragment>
+            <TweetProfilePic url={curTweet.user.pic} />
+            <TweetInfo />
+            <TweetContent />
+          </Fragment>
+        );
+      }
       else {
         console.error('Game type not caught in TweetCard');
       }

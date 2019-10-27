@@ -115,8 +115,9 @@ export default class GuessAuthor {
 			draggable: false,
 			transition: Zoom,
 			hideProgressBar: true
-		});
-		this.newGame();
+        });
+        this.type = 'Complete';
+		this.parent.updateGame(this);
     }
 
     fail() {
