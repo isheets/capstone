@@ -24,6 +24,10 @@ export const loadState = () => {
         gameFromJson.type = 'Complete';
         gameFromJson.curTweet = parsedState.game.curGame.curTweet;
       }
+      else if(parsedState.game.curGame.type === 'NoTweets') {
+        gameFromJson.type = 'NoTweets';
+        gameFromJson.curTweet = parsedState.game.curGame.curTweet;
+      }
       else {
         console.error("Game type not caught in localStorage.js");
       }

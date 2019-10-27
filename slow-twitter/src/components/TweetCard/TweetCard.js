@@ -36,7 +36,7 @@ const TweetCard = () => {
           </Fragment>
         )
       }
-      else if(game.type === 'Complete') {
+      else if(game.type === 'Complete' || game.type === 'NoTweets') {
         content = (
           <Fragment>
             <TweetProfilePic url={curTweet.user.pic} />

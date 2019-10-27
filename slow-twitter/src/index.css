@@ -292,6 +292,7 @@ a:hover {
   border-radius: var(--large-border-radius);
   height: min-content;
   cursor: pointer;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .drag-options-container {

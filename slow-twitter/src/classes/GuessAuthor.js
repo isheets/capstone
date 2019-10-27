@@ -132,8 +132,8 @@ export default class GuessAuthor {
 			transition: Zoom,
 			hideProgressBar: true
 		});
-
-		this.newGame();
+        this.type = 'Complete';
+		this.parent.updateGame(this);
     }
 
     static fromJSON(serializedJson) {

@@ -28,7 +28,7 @@ const game = (state = intialGame, action) => {
         lastTweetFetched: action.lastFetched
       };
     case "SET_PARSED_TWEETS":
-      if (action.lastTweetFetched !== null) {
+      if (action.lastTweetFetched === null) {
         return {
           ...state,
           parsedTweets: action.parsedTweets,

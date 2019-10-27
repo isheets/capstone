@@ -49,12 +49,32 @@ const App = () => {
   const user = useSelector(state => state.user);
   const game = useSelector(state => state.game);
 
+  let gameAdmin;
+
   if (!!user.isAuthenticated) {
     if (game.curGame !== null) {
+      //we have a game
       const sixHours = 6 * 60 * 60 * 1000;
       if (Date.now() - game.lastTweetFetchDate > sixHours) {
         console.log("last fetched more than six hours ago, re-fetching and creating new game now now")
         gameController.init();
+      }
+
+
+      if (game.curGame.type === 'Complete') {
+
+        gameAdmin = (<TweetNav />);
+      }
+      else if (game.curGame.type === 'NoTweets') {
+        //this should probably be a new component
+        gameAdmin = (
+          <button
+            onClick={() => gameController.newGame()}
+            className="button"
+          >
+            Refresh Timeline
+      </button>
+        );
       }
     }
     else {
@@ -62,10 +82,12 @@ const App = () => {
     }
   }
 
+
   //check to see if we need to refresh
 
   //init reference to dispatch
   dispatch = useDispatch();
+
 
   let content = null;
 
@@ -83,8 +105,8 @@ const App = () => {
         <div className="main-grid">
           <TweetCard />
           <div className="main-grid-col-2">
-            {game.curGame.type === 'Complete' ?
-              <TweetNav />
+            {game.curGame.type === 'Complete' || game.curGame.type === 'NoTweets' ?
+              gameAdmin
               :
               <Fragment>
                 <div className="drag-options-wrapper">
@@ -96,12 +118,7 @@ const App = () => {
           </div>
         </div>
 
-        <button
-          onClick={() => gameController.fetchNewTweets(true)}
-          className="button"
-        >
-          Refresh Timeline
-        </button>
+
         <button
           onClick={() => gameController.fetchAllFriends()}
           className="button"

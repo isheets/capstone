@@ -54,7 +54,7 @@ const TweetText = props => {
 				}
 			}
 		}
-		else if(game.type === "Complete") {
+		else if(game.type === "Complete" || game.type === 'NoTweets') {
 			textToRender = curTweet.text;
 			if (curTweet.urls !== null) {
 				for (let i = 0; i < curTweet.urls.length; i++) {

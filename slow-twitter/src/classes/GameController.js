@@ -13,6 +13,9 @@ var he = require('he');
 /*
 TODO:
 handle rate-limiting or no new tweets - inside new game 
+
+BUGS:
+double init on reload when tweets fetched more than six hours ago
 */
 
 export default class GameController {
@@ -37,14 +40,17 @@ export default class GameController {
   }
 
   async newGame(shouldReturn, tweets, friends) {
+    console.log("creating new game");
     //determine FillBlank or GuessAuthor psuedo randomly and instantiate
     let state = store.getState();
     //get all the tweets
     let allTweets;
     if (tweets) {
+      console.log('using tweets parameter');
       allTweets = tweets;
     }
     else {
+      console.log('using tweets from state')
       allTweets = state.game.parsedTweets;
     }
 
@@ -66,21 +72,22 @@ export default class GameController {
         }
         newGame.getRandomFriends();
       }
-      if (shouldReturn) {
+      if (shouldReturn === true) {
         return newGame;
       }
 
       else {
-        //check to see if we're at the end
-        if (allTweets.length === 1) {
-          let newTweets = await this.fetchNewTweets();
-          if (newTweets === null && newTweets.length > 0) {
-            console.error('Tried to fetch new tweets cuz we out but failed');
-          }
-          else {
-            this.updateTweets(newTweets);
-          }
-        }
+        // //check to see if we're at the end
+        // if (allTweets.length === 1) {
+        //   console.log('only 1 tweet left, getting more')
+        //   let newTweets = await this.fetchNewTweets();
+        //   if (newTweets === null && newTweets.length > 0) {
+        //     console.error('Tried to fetch new tweets cuz we out but failed');
+        //   }
+        //   else {
+        //     this.updateTweets(newTweets);
+        //   }
+        // }
         //call methods to update the store accordingly
         this.updateTweets(allTweets);
         this.updateGame(newGame);
@@ -89,14 +96,15 @@ export default class GameController {
 
     }
     else {
+      console.log("out of tweets, fetching more");
       let newTweets = await this.fetchNewTweets();
-      if (newTweets === null) {
+      if (newTweets === null || newTweets.length < 1) {
         console.error('Out of tweets in GameController.newGame()');
-        return null;
+        state.game.curGame.type = 'NoTweets';
       }
       else {
-        this.updateTweets(allTweets);
-        this.newGame();
+        console.log('Got ' + newTweets.length + ' new tweets.')
+        this.newGame(false, allTweets);
       }
 
     }
@@ -116,7 +124,7 @@ export default class GameController {
 
   updateTweets(tweets) {
     let lastTweetFetched = null;
-    if(tweets.length > 0) {
+    if (tweets.length > 0) {
       lastTweetFetched = tweets[tweets.length - 1].tweetID;
     }
     store.dispatch(updateParsedTweets(tweets, lastTweetFetched));

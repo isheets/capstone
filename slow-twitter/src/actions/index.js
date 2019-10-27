@@ -25,6 +25,7 @@ export const setDataAndInitGame = (curGame, parsedFriends, parsedTweets) => ({
   parsedFriends,
   parsedTweets,
   lastTweetFetchDate: Date.now(),
+  //potential bug here - see fix in updateParsedTweets()
   lastTweetFetched: parsedTweets[parsedTweets.length - 1].tweetID
 })
 
