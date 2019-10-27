@@ -37,11 +37,12 @@ export const updateLastTweetFetched = lastFetched => ({
 
 //updates array of objects for store.tweets.parsedTweets
 //expects array of objects
-export const updateParsedTweets = (parsedTweets, lastTweetFetched) => ({
+export const updateParsedTweets = (parsedTweets, lastTweetFetched) => (
+  {
   type: 'SET_PARSED_TWEETS',
   parsedTweets: parsedTweets,
   lastTweetFetchDate: Date.now(),
-  lastTweetFetched: parsedTweets[parsedTweets.length - 1].tweetID
+  lastTweetFetched: lastTweetFetched
 })
 
 export const updateCurGame = curGame => ({

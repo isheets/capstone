@@ -97,7 +97,7 @@ const App = () => {
         </div>
 
         <button
-          onClick={() => gameController.fetchNewTweets()}
+          onClick={() => gameController.fetchNewTweets(true)}
           className="button"
         >
           Refresh Timeline

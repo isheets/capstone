@@ -12,9 +12,7 @@ var he = require('he');
 
 /*
 TODO:
-what happens when we run out of tweets? fetch? what if fetch is null?
-make method to init controller - get friends, get tweets, make new game
-add some pause or something between tweets - wait for user to press next or timer?
+handle rate-limiting or no new tweets - inside new game 
 */
 
 export default class GameController {
@@ -22,20 +20,20 @@ export default class GameController {
   //fetch data and create a new game
   async init() {
     console.log("init")
-    let tweets =  await this.fetchNewTweets();
+    let tweets = await this.fetchNewTweets();
     let friends = await this.fetchAllFriends();
     let newGame = await this.newGame(true, tweets, friends);
-    if(newGame && tweets && friends) {
+    if (newGame && tweets && friends) {
       store.dispatch(setDataAndInitGame(newGame, friends, tweets));
     }
     else {
       console.error('problem in GameController.init()');
     }
-    return Promise.resolve(); 
+    return Promise.resolve();
   }
 
   pickGame() {
-    
+
   }
 
   async newGame(shouldReturn, tweets, friends) {
@@ -43,13 +41,13 @@ export default class GameController {
     let state = store.getState();
     //get all the tweets
     let allTweets;
-    if(tweets) {
+    if (tweets) {
       allTweets = tweets;
     }
     else {
       allTweets = state.game.parsedTweets;
     }
-    
+
     if (allTweets && allTweets.length > 0) {
       //remove the first one and save it (will be used to create new game)
       let firstTweet = allTweets.splice(0, 1);
@@ -63,7 +61,7 @@ export default class GameController {
       else {
         //instantiate GuessAuthor game and make sure we get some random friends
         newGame = new GuessAuthor(firstTweet[0]);
-        if(friends) {
+        if (friends) {
           newGame.getRandomFriends(friends)
         }
         newGame.getRandomFriends();
@@ -73,6 +71,16 @@ export default class GameController {
       }
 
       else {
+        //check to see if we're at the end
+        if (allTweets.length === 1) {
+          let newTweets = await this.fetchNewTweets();
+          if (newTweets === null && newTweets.length > 0) {
+            console.error('Tried to fetch new tweets cuz we out but failed');
+          }
+          else {
+            this.updateTweets(newTweets);
+          }
+        }
         //call methods to update the store accordingly
         this.updateTweets(allTweets);
         this.updateGame(newGame);
@@ -81,9 +89,21 @@ export default class GameController {
 
     }
     else {
-      console.error('Out of tweets in GameController.newGame()');
-      return null
+      let newTweets = await this.fetchNewTweets();
+      if (newTweets === null) {
+        console.error('Out of tweets in GameController.newGame()');
+        return null;
+      }
+      else {
+        this.newGame();
+      }
+
     }
+  }
+
+  //method to handle when we can't get the tweets (either bad params, rate-limited, or simply no new tweets to fetch)
+  failFetchTweets() {
+
   }
 
   newGuessAuthor(tweet) {
@@ -94,14 +114,18 @@ export default class GameController {
   }
 
   updateTweets(tweets) {
-    store.dispatch(updateParsedTweets(tweets));
+    let lastTweetFetched = null;
+    if(tweets.length > 0) {
+      lastTweetFetched = tweets[tweets.length - 1].tweetID;
+    }
+    store.dispatch(updateParsedTweets(tweets, lastTweetFetched));
   }
 
   updateGame(newGame) {
     store.dispatch(updateCurGame(newGame));
   }
 
-  async fetchNewTweets() {
+  async fetchNewTweets(updateStore) {
 
     let state = store.getState();
     console.log("fetchNewTweets");
@@ -126,22 +150,33 @@ export default class GameController {
             //make sure response not null
             if (response) {
               console.log(response);
-              if(response.errors) {
-                console.error('erros fetching new tweets');
+              if (response.errors) {
+                console.error('errors fetching new tweets');
+                return null;
               }
               else {
                 let parsedTweets = parseRawTweets(response);
                 //push to store
-                return parsedTweets;
+                if (updateStore) {
+                  this.updateTweets(parsedTweets)
+                }
+                else {
+                  return parsedTweets;
+                }
               }
 
+            }
+            else {
+              return null;
             }
           })
           .catch(res => {
             console.log(res);
+            return null;
           });
       } else {
         console.error("Cannot refreshFeed, bad args");
+
       }
     }
   }

@@ -220,6 +220,7 @@ a {
   border-radius: var(--small-border-radius);
 }
 a:focus {
+  outline: none;
 }
 a:hover {
   background-color: var(--dark-bg);
@@ -272,11 +273,6 @@ a:hover {
 }
 
 .tweet-blank-filled {
-  border: .5px solid var(--red);
-  padding: 2px;
-  border-radius: var(--small-border-radius);
-  line-height: calc(150% - 4px);
-  margin-top: 2px;
 }
 
 .main-grid {

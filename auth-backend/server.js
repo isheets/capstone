@@ -90,7 +90,7 @@ router.get('/timeline', function (req, res) {
 
   //error function
   var error = (err, response, body) => {
-    console.log(err, response, body);
+    console.log(err.data);
     return res.status(err.statusCode).send(err.data);
   }
 

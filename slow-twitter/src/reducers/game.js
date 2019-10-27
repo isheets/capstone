@@ -9,7 +9,6 @@ const intialGame = {
 const game = (state = intialGame, action) => {
   switch (action.type) {
     case "INIT_GAME":
-      console.log(action);
       return {
         ...state,
         curGame: action.curGame,
@@ -29,12 +28,21 @@ const game = (state = intialGame, action) => {
         lastTweetFetched: action.lastFetched
       };
     case "SET_PARSED_TWEETS":
-      return {
-        ...state,
-        parsedTweets: action.parsedTweets,
-        lastTweetFetchDate: action.lastTweetFetchDate,
-        lastTweetFetched: action.lastTweetFetched
-      };
+      if (action.lastTweetFetched !== null) {
+        return {
+          ...state,
+          parsedTweets: action.parsedTweets,
+          lastTweetFetchDate: action.lastTweetFetchDate
+        };
+      }
+      else {
+        return {
+          ...state,
+          parsedTweets: action.parsedTweets,
+          lastTweetFetchDate: action.lastTweetFetchDate,
+          lastTweetFetched: action.lastTweetFetched
+        };
+      }
     case "SET_PARSED_FRIENDS":
       return {
         ...state,
