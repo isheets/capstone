@@ -13,6 +13,7 @@ var he = require('he');
 /*
 TODO:
 handle rate-limiting or no new tweets - inside new game 
+scrub URLS from quote tweets
 
 BUGS:
 double init on reload when tweets fetched more than six hours ago
@@ -72,22 +73,12 @@ export default class GameController {
         }
         newGame.getRandomFriends();
       }
+
       if (shouldReturn === true) {
         return newGame;
       }
 
       else {
-        // //check to see if we're at the end
-        // if (allTweets.length === 1) {
-        //   console.log('only 1 tweet left, getting more')
-        //   let newTweets = await this.fetchNewTweets();
-        //   if (newTweets === null && newTweets.length > 0) {
-        //     console.error('Tried to fetch new tweets cuz we out but failed');
-        //   }
-        //   else {
-        //     this.updateTweets(newTweets);
-        //   }
-        // }
         //call methods to update the store accordingly
         this.updateTweets(allTweets);
         this.updateGame(newGame);

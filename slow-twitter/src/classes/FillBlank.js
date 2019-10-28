@@ -307,6 +307,7 @@ export default class FillBlank {
 				console.log("checked all the words");
 				//can't do FIB so resort to GuessAuthor
 				this.type = 'NoWords';
+				this.parent.newGuessAuthor(this.curTweet);
 				return null;
 			} else {
 				let wordLex = new pos.Lexer().lex(extractedWord);

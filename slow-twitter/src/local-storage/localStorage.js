@@ -17,14 +17,19 @@ export const loadState = () => {
         gameFromJson = FillBlank.fromJSON(parsedState.game.curGame);
         console.log(gameFromJson);
         if(gameFromJson.type === 'NoWords') {
-          
           gameFromJson = GuessAuthor.fromJSON(parsedState.game.curGame);
           gameFromJson.getRandomFriends(parsedState.game.parsedFriends, true);
         }
       }
+      else if(parsedState.game.curGame.type === 'NoWords') {
+        console.log('game type is NoWords, constructing GuessAuthor');
+        gameFromJson = GuessAuthor.fromJSON(parsedState.game.curGame);
+        gameFromJson.getRandomFriends(parsedState.game.parsedFriends, true);
+      }
       else if (parsedState.game.curGame.type === 'GuessAuthor') {
         console.log('constructing new GuessAuthor game');
         gameFromJson = GuessAuthor.fromJSON(parsedState.game.curGame);
+        gameFromJson.getRandomFriends(parsedState.game.parsedFriends, true);
       }
       else if(parsedState.game.curGame.type === 'Complete') {
         gameFromJson.type = 'Complete';
