@@ -13,6 +13,7 @@ import DragOptions from "./DragOptions";
 import Lives from './Lives';
 
 import GameController from '../classes/GameController';
+import Typing from "react-typing-animation/dist/Typing";
 
 
 let dispatch;
@@ -93,38 +94,42 @@ const App = () => {
 
   if (game.curGame !== null) {
     content = (
-      <div>
-        <div className="top-bar">
-          <div className="black-box">
-            <h1>SLOW TWITTER</h1>
-          </div>
-          <div className="black-box">
-            <h2>{user.userDetails.name}</h2>
-          </div>
-        </div>
-        <div className="main-grid">
-          <TweetCard />
-          <div className="main-grid-col-2">
-            {game.curGame.type === 'Complete' || game.curGame.type === 'NoTweets' ?
-              gameAdmin
-              :
-              <Fragment>
-                <div className="drag-options-wrapper">
-                  <DragOptions />
-                </div>
-                <Lives />
-              </Fragment>
-            }
-          </div>
-        </div>
+      <div className="bg">
+        <div className="paper">
+          <div className="content-wrapper">
+            <div className="top-bar">
+              <div className="user-details">
+                <h2>{user.userDetails.name}</h2>
+              </div>
+              <div className="title">
+                <Typing speed={1000}><h1>SLOW TWITTER</h1></Typing>
+              </div>
+            </div>
+            <div className="main-grid">
+              <TweetCard />
+              <div className="main-grid-col-2">
+                {game.curGame.type === 'Complete' || game.curGame.type === 'NoTweets' ?
+                  gameAdmin
+                  :
+                  <Fragment>
+                    <div className="drag-options-wrapper">
+                      <DragOptions />
+                    </div>
+                    <Lives />
+                  </Fragment>
+                }
+              </div>
+            </div>
 
-        <TweetNav />
-        <button
-          onClick={() => gameController.fetchAllFriends()}
-          className="button"
-        >
-          Get Friends
+            <TweetNav />
+            <button
+              onClick={() => gameController.fetchAllFriends()}
+              className="button"
+            >
+              Get Friends
         </button>
+          </div>
+        </div>
       </div>
     );
 

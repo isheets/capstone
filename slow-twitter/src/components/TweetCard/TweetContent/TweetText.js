@@ -30,7 +30,7 @@ const TweetText = props => {
 		}
 		//extract words and such if its a fillblank game
 		else if (game.type === 'FillBlank'){
-			textToRender = <Typing>{game.textToRender}</Typing>;
+			textToRender = <Typing startDelay={500}>{game.textToRender}</Typing>;
 			console.log(textToRender);
 			if (curTweet.urls !== null) {
 				for (let i = 0; i < curTweet.urls.length; i++) {
@@ -44,7 +44,7 @@ const TweetText = props => {
 		}
 		//no need to extract words if game is guess author
 		else if (game.type === 'GuessAuthor') {
-			textToRender = <Typing>{curTweet.text}</Typing>;
+			textToRender = <Typing startDelay={500}>{curTweet.text}</Typing>;
 			if (curTweet.urls !== null) {
 				for (let i = 0; i < curTweet.urls.length; i++) {
 					urlsToRender.push(

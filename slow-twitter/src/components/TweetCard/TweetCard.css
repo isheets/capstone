@@ -10,7 +10,6 @@
 .tweet-card {
     margin: 15px;
     color: var(--tan);
-    font-family: 'Courier New', Courier, monospace;
 }
 
 .tweet-card-col-2 {

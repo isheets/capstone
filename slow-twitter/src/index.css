@@ -131,24 +131,20 @@ table {
 /* global vars */
 
 :root{
-  --dark-bg: rgb(48, 39, 40);
-  --tan: rgb(187, 197, 182);
-  --blue: rgb(79, 177, 211);
-  --red: rgb(209, 109, 95);
+  --aqua: #5D8C87;
+  --tan: #BFB3A4;
+  --blue: #C7CFD9;
+  --red: #BF0404;
+  --brown: #736356;
   --large-border-radius: 10px;
   --small-border-radius: 3px;
 }
 
 
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  margin-top: 0;
+  font-family: itc-american-typewriter, monospace;
   width: 100%;
-  background-color: var(--dark-bg);
 }
 
 code {
@@ -156,48 +152,43 @@ code {
     monospace;
 }
 
-.good-toast {
-  padding: 15px;
-  display: flex;
-  position: fixed;
-  border-radius: var(--small-border-radius);
-  bottom: 5%;
-  left: 50%;
-  width: min-content;
-  background-color: var(--tan);
-  color: var(--dark-bg);
+.bg {
+  margin: 0;
+  width: 100%;
+  top: 0;
+  background-color: var(--aqua);
 }
 
+.paper {
+  width: 80%;
+  margin-top: 5%;
+  margin-right: 10%;
+  margin-left: 10%;
+  background-color: var(--blue);
+}
 
+.content-wrapper {
+  margin: 3%;
+}
 
 .top-bar {
-  width: 90%;
-  display: grid;
-  grid-template-columns: 58% 37%;
-  column-gap: 5%;
+  width: 100%;
+  display: flex;
   margin: auto;
   margin-top: 15px;
 }
 
 h1 {
-  color: var(--red);
+  color: black;
   font-size: 200%;
-  font-family: paralucent-stencil, sans-serif;
+  font-weight: 500;
   display: inline-block;
-  align-self: center;
-  border-top: 2px dashed var(--blue);
-  border-bottom: 2px dashed var(--blue);
-  border-radius: var(--large-border-radius);
-  padding: 15px;
 }
 
 h2 {
   color: var(--red);
   font-size: 110%;
-  font-family: paralucent-stencil, sans-serif;
   display: inline-block;
-  font-weight: bold;
-  align-self: center;
 }
 
 pre {
@@ -215,7 +206,6 @@ a {
   text-decoration: none;
   color: var(--dark-bg);
   background-color: var(--red);
-  font-weight: bold;
   padding: 5px;
   border-radius: var(--small-border-radius);
 }
