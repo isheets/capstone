@@ -102,7 +102,7 @@ const App = () => {
                 <h2>{user.userDetails.name}</h2>
               </div>
               <div className="title">
-                <Typing speed={1000}><h1>SLOW TWITTER</h1></Typing>
+                <h1>SLOW TWITTER</h1>
               </div>
             </div>
             <div className="main-grid">

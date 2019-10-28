@@ -231,7 +231,7 @@ export default class FillBlank {
 	static fromJSON(serializedJson) {
 		let newInstance = new FillBlank(serializedJson.curTweet, serializedJson.foundWords);
 
-		if(newInstance.type !== 'NoWords') {
+		if (newInstance.type !== 'NoWords') {
 			newInstance.type = 'FillBlank'
 		}
 		newInstance.extractedWords = serializedJson.extractedWords; //array of extracted word objects
@@ -307,7 +307,6 @@ export default class FillBlank {
 				console.log("checked all the words");
 				//can't do FIB so resort to GuessAuthor
 				this.type = 'NoWords';
-				this.parent.newGuessAuthor(this.curTweet);
 				return null;
 			} else {
 				let wordLex = new pos.Lexer().lex(extractedWord);
@@ -419,7 +418,7 @@ export default class FillBlank {
 			}
 		}
 
-		if(jsxAr.length < 2) {
+		if (jsxAr.length < 2) {
 			this.parent.newGuessAuthor(this.curTweet);
 			return null;
 		}
@@ -441,7 +440,7 @@ export default class FillBlank {
 			}
 		}
 
-		
+
 
 		this.setWordOptions(wordOptions);
 		this.setExtractedWords(extractWordObjs);

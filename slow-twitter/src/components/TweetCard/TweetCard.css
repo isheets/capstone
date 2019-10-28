@@ -9,7 +9,7 @@
 }
 .tweet-card {
     margin: 15px;
-    color: var(--tan);
+    color: black;
 }
 
 .tweet-card-col-2 {
@@ -129,11 +129,5 @@
     border-radius: 10px;
     padding: 10px;
 }
-
-.microlink_card:hover {
-    box-shadow: 1px 1px 0 0 black;
-    color: black;
-}
-
 
 

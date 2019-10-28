@@ -64,6 +64,14 @@ export default class GameController {
       if (randomNumber <= 2) {
         //instantiate FillBlank game
         newGame = new FillBlank(firstTweet[0])
+
+        if (newGame.type === 'NoWords') {
+          newGame = new GuessAuthor(firstTweet[0]);
+          if (friends) {
+            newGame.getRandomFriends(friends);
+          }
+          newGame.getRandomFriends();
+        }
       }
       else {
         //instantiate GuessAuthor game and make sure we get some random friends
@@ -108,9 +116,12 @@ export default class GameController {
   }
 
   newGuessAuthor(tweet) {
-    let newGame = new GuessAuthor(tweet);
+    console.log("couldn't extract words, constructing GuessAuthor");
 
-    this.updateGame(newGame);
+    let newGame = new GuessAuthor(tweet);
+    newGame.getRandomFriends(undefined, true);
+
+    return // also updates the store
   }
 
   updateTweets(tweets) {
@@ -326,10 +337,14 @@ const parseRawTweets = rawTweets => {
             newTweet.media[i].url =
               tweet.extended_entities.media[i].video_info.variants[0].url;
             newTweet.media[i].format =
-              tweet.extended_entities.media[
-                i
-              ].video_info.variants[0].content_type;
+              tweet.extended_entities.media[i].video_info.variants[0].content_type;
           } else if (newTweet.media[i].type === "animated_gif") {
+            //render as a video
+            newTweet.media[i].type = "video";
+            newTweet.media[i].url =
+              tweet.extended_entities.media[i].video_info.variants[0].url;
+            newTweet.media[i].format =
+              tweet.extended_entities.media[i].video_info.variants[0].content_type;
           }
           //NEED TO CHECK FOR OTHER TYPES OF MEDIA
         }
