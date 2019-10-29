@@ -140,42 +140,44 @@ table {
   --small-border-radius: 3px;
 }
 
-
-body {
-  margin-top: 0;
-  font-family: itc-american-typewriter, monospace;
-  width: 100%;
+.aqua {
+  background-color: var(--aqua);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+.blue{
+  background-color: var(--blue);
+}
+
+body {
+  font-family: itc-american-typewriter, monospace;
+  background-color: var(--aqua);
+}
+
+.page-grid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 3% 3% 88% 3% 3%;;
+  grid-auto-rows: minmax(50px, min-content);
 }
 
 .bg {
-  margin: 0;
   width: 100%;
   top: 0;
   background-color: var(--aqua);
 }
 
 .paper {
-  width: 80%;
-  margin-top: 5%;
-  margin-right: 10%;
-  margin-left: 10%;
+  width: 92%;
+  margin-top: 2%;
+  margin-right: 4%;
+  margin-left: 4%;
   background-color: var(--blue);
-}
-
-.content-wrapper {
-  margin: 3%;
 }
 
 .top-bar {
   width: 100%;
   display: flex;
   margin: auto;
-  margin-top: 15px;
 }
 
 h1 {
@@ -262,7 +264,6 @@ a:hover {
 }
 
 .main-grid {
-  width: 90%;
   display: grid;
   grid-template-columns: 58% 37%;
   column-gap: 5%;

@@ -396,10 +396,18 @@ export default class FillBlank {
 		//array to hold all the jsx
 		let jsxAr = [];
 
-		//iterator to keep track of how what word we're replacing
+		//iterator to keep track of what word we're replacing
 		let curWordIdx = 0;
 
-		for (let i = 0; i < parts.length; i++) {
+		let startIdx;
+		if(parts[0] == '') {
+			startIdx = 1;
+		}
+		else {
+			startIdx = 0;
+		}
+
+		for (let i = startIdx; i < parts.length; i++) {
 			//insert fill in the blank compenent in at placeholder
 			if (parts[i] === "[need a blank here plzz]") {
 				jsxAr.push(

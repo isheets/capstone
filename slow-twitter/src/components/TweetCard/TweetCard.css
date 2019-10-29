@@ -1,15 +1,7 @@
-
-
 .tweet-card-wrapper {
     width: 100%;
     height: min-content;
     background-color: var(--dark-bg);
-    border: 2px solid var(--red);
-    border-radius: var(--large-border-radius);
-}
-.tweet-card {
-    margin: 15px;
-    color: black;
 }
 
 .tweet-card-col-2 {

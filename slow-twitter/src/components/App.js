@@ -13,7 +13,6 @@ import DragOptions from "./DragOptions";
 import Lives from './Lives';
 
 import GameController from '../classes/GameController';
-import Typing from "react-typing-animation/dist/Typing";
 
 
 let dispatch;
@@ -94,42 +93,52 @@ const App = () => {
 
   if (game.curGame !== null) {
     content = (
-      <div className="bg">
-        <div className="paper">
-          <div className="content-wrapper">
-            <div className="top-bar">
-              <div className="user-details">
-                <h2>{user.userDetails.name}</h2>
-              </div>
-              <div className="title">
-                <h1>SLOW TWITTER</h1>
-              </div>
+      <div className="page-grid">
+        <div className="aqua"></div>
+        <div className="aqua"></div>
+        <div className="aqua"></div>
+        <div className="aqua"></div>
+        <div className="aqua"></div>
+        <div className="aqua"></div>
+        <div className="blue"></div>
+        <div className="blue"></div>
+        <div className="blue"></div>
+        <div className="aqua"></div>
+        <div className="aqua"></div>
+        <div className="blue"></div>
+        <div className="content-wrapper blue">
+          <div className="top-bar">
+            <div className="user-details">
+              <h2>{user.userDetails.name}</h2>
             </div>
-            <div className="main-grid">
-              <TweetCard />
-              <div className="main-grid-col-2">
-                {game.curGame.type === 'Complete' || game.curGame.type === 'NoTweets' ?
-                  gameAdmin
-                  :
-                  <Fragment>
-                    <div className="drag-options-wrapper">
-                      <DragOptions />
-                    </div>
-                    <Lives />
-                  </Fragment>
-                }
-              </div>
+            <div className="title">
+              <h1>SLOW TWITTER</h1>
             </div>
-
-            <TweetNav />
-            <button
-              onClick={() => gameController.fetchAllFriends()}
-              className="button"
-            >
-              Get Friends
-        </button>
+          </div>
+          <div className="main-grid">
+            <TweetCard />
+            <div className="main-grid-col-2">
+              {game.curGame.type === 'Complete' || game.curGame.type === 'NoTweets' ?
+                gameAdmin
+                :
+                <Fragment>
+                  <div className="drag-options-wrapper">
+                    <DragOptions />
+                  </div>
+                  <Lives />
+                </Fragment>
+              }
+            </div>
           </div>
         </div>
+        <div className="blue"></div>
+        <div className="aqua"></div>
+        <div className="aqua"></div>
+        <div className="blue"></div>
+        <div className="blue"></div>
+        <div className="blue"></div>
+        <div className="aqua"></div>
+
       </div>
     );
 
