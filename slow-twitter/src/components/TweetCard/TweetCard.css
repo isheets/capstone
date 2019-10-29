@@ -1,8 +1,4 @@
-.tweet-card-wrapper {
-    width: 100%;
-    height: min-content;
-    background-color: var(--dark-bg);
-}
+
 
 .tweet-card-col-2 {
     margin-top: 5px;
@@ -71,7 +67,6 @@
 
 .tweet-media-grid-1 {
     border-radius: 10px;
-    margin: auto;
     width: 75%;
     margin-top: 10px;
     display: grid;

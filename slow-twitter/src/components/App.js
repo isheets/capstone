@@ -122,9 +122,8 @@ const App = () => {
                 gameAdmin
                 :
                 <Fragment>
-                  <div className="drag-options-wrapper">
-                    <DragOptions />
-                  </div>
+                  <h2>Word Bank:</h2>
+                  <DragOptions />
                   <Lives />
                 </Fragment>
               }

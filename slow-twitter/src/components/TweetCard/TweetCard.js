@@ -21,6 +21,7 @@ const TweetCard = () => {
 
         content = (
           <Fragment>
+            <h2>Complete the Tweet:</h2>
             <TweetProfilePic url={curTweet.user.pic} />
             <TweetInfo />
             <TweetContent />
@@ -31,6 +32,7 @@ const TweetCard = () => {
       else if (game.type === 'GuessAuthor') {
         content = (
           <Fragment>
+            <h2>Guess the Author:</h2>
             <AuthorBlank />
             <TweetContent />
           </Fragment>

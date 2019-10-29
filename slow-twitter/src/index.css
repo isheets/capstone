@@ -272,21 +272,7 @@ a:hover {
   margin-top: 30px;
 }
 
-.drag-options-wrapper {
-  position: sticky; 
-  top: 15px;
-  border: 2px solid var(--red);
-  border-radius: var(--large-border-radius);
-  height: min-content;
-  cursor: pointer;
-}
-
 .drag-options-container {
-  margin: 20px;
-  display: grid;
-  grid-template-columns: minmax(min-content, 1fr) minmax(min-content, 1fr) minmax(min-content, 1fr) minmax(min-content, 1fr);
-  row-gap: 10px;
-  column-gap: 10px;
   height: min-content;
   color: var(--tan);
 }
