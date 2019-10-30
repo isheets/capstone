@@ -15,6 +15,7 @@ import Lives from './Lives';
 import GameController from '../classes/GameController';
 
 
+
 let dispatch;
 
 let gameController = new GameController();
@@ -72,7 +73,7 @@ const App = () => {
             onClick={() => gameController.newGame()}
             className="button"
           >
-            Refresh Timeline
+            RETRY
       </button>
         );
       }
@@ -95,18 +96,18 @@ const App = () => {
     content = (
       <div className="page-grid">
         <div className="aqua"></div>
+        <div className="aqua rightBorder"></div>
+        <div className="aqua rightBorder"></div>
         <div className="aqua"></div>
         <div className="aqua"></div>
+        <div className="aqua bottomBorder"></div>
+        <div className="blue bottomBorder rightBorder"></div>
+        <div className="blue bottomBorder rightBorder"></div>
+        <div className="blue bottomBorder"></div>
+        <div className="aqua bottomBorder"></div>
         <div className="aqua"></div>
-        <div className="aqua"></div>
-        <div className="aqua"></div>
-        <div className="blue"></div>
-        <div className="blue"></div>
-        <div className="blue"></div>
-        <div className="aqua"></div>
-        <div className="aqua"></div>
-        <div className="blue"></div>
-        <div className="content-wrapper blue">
+        <div className="blue rightBorder"></div>
+        <div className="content-wrapper blue rightBorder">
           <div className="top-bar">
             <div className="user-details">
               <h2>{user.userDetails.name}</h2>
@@ -116,18 +117,18 @@ const App = () => {
             </div>
           </div>
           <div className="main-grid">
-            <TweetCard />
-            <div className="main-grid-col-2">
-              {game.curGame.type === 'Complete' || game.curGame.type === 'NoTweets' ?
-                gameAdmin
-                :
-                <Fragment>
-                  <h2>Word Bank:</h2>
-                  <DragOptions />
-                  <Lives />
-                </Fragment>
-              }
-            </div>
+              <TweetCard />
+              <div className="main-grid-col-2">
+                {game.curGame.type === 'Complete' || game.curGame.type === 'NoTweets' ?
+                  gameAdmin
+                  :
+                  <Fragment>
+                    <h2 className='section-title'>Word Bank:</h2>
+                    <DragOptions />
+                    <Lives />
+                  </Fragment>
+                }
+              </div>
           </div>
         </div>
         <div className="blue"></div>

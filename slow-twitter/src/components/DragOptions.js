@@ -28,7 +28,7 @@ const DragOptions = () => {
 
     
 
-    let className = 'drag-options-container';
+    let className = 'drag-options-container double';
 
     let content = null;
     if (game !== null) {
@@ -46,7 +46,7 @@ const DragOptions = () => {
 
         else if (game.type === "GuessAuthor") {
             if (game.friendOptions.length > 0) {
-                className = 'drag-options-container double'
+                className = 'drag-options-container'
                 game.friendOptions = shuffle(game.friendOptions);
                 content = game.friendOptions.map((user, key) => 
                     <DragAuthor key={key} name={user.name} url={user.pic} handle={user.handle} time={tweetTime} correct={user.correct} />

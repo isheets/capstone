@@ -6,6 +6,8 @@ import TweetContent from "./TweetContent/TweetContent";
 import AuthorBlank from './TweetContent/AuthorBlank';
 import "./TweetCard.css";
 
+import Typing from 'react-typing-animation';
+
 const TweetCard = () => {
   //hook into state to get the current tweet to display
   let game = useSelector(state => state.game.curGame);
@@ -18,12 +20,9 @@ const TweetCard = () => {
     if (curTweet !== null) {
       //render the info and everything if its FillBlank
       if (game.type === 'FillBlank') {
-
         content = (
           <Fragment>
-            <h2>Complete the Tweet:</h2>
-            <TweetProfilePic url={curTweet.user.pic} />
-            <TweetInfo />
+            <h2 className="section-title">Complete the Tweet:</h2>
             <TweetContent />
           </Fragment>
         );
@@ -32,7 +31,7 @@ const TweetCard = () => {
       else if (game.type === 'GuessAuthor') {
         content = (
           <Fragment>
-            <h2>Guess the Author:</h2>
+            <h2 className="section-title">Guess the Author:</h2>
             <AuthorBlank />
             <TweetContent />
           </Fragment>
@@ -41,8 +40,8 @@ const TweetCard = () => {
       else if(game.type === 'Complete' || game.type === 'NoTweets') {
         content = (
           <Fragment>
-            <TweetProfilePic url={curTweet.user.pic} />
-            <TweetInfo />
+            {/* <TweetProfilePic url={curTweet.user.pic} /> */}
+            {/* <TweetInfo /> */}
             <TweetContent />
           </Fragment>
         );

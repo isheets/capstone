@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react'
 import { useSelector } from "react-redux";
 
+import Typing from 'react-typing-animation';
+
 export var timeSinceTweet = function( tweetDateString ) {
   
     // Convert both dates to milliseconds
@@ -56,10 +58,10 @@ const TweetInfo = (props) => {
         tweetToRender = curTweet;
         classForTweetInfo = "tweet-info"
     }
-    let content;
+    let infoContent;
     if (tweetToRender !== null) {
         timeSinceTweet(tweetToRender.date);
-        content = (
+     infoContent = (
             <div className={classForTweetInfo}>
                 <h3 className={classForTweetInfo + "-name"}>{tweetToRender.user.name}</h3>
                 <h4 className={classForTweetInfo + "-details"}>@{tweetToRender.user.handle} / {timeSinceTweet(tweetToRender.date)}</h4>
@@ -67,11 +69,11 @@ const TweetInfo = (props) => {
         )
     }
     else {
-        content = (<p>curTweet not found</p>);
+     infoContent = (<p>curTweet not found</p>);
     }
     return (
         <Fragment>
-            {content}
+             {infoContent}
         </Fragment>
     )
 }

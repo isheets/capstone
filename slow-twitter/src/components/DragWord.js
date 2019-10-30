@@ -9,17 +9,11 @@ const DragWord = props => {
   const word = props.word;
   const order = props.order;
   let strike = false;
+  let opacity = 1;
 
   let content = null;
 
-  if (fibGame !== null) {
-    //check if word is one of the already dropped ones, and if so then strike it out
-    for (let wordObj of fibGame.droppedWords) {
-      if (wordObj.word === word) {
-        strike = true;
-      }
-    }
-  }
+
 
   const [{ isDragging }, drag] = useDrag({
     item: { value: word, order: order, type: "word" },
@@ -37,18 +31,29 @@ const DragWord = props => {
       isDragging: monitor.isDragging()
     })
   });
+  opacity = isDragging ? 0.4 : 1;
 
-  const opacity = isDragging ? 0.4 : 1;
+  if (fibGame !== null) {
+    //check if word is one of the already dropped ones, and if so then strike it out
+    for (let wordObj of fibGame.droppedWords) {
+      if (wordObj.word === word) {
+        strike = true;
+        opacity = 0.5;
+      }
+    }
+  }
 
   //switch strike based on whether word has been dropped
   const textDecoration = strike ? 'line-through' : 'none';
 
-  
+
 
   if (word !== null) {
     content = (
-      <div ref={drag} style={{ opacity, textDecoration }} className="word-drag">
-        {word}
+      <div className="word-wrapper">
+        <div ref={drag} style={{ opacity, textDecoration }} className="word-drag">
+          {word}
+        </div>
       </div>
     );
   }

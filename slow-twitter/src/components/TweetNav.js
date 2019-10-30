@@ -8,7 +8,7 @@ let gameController = new GameController();
 const TweetNav = () => {
     return (
         <div>
-            <button onClick={() => gameController.newGame()}>Next</button>
+            <button onClick={() => gameController.newGame()}>NEXT &#x27FE;</button>
         </div>
     )
 }

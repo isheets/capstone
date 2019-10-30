@@ -148,6 +148,14 @@ table {
   background-color: var(--blue);
 }
 
+.rightBorder {
+  border-right: 1px dashed var(--red);
+}
+
+.bottomBorder {
+  border-bottom: 1px dashed var(--red);
+}
+
 body {
   font-family: itc-american-typewriter, monospace;
   background-color: var(--aqua);
@@ -156,28 +164,19 @@ body {
 .page-grid {
   display: grid;
   width: 100%;
-  grid-template-columns: 3% 3% 88% 3% 3%;;
-  grid-auto-rows: minmax(50px, min-content);
+  grid-template-columns: 3% 4% 86% 4% 3%;;
+  grid-auto-rows: minmax(60px, min-content);
 }
 
-.bg {
-  width: 100%;
-  top: 0;
-  background-color: var(--aqua);
-}
-
-.paper {
-  width: 92%;
-  margin-top: 2%;
-  margin-right: 4%;
-  margin-left: 4%;
-  background-color: var(--blue);
+.content-wrapper {
+  padding: 2%;
 }
 
 .top-bar {
   width: 100%;
   display: flex;
   margin: auto;
+  margin-bottom: 20px;
 }
 
 h1 {
@@ -188,10 +187,16 @@ h1 {
 }
 
 h2 {
-  color: var(--red);
+  color: black;
   font-size: 110%;
   display: inline-block;
 }
+
+.section-title {
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
 
 pre {
   white-space: pre-wrap; /* Since CSS 2.1 */
@@ -201,23 +206,22 @@ pre {
   word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
 
-h3 {
-}
-
 a {
   text-decoration: none;
-  color: var(--dark-bg);
-  background-color: var(--red);
+  color: var(--red);
+  background-color: var(--tan);
   padding: 5px;
-  border-radius: var(--small-border-radius);
 }
 a:focus {
-  outline: none;
+  outline: 1px dashed var(--red);
 }
 a:hover {
-  background-color: var(--dark-bg);
-  color: var(--red);
-  border: 1px solid var(--red);
+  background-color: var(--blue);
+  color: var(--black);
+}
+
+.word-wrapper {
+  margin-bottom: 10px;
 }
 
 .word-drag {
@@ -275,10 +279,24 @@ a:hover {
 .drag-options-container {
   height: min-content;
   color: var(--tan);
+  display: grid;
 }
 
 .double {
-  grid-template-columns: 50% 50%;
+  grid-template-columns: min-content min-content;
+  column-gap: 20px;
+}
+
+.lives-wrapper {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.heart-img {
+  font-size: 200%;
+  margin-left: 5px;
+  color:var(--red);
 }
 
 .twitter-login-container {
@@ -302,4 +320,28 @@ a:hover {
 
 .twitter-login-button:hover {
   box-shadow: 4px 4px 0 0 var(--red);
+}
+
+button {
+  background-color: var(--tan);
+  outline: none;
+  border-radius: 5px;
+  padding: 5px;
+  color: black;
+  border: 1px solid black;
+  font-family: itc-american-typewriter, monospace;
+  font-size: 120%;
+  box-shadow: 0px 2px 3px 0 var(--brown);
+  cursor: pointer;
+  transition: padding .1s, transform .1s;
+}
+
+button:hover {
+  padding: 6px;
+  transform: translate(-1px, -1px);
+  
+}
+
+button:active {
+  box-shadow: 0px 1px 1px 0 var(--brown);
 }
