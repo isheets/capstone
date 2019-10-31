@@ -14,6 +14,7 @@ import Lives from './Lives';
 
 import GameController from '../classes/GameController';
 
+import Typist from 'react-typist';
 
 
 let dispatch;
@@ -116,6 +117,7 @@ const App = () => {
               <h1>SLOW TWITTER</h1>
             </div>
           </div>
+          
           <div className="main-grid">
               <TweetCard />
               <div className="main-grid-col-2">

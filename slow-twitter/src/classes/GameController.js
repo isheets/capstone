@@ -97,14 +97,16 @@ export default class GameController {
     else {
       console.log("out of tweets, fetching more");
       let newTweets = await this.fetchNewTweets();
-      if (newTweets === null || newTweets.length < 1) {
+      console.log(newTweets);
+      if (newTweets === null || Object.keys(newTweets).length < 1) {
         console.error('Out of tweets in GameController.newGame()');
         state.game.curGame.type = 'NoTweets';
         this.updateGame(state.game.curGame);
       }
       else {
-        console.log('Got ' + newTweets.length + ' new tweets.')
-        this.newGame(false, newTweets);
+        console.log('Got ' + Object.keys(newTweets).length - 1  + ' new tweets.')
+        this.updateTweets(newTweets);
+        this.newGame();
       }
 
     }

@@ -256,7 +256,7 @@ export default class FillBlank {
 		let text = this.curTweet.text;
 		//construct regex to split string into all words
 		let allWordExp =
-			"(?<!@)(?<=\\s|^|\\b)(?:[-’%$#&\\/]\\b|\\b[-’%$#&\\/]|[A-Za-z0-9]|\\([A-Za-z0-9]+\\))+(?=\\s|$|\\b)";
+			"(?<!@)(?<=\\s|^|\\b)(?:[-’'%$#&\\/]\\b|\\b[-’'%$#&\\/]|[A-Za-z0-9]|\\([A-Za-z0-9]+\\))+(?=\\s|$|\\b)";
 		let allWordReg = new RegExp(allWordExp, "g");
 
 
