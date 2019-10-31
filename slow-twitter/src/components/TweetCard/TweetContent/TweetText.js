@@ -1,7 +1,10 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { useSelector } from "react-redux";
 import Typing from 'react-typing-animation';
 import TweetProfilePic from "./../TweetProfilePic";
+import AuthorBlank from "./AuthorBlank";
+
+import Typist from 'react-typist';
 
 export var timeSinceTweet = function( tweetDateString ) {
   
@@ -108,6 +111,7 @@ const TweetText = props => {
 		}
 		//no need to extract words if game is guess author
 		else if (game.type === 'GuessAuthor') {
+			infoContent = <AuthorBlank />;
 			textToRender = curTweet.text;
 			if (curTweet.urls !== null) {
 				for (let i = 0; i < curTweet.urls.length; i++) {
@@ -138,11 +142,21 @@ const TweetText = props => {
 		return (
 
 			<div className="tweet-text">
-				<Typing speed={20}>
+				{game.type === 'FillBlank' || game.type === 'GuessAuthor' && quote !== true ? 
+				<Fragment>	
 					{infoContent}
 					<pre>{textToRender}</pre>
 					<div className="tweet-urls">{urlsToRender}</div>
-				</Typing>
+				</Fragment>
+
+				:
+
+				<Fragment>
+					{infoContent}
+					<pre>{textToRender}</pre>
+					<div className="tweet-urls">{urlsToRender}</div>
+				</Fragment>
+				}
 			</div>
 		);
 	}

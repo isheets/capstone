@@ -138,6 +138,7 @@ export default class FillBlank {
 	correctDrop() {
 		//probably add word here
 		this.checkDone();
+		this.parent.updateGame(this);
 		return true;
 	}
 

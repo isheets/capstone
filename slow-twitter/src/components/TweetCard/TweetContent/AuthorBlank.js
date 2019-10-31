@@ -3,6 +3,7 @@ import { useDrop } from "react-dnd";
 import { useSelector } from "react-redux";
 
 const AuthorBlank = () => {
+    console.log('rendering blank');
     const [{ canDrop, isOver, authorBeingDragged }, drop] = useDrop({
         accept: "author",
         collect: monitor => ({

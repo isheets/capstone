@@ -22,6 +22,7 @@
     "react-toastify": "^5.4.0",
     "react-twitter-auth": "0.0.9",
     "react-typing-animation": "^1.6.2",
+    "react-typist": "^2.0.5",
     "redux": "^4.0.4",
     "sentencer": "^0.2.0"
   },

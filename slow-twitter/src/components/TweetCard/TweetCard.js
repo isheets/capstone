@@ -32,7 +32,6 @@ const TweetCard = () => {
         content = (
           <Fragment>
             <h2 className="section-title">Guess the Author:</h2>
-            <AuthorBlank />
             <TweetContent />
           </Fragment>
         )

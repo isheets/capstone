@@ -3,6 +3,9 @@ import { useDrop } from "react-dnd";
 import { useSelector } from "react-redux";
 
 const Blank = props => {
+
+  console.log('rendering blank');
+
   let extractedWord = props.extractedWord;
   let blankOrder = props.blankOrder;
   let game = useSelector(state => state.game.curGame);
