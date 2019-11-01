@@ -235,21 +235,21 @@ a:hover {
 }
 
 .author-drag {
-  background-color: var(--dark-bg);
-  color: var(--tan);
-  border: 1px solid var(--red);
-  border-radius: var(--small-border-radius);
+  background-color: var(--tan);
+  color: black;
   line-height: 150%;
-  padding: 5px;
+  padding-top: 0;
   white-space: nowrap;
-  width: calc(100% - 20px);
+  width: min-content;
   cursor: pointer;
+  margin-bottom: 10px;
 }
 
 .author-blank {
-  border: .5px solid var(--red);
-  border-radius: var(--small-border-radius);
-  padding: 5px;
+  display: inline-block;
+  cursor: pointer;
+  border-bottom: 1px solid var(--red);
+  width: 50%;
   height: 110px;
 }
 

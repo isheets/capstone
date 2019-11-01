@@ -266,8 +266,8 @@ export default class FillBlank {
 		//some issue with getting words - maybe all emojis or excalamation or something else
 		if (wordAr === null) {
 			//log an error and just return the text to avoid crash
-			console.error("NO WORDS IN WORD ARRAY");
-			return text;
+			this.type = 'NoWords';
+			return null;
 		}
 		//declare array to hold all words we extract
 		let extractedWordArray = [];

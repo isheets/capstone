@@ -14,20 +14,19 @@ const AuthorBlank = () => {
     });
 
     const isActive = canDrop && isOver;
-    let backgroundColor = "rgb(48, 39, 40)";
-    let color = backgroundColor;
+    let backgroundColor = "none";
+    let color = 'black';
     if (isActive) {
-      backgroundColor = "rgb(48, 39, 40)";
-      color = backgroundColor;
+      backgroundColor = "#C7CFD9";
+      color = 'black';
     } else if (canDrop) {
-      backgroundColor = "rgb(79, 177, 211)";
+      backgroundColor = "#BF0404";
       color = backgroundColor;
     }
     console.log(authorBeingDragged);
 
     return  (
         <div ref={drop} className="author-blank" style={{backgroundColor, color}}>
-            <h3>Drop an author here</h3>
         </div>
     )
 }
