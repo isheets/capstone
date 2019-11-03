@@ -60,11 +60,12 @@ const App = () => {
       if (Date.now() - game.lastTweetFetchDate > sixHours) {
         console.log("last fetched more than six hours ago, re-fetching and creating new game now now")
         gameController.init();
+
+        game.curGame = null;
       }
 
-
-      if (game.curGame.type === 'Complete') {
-
+      //show some administration like next button or refresh
+      else if (game.curGame.type === 'Complete') {
         gameAdmin = (<TweetNav />);
       }
       else if (game.curGame.type === 'NoTweets') {
@@ -95,60 +96,42 @@ const App = () => {
 
   if (game.curGame !== null) {
     content = (
-      <div className="page-grid">
-        <div className="aqua"></div>
-        <div className="aqua rightBorder"></div>
-        <div className="aqua rightBorder"></div>
-        <div className="aqua"></div>
-        <div className="aqua"></div>
-        <div className="aqua bottomBorder"></div>
-        <div className="blue bottomBorder rightBorder"></div>
-        <div className="blue bottomBorder rightBorder"></div>
-        <div className="blue bottomBorder"></div>
-        <div className="aqua bottomBorder"></div>
-        <div className="aqua"></div>
-        <div className="blue rightBorder"></div>
-        <div className="content-wrapper blue rightBorder">
-          <div className="top-bar">
-            <div className="user-details">
-              <h2>{user.userDetails.name}</h2>
-            </div>
-            <div className="title">
-              <h1>SLOW TWITTER</h1>
-            </div>
+      <div className="page-wrapper">
+        <div className="top-bar">
+          <div className="user-details">
+            <h2>{user.userDetails.name}</h2>
           </div>
-          
-          <div className="main-grid">
-              <TweetCard />
-              <div className="main-grid-col-2">
-                {game.curGame.type === 'Complete' || game.curGame.type === 'NoTweets' ?
-                  gameAdmin
-                  :
-                  <Fragment>
-                    <h2 className='section-title'>Word Bank:</h2>
-                    <DragOptions />
-                    <Lives />
-                  </Fragment>
-                }
-              </div>
+          <div className="title">
+            <h1>SLOW TWITTER</h1>
           </div>
         </div>
-        <div className="blue"></div>
-        <div className="aqua"></div>
-        <div className="aqua"></div>
-        <div className="blue"></div>
-        <div className="blue"></div>
-        <div className="blue"></div>
-        <div className="aqua"></div>
 
+        <div className="main-grid">
+          <TweetCard />
+          <div className="main-grid-col-2">
+            {game.curGame.type === 'Complete' || game.curGame.type === 'NoTweets' ?
+              gameAdmin
+              :
+              <Fragment>
+                <h2 className='section-title'>Word Bank:</h2>
+                <DragOptions />
+                <Lives />
+              </Fragment>
+            }
+          </div>
+        </div>
       </div>
     );
 
   }
+
+  //loading after authentication
   else if (user.isAuthenticated) {
     content = <h1>Loading game</h1>;
 
   }
+
+  //initial view not signed in
   else {
     content = (
       <div className="top-bar">

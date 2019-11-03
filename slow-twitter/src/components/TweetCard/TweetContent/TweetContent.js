@@ -38,7 +38,7 @@ const TweetContent = () => {
     }
 
     return(
-        <div className="tweet-content">
+        <div className="tweet-card">
             {content}
         </div>
     )

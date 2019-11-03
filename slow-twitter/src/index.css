@@ -148,6 +148,10 @@ table {
   background-color: var(--blue);
 }
 
+.bold {
+  font-weight: 700;
+}
+
 .rightBorder {
   border-right: 1px dashed var(--red);
 }
@@ -158,14 +162,12 @@ table {
 
 body {
   font-family: itc-american-typewriter, monospace;
-  background-color: var(--aqua);
+  background-color: var(--blue);
 }
 
-.page-grid {
-  display: grid;
-  width: 100%;
-  grid-template-columns: 3% 4% 86% 4% 3%;;
-  grid-auto-rows: minmax(60px, min-content);
+.page-wrapper {
+  width: 90%;
+  margin: auto;
 }
 
 .content-wrapper {
@@ -177,6 +179,13 @@ body {
   display: flex;
   margin: auto;
   margin-bottom: 20px;
+  margin-top: 30px;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 60% 35%;
+  column-gap: 5%;
 }
 
 h1 {
@@ -242,7 +251,6 @@ a:hover {
   white-space: nowrap;
   width: min-content;
   cursor: pointer;
-  margin-bottom: 10px;
 }
 
 .author-blank {
@@ -267,14 +275,6 @@ a:hover {
   border-bottom: 1px solid var(--red);
 }
 
-.main-grid {
-  display: grid;
-  grid-template-columns: 58% 37%;
-  column-gap: 5%;
-  margin: auto;
-  margin-bottom: 15px;
-  margin-top: 30px;
-}
 
 .drag-options-container {
   height: min-content;
