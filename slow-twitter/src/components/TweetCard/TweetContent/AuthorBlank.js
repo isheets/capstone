@@ -26,7 +26,8 @@ const AuthorBlank = () => {
     console.log(authorBeingDragged);
 
     return  (
-        <div ref={drop} className="author-blank" style={{backgroundColor, color}}>
+        <div ref={drop} className="author-blank" >
+            <h3 className={"author-blank-empty"} style={{backgroundColor, color}}>&#8213;</h3>
         </div>
     )
 }

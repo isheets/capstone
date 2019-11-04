@@ -1,13 +1,26 @@
 .tweet-content-wrapper {
-    background-color: var(--tan);
+    background-image: url('./../../img/paper-bg_1.png');
+    background-repeat: repeat;
+    border-radius: 3px;
+    box-shadow: 1px 1px 3px 0px black;
+    padding: 5px;
+    font-family: ibm-plex-mono, sans-serif;
+    font-weight: 500;
 }
 
 .tweet-content {
     width: 90%;
     padding: 15px;
+    padding-top: 25px;
+    padding-bottom: 25px;
     margin: auto;
-    border: 10px solid;
-    border-image: url('./../../img/holes_4.svg') 50 / 0 15px 0 15px  round;
+    border-right: 18px;
+    border-left: 18px;
+    border-style: dotted;
+    border-color: var(--blue);
+    border-image-source: url('./../../img/holes_5.svg');
+    border-image-slice: 33% 33%;
+    border-image-repeat: round;
 }
 
 
@@ -33,10 +46,17 @@
     font-size: 100%;
     text-align: right;
     margin-right: 5%;
-    font-weight: 700;
+    font-weight: 800;
+    font-family: ibm-plex-mono, sans-serif;
+}
+.tweet-info-details {
+    font-weight: 500;
+    font-size: 90%;
 }
 .quote-tweet-info-name {
     font-size: 100%;
+    font-weight: 800;
+    font-family: ibm-plex-mono, sans-serif;
 }
 
 .quote-tweet-info-details {
@@ -58,7 +78,14 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 3px;
+    filter: grayscale(100%);
 }
+
+.tweet-media-item:focus {
+    outline: none;
+}
+
 
 /* for videos */
 .fit {
@@ -67,8 +94,9 @@
 }
 
 .tweet-media-grid-1 {
-    width: 75%;
-    margin-top: 10px;
+    width: 50%;
+    margin: auto;
+    margin-top: 20px;
     display: grid;
     grid-template-columns: 100%;
     grid-auto-rows: 250px;

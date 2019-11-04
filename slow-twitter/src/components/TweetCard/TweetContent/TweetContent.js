@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import { useSelector } from "react-redux";
 import TweetText from "./TweetText";
 import TweetMedia from "./TweetMedia";
@@ -17,11 +17,11 @@ const TweetContent = () => {
     //make sure we have content to render
     if (curTweet !== null) {
         //check if we need to render a quote tweet
-        if(curTweet.isQuote === true) {
+        if (curTweet.isQuote === true) {
             content = (
                 <Fragment>
                     <TweetText />
-                    <TweetMedia quote={false}/>
+                    <TweetMedia quote={false} />
                     <QuoteTweet />
                 </Fragment>
             )
@@ -31,15 +31,17 @@ const TweetContent = () => {
             content = (
                 <Fragment>
                     <TweetText />
-                    <TweetMedia quote={false}/>
+                    <TweetMedia quote={false} />
                 </Fragment>
             )
         }
     }
 
-    return(
-        <div className="tweet-card">
-            {content}
+    return (
+        <div className="tweet-content-wrapper">
+            <div className="tweet-content">
+                {content}
+            </div>
         </div>
     )
 }

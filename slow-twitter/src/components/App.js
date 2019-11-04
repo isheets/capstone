@@ -98,11 +98,14 @@ const App = () => {
     content = (
       <div className="page-wrapper">
         <div className="top-bar">
-          <div className="user-details">
-            <h2>{user.userDetails.name}</h2>
+        <div className="user-details">
+            <h3>{user.userDetails.name}</h3>
           </div>
           <div className="title">
             <h1>SLOW TWITTER</h1>
+          </div>
+          <div className="user-details">
+            <button className="small-text">LOG OUT</button>
           </div>
         </div>
 

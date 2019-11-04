@@ -19,8 +19,12 @@ const DragAuthor = props => {
         //called after word is dropped
         end: (item, monitor) => {
             console.log(item);
-            //call function to check order and word correctness
-            authorGame.handleDrop(item.correct);
+            const dropResult = monitor.getDropResult();
+            //check if the item and dropResult exist
+            if (item && dropResult) {
+                //call function to check order and word correctness
+                authorGame.handleDrop(item.correct);
+            }
         },
         collect: monitor => ({
             isDragging: monitor.isDragging()
@@ -31,11 +35,7 @@ const DragAuthor = props => {
 
     content = (
         <div className="author-drag" ref={drag}>
-            <TweetProfilePic url={url}></TweetProfilePic>
-            <div className="tweet-info" style={{ opacity }}>
-                <h3 className={"tweet-info-name"}>{name}</h3>
-                <h4 className={"tweet-info-details"}>@{handle} / {time}</h4>
-            </div>
+            <h3 className={"tweet-info-name"}>{name} <span className={"tweet-info-details"}> @{handle}</span></h3>
         </div>
     );
 

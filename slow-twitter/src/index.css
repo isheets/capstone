@@ -149,7 +149,7 @@ table {
 }
 
 .bold {
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .rightBorder {
@@ -161,8 +161,12 @@ table {
 }
 
 body {
-  font-family: itc-american-typewriter, monospace;
-  background-color: var(--blue);
+  font-family: adorn-smooth-serif, serif;
+  font-weight: 400;
+  font-style: normal;
+  background-image: url('./img/bg.svg');
+  background-repeat: repeat;
+  background-size: 40px;
 }
 
 .page-wrapper {
@@ -177,8 +181,10 @@ body {
 .top-bar {
   width: 100%;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin: auto;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   margin-top: 30px;
 }
 
@@ -190,15 +196,29 @@ body {
 
 h1 {
   color: black;
-  font-size: 200%;
+  font-size: 210%;
   font-weight: 500;
   display: inline-block;
+  font-family: adorn-smooth-engraved, sans-serif;
+  font-weight: 400;
 }
 
 h2 {
   color: black;
-  font-size: 110%;
+  font-size: 150%;
   display: inline-block;
+  font-family: adorn-smooth-serif, serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+h3 {
+  color: black;
+  font-size: 125%;
+  display: inline-block;
+  font-family: adorn-smooth-serif, serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .section-title {
@@ -218,47 +238,65 @@ pre {
 a {
   text-decoration: none;
   color: var(--red);
-  background-color: var(--tan);
   padding: 5px;
 }
 a:focus {
   outline: 1px dashed var(--red);
 }
 a:hover {
-  background-color: var(--blue);
-  color: var(--black);
+  padding: 4px;
+  border: 1px dashed var(--red);
+  border-radius: 3px;
 }
 
 .word-wrapper {
+  background-image: url('./img/paper-bg_1.png');
+  background-repeat: repeat;
+  padding: 3px;
   margin-bottom: 10px;
+  width: min-content;
+  word-wrap: none;
+  white-space: nowrap;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px 0px black;
 }
 
 .word-drag {
-  background-color: var(--tan);
   color: black;
   line-height: 150%;
   padding-top: 0;
   white-space: nowrap;
   width: min-content;
   cursor: pointer;
+  border-radius: 3px;
 }
 
 .author-drag {
-  background-color: var(--tan);
+  background-image: url('./img/paper-bg_1.png');
+  background-repeat: repeat;
   color: black;
   line-height: 150%;
   padding-top: 0;
   white-space: nowrap;
   width: min-content;
   cursor: pointer;
+  padding: 3px;
+  margin-bottom: 10px;
+  border-radius: 3px;
+
 }
 
 .author-blank {
-  display: inline-block;
-  cursor: pointer;
+  margin-top: 15px;
+  display: flex;
+  justify-content: flex-end;
+
+
+}
+
+.author-blank-empty {
+  width: 100px;
   border-bottom: 1px solid var(--red);
-  width: 50%;
-  height: 110px;
 }
 
 .tweet-blank {
@@ -268,6 +306,7 @@ a:hover {
   white-space: nowrap;
   cursor: pointer;
   border-bottom: 1px solid var(--red);
+  border-radius: 3px;
 }
 
 /* tweet blank filled styled in WordBlank component */
@@ -280,6 +319,7 @@ a:hover {
   height: min-content;
   color: var(--tan);
   display: grid;
+  font-family: ibm-plex-mono, sans-serif;
 }
 
 .double {
@@ -323,25 +363,29 @@ a:hover {
 }
 
 button {
-  background-color: var(--tan);
+  background-color: black;
   outline: none;
-  border-radius: 5px;
-  padding: 5px;
-  color: black;
-  border: 1px solid black;
-  font-family: itc-american-typewriter, monospace;
-  font-size: 120%;
-  box-shadow: 0px 2px 3px 0 var(--brown);
+  border-radius: 100%;
+  padding: 15px;
+  color: var(--tan);
+  border: 1px solid var(--tan);
+  font-family: adorn-smooth-serif, serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 150%;
+  box-shadow: 1px 1px 4px 1px black;
   cursor: pointer;
-  transition: padding .1s, transform .1s;
+  transition: .3s box-shadow;
 }
 
 button:hover {
-  padding: 6px;
-  transform: translate(-1px, -1px);
-  
+  box-shadow: 1px 1px 2px 1px black;;
 }
 
 button:active {
   box-shadow: 0px 1px 1px 0 var(--brown);
+}
+
+.small-text {
+  font-size: 125%;
 }
