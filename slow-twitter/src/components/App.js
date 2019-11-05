@@ -52,6 +52,8 @@ const App = () => {
   const game = useSelector(state => state.game);
 
   let gameAdmin;
+  let gridStyle = 'main-grid';
+  let gridSpan = '';
 
   if (!!user.isAuthenticated) {
     if (game.curGame !== null) {
@@ -67,17 +69,26 @@ const App = () => {
       //show some administration like next button or refresh
       else if (game.curGame.type === 'Complete') {
         gameAdmin = (<TweetNav />);
+        gridStyle = 'single';
+        gridSpan = 'span';
       }
       else if (game.curGame.type === 'NoTweets') {
         //this should probably be a new component
         gameAdmin = (
-          <button
-            onClick={() => gameController.newGame()}
-            className="button"
-          >
-            RETRY
-      </button>
+          <div className='no-new-tweets'>
+            <h2>No new tweets to fetch.</h2>
+            <h3>Try again later.</h3>
+            <button
+              onClick={() => gameController.newGame()}
+              className="button"
+            >
+              RETRY
+          </button>
+          </div>
         );
+
+        gridStyle = 'single';
+        gridSpan = 'span';
       }
     }
     else {
@@ -98,7 +109,7 @@ const App = () => {
     content = (
       <div className="page-wrapper">
         <div className="top-bar">
-        <div className="user-details">
+          <div className="user-details">
             <h3>{user.userDetails.name}</h3>
           </div>
           <div className="title">
@@ -108,15 +119,15 @@ const App = () => {
             <button className="small-text">LOG OUT</button>
           </div>
         </div>
-
-        <div className="main-grid">
+        <div className={"main-flex " + gridStyle}>
           <TweetCard />
-          <div className="main-grid-col-2">
+          <div className={"main-grid-col-2 " + gridSpan}>
             {game.curGame.type === 'Complete' || game.curGame.type === 'NoTweets' ?
-              gameAdmin
+              <Fragment>
+                <div className="span">{gameAdmin}</div>
+              </Fragment>
               :
               <Fragment>
-                <h2 className='section-title'>Word Bank:</h2>
                 <DragOptions />
                 <Lives />
               </Fragment>

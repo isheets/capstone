@@ -14,11 +14,10 @@ const DragAuthor = props => {
 
     let content = null;
 
-    const [{ isDragging }, drag] = useDrag({
+    const [{ isDragging, isOver, dragCoords }, drag] = useDrag({
         item: { author: { name: name, url: url, handle: handle, time: time }, correct: correct, type: "author" },
         //called after word is dropped
         end: (item, monitor) => {
-            console.log(item);
             const dropResult = monitor.getDropResult();
             //check if the item and dropResult exist
             if (item && dropResult) {
@@ -26,16 +25,21 @@ const DragAuthor = props => {
                 authorGame.handleDrop(item.correct);
             }
         },
+        options: {
+            dropEffect: 'copy'
+        },
         collect: monitor => ({
-            isDragging: monitor.isDragging()
+            isDragging: monitor.isDragging(),
+            isOver: monitor.isOverTarget(),
+            dragCoords: monitor.getSourceClientOffset()
         })
     });
 
     const opacity = isDragging ? 0.4 : 1;
 
     content = (
-        <div className="author-drag" ref={drag}>
-            <h3 className={"tweet-info-name"}>{name} <span className={"tweet-info-details"}> @{handle}</span></h3>
+        <div className="author-drag" style={{opacity}}>
+            <h3 className={"tweet-info-name"} ref={drag}>{name} <span className={"tweet-info-details"}> @{handle}</span></h3>
         </div>
     );
 

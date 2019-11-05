@@ -6,6 +6,7 @@ import AuthorBlank from "./AuthorBlank";
 
 import Typist from 'react-typist';
 
+
 const TweetText = props => {
 	const game = useSelector(state => state.game.curGame);
 	if (game !== null) {
@@ -28,7 +29,8 @@ const TweetText = props => {
 			tweetToRender = curTweet;
 			classForTweetInfo = "tweet-info"
 		}
-		let infoContent;
+		let infoContent = null;
+		let header = null;
 		if (tweetToRender !== null) {
 			infoContent = (
 				<div className="info">
@@ -37,7 +39,7 @@ const TweetText = props => {
 			)
 		}
 		else {
-			infoContent = (<p>curTweet not found</p>);
+			console.error('no tweetToRender in TweetText')
 		}
 
 		//no need to extract words if it's a quote tweet
@@ -55,6 +57,7 @@ const TweetText = props => {
 		}
 		//extract words and such if its a fillblank game
 		else if (game.type === 'FillBlank') {
+			header = <h2 className="section-title">Complete the Tweet:</h2>
 			textToRender = game.textToRender;
 			console.log(textToRender);
 			if (curTweet.urls !== null) {
@@ -70,6 +73,7 @@ const TweetText = props => {
 		//no need to extract words if game is guess author
 		else if (game.type === 'GuessAuthor') {
 			infoContent = <AuthorBlank />;
+			header = <h2 className="section-title">Guess the Author:</h2>
 			textToRender = curTweet.text;
 			if (curTweet.urls !== null) {
 				for (let i = 0; i < curTweet.urls.length; i++) {
@@ -103,6 +107,7 @@ const TweetText = props => {
 			<Fragment>
 				{game.type === 'FillBlank' || game.type === 'GuessAuthor' && quote !== true ?
 					<Fragment>
+						{header}
 						<h4 className="bold">Recieved at {tweetDate.toLocaleTimeString('en-US')} {tweetDate.toLocaleDateString('en-US')}</h4>
 						<pre className="tweet-text">{textToRender}</pre>
 						{infoContent}

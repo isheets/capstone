@@ -27,11 +27,15 @@ const DragWord = props => {
         fibGame.handleDrop(item.value, dropResult.order, item.order);
       }
     },
+    options: {
+      dropEffect: 'copy'
+    },
     collect: monitor => ({
       isDragging: monitor.isDragging()
     })
   });
   opacity = isDragging ? 0.4 : 1;
+
 
   if (fibGame !== null) {
     //check if word is one of the already dropped ones, and if so then strike it out
