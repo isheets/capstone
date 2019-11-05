@@ -48,7 +48,6 @@ const TweetContent = () => {
             classNames="slide-up"
             appear={true}
             timeout={1000}
-            unmountOnExit
         >
             <div className="tweet-content-wrapper torn">
                 <div className="tweet-content">

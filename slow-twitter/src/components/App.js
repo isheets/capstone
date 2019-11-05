@@ -14,7 +14,7 @@ import Lives from './Lives';
 
 import GameController from '../classes/GameController';
 
-import Typist from 'react-typist';
+import { CSSTransition } from 'react-transition-group';
 
 
 let dispatch;
@@ -121,6 +121,12 @@ const App = () => {
         </div>
         <div className={"main-flex " + gridStyle}>
           <TweetCard />
+          <CSSTransition
+            in={true}
+            classNames="fade"
+            appear={true}
+            timeout={1000}
+        >
           <div className={"main-grid-col-2 " + gridSpan}>
             {game.curGame.type === 'Complete' || game.curGame.type === 'NoTweets' ?
               <Fragment>
@@ -133,6 +139,7 @@ const App = () => {
               </Fragment>
             }
           </div>
+          </CSSTransition>
         </div>
       </div>
     );

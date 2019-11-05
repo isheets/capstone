@@ -200,7 +200,8 @@ body {
   display: flex;
   flex-wrap: nowrap;
   justify-content: center;
-  transition: flex-wrap 1s;
+  height: min-content;
+  overflow-y: hidden;
 }
 
 .tweet {
@@ -459,4 +460,30 @@ button:active {
 .torn:after {
   background-color: var(--tan);
   bottom: -2px;
+}
+
+.fade-appear {
+  opacity: 0;
+}
+.fade-appear-active {
+  opacity: 1;
+  transition: opacity 1000ms linear;
+}
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 1000ms linear;
+
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 1000ms; 
 }

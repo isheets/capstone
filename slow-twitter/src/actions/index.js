@@ -64,3 +64,15 @@ export const setLBSlide = (slideNum) => ({
   type: 'SET_LB_SLIDE',
   slideNum
 })
+
+export const toggleTweetIn = () => ({
+  type: 'TOGGLE_TWEET_IN'
+})
+
+export const toggleOptionsIn = () => ({
+  type: 'TOGGLE_OPTIONS_IN'
+})
+
+export const toggleCompleteIn = () => ({
+  type: 'TOGGLE_COMPLETE_IN'
+})

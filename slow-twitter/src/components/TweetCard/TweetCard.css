@@ -1,6 +1,8 @@
 .tweet {
     height: min-content;
     overflow-y: hidden;
+    position: relative;
+    align-self: flex-start;
 }
 
 .tweet-content-wrapper {
@@ -13,6 +15,8 @@
     position: relative;
     box-shadow: var(--shadow);
     margin: 5px;
+    height: min-content;
+
 }
 
 .tweet-content {
@@ -152,14 +156,17 @@
 
 
 .slide-up-appear {
-    top: 100%;
+    transform: translateY(100%);
+    opacity: .5;
     position: relative;
+    align-self: flex-start;
     box-shadow: var(--shadow);
     margin: 5px;
 }
 .slide-up-appear-active {
-    top: 0;
-    transition: top 1000ms linear;
+    opacity: 1;
+    transform: translateY(0%);
+    transition: transform 1000ms linear, opacity 1000ms linear;
     box-shadow: var(--shadow);
     margin: 5px;
 }
