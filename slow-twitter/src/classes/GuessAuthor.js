@@ -114,7 +114,7 @@ export default class GuessAuthor {
         }
     }
 
-    success() {
+    async success() {
         //get the next tweet
         toast.success('Tweet completed correctly!', {
             position: "top-center",
@@ -125,6 +125,7 @@ export default class GuessAuthor {
             transition: Zoom,
             hideProgressBar: true
         });
+        await this.parent.animateOut();
         this.type = 'Complete';
         this.parent.updateGame(this);
     }

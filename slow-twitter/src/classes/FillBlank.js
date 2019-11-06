@@ -137,8 +137,10 @@ export default class FillBlank {
 	//handles a correct drop
 	correctDrop() {
 		//probably add word here
-		this.checkDone();
-		this.parent.updateGame(this);
+		let done = this.checkDone();
+		if(done) {
+			this.parent.updateGame(this);
+		}
 		return true;
 	}
 
@@ -169,11 +171,13 @@ export default class FillBlank {
 		console.log('checking to see if we completed the entire tweet');
 		if (this.droppedWords.length === this.extractedWords.length) {
 			this.success();
+			return true;
 		}
+		else return false
 	}
 
 	//game is done and everything is correct
-	success() {
+	async success() {
 		//get the next tweet
 		toast.success('Tweet completed correctly!', {
 			position: "top-center",
@@ -184,8 +188,10 @@ export default class FillBlank {
 			transition: Zoom,
 			hideProgressBar: true
 		});
+		await this.parent.animateOut();
 		this.type = 'Complete';
 		this.parent.updateGame(this);
+		return true;
 	}
 
 

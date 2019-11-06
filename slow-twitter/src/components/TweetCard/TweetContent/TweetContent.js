@@ -1,16 +1,21 @@
 import React, { Fragment } from 'react';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import TweetText from "./TweetText";
 import TweetMedia from "./TweetMedia";
 import QuoteTweet from "./QuoteTweet/QuoteTweet";
 
 import { CSSTransition } from 'react-transition-group';
+import { tweetIn, optionsIn } from '../../../actions';
 
 const TweetContent = () => {
 
     console.log('rendering content');
 
     let curGame = useSelector(state => state.game.curGame);
+
+    let animateToggle = useSelector(state => state.ui.tweetIn);
+
+    let dispatch = useDispatch();
 
     let curTweet = null;
     if (curGame !== null) {
@@ -42,12 +47,22 @@ const TweetContent = () => {
         }
     }
 
+    const enterTransition = () => {
+        dispatch(tweetIn());
+    }
+
+    const showOptions = () => {
+        dispatch(optionsIn());
+    }
+
     return (
         <CSSTransition
-            in={true}
+            in={animateToggle}
             classNames="slide-up"
             appear={true}
             timeout={1000}
+            onExited={()=> enterTransition()}
+            onEntered={() => showOptions()}
         >
             <div className="tweet-content-wrapper torn">
                 <div className="tweet-content">

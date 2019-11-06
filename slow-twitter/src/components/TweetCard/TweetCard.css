@@ -171,15 +171,20 @@
     margin: 5px;
 }
 .slide-up-enter {
-    top: 100%;
+    transform: translateY(100%);
+    opacity: .5;
     position: relative;
+    align-self: flex-start;
     box-shadow: var(--shadow);
     margin: 5px;
 }
 
 .slide-up-enter-active {
-    top: 0;
-    transition: top 1000ms linear;
+    opacity: 1;
+    transform: translateY(0%);
+    transition: transform 1000ms linear, opacity 1000ms linear;
+    box-shadow: var(--shadow);
+    margin: 5px;
 
 }
 
@@ -190,4 +195,8 @@
 .slide-up-exit-active {
     opacity: 0;
     transition: opacity 1000ms; 
+}
+
+.slide-up-exit-done {
+    visibility: hidden;
 }

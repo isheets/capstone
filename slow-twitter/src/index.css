@@ -462,28 +462,44 @@ button:active {
   bottom: -2px;
 }
 
+.main-grid-col-2{
+  visibility: hidden;
+}
+
+.fade-appear-done, .fade-enter-done {
+  visibility: visible;
+}
+
 .fade-appear {
   opacity: 0;
+  visibility: visible;
 }
 .fade-appear-active {
   opacity: 1;
   transition: opacity 1000ms linear;
+  visibility: visible;
 }
 .fade-enter {
   opacity: 0;
+  visibility: visible;
 }
-
 .fade-enter-active {
   opacity: 1;
   transition: opacity 1000ms linear;
-
+  visibility: visible;
 }
 
 .fade-exit {
   opacity: 1;
+  visibility: visible;
 }
 
 .fade-exit-active {
   opacity: 0;
-  transition: opacity 1000ms; 
+  transition: opacity 1000ms;
+  visibility: visible;
+}
+
+.fade-exit-done {
+  visibility: hidden;
 }

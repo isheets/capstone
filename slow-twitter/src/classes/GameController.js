@@ -5,7 +5,9 @@ import {
   updateParsedTweets,
   updateCurGame,
   updateParsedFriends,
-  setDataAndInitGame
+  setDataAndInitGame,
+  tweetOut,
+  optionsOut
 } from "../actions";
 
 var he = require('he');
@@ -104,7 +106,7 @@ export default class GameController {
         this.updateGame(state.game.curGame);
       }
       else {
-        console.log('Got ' + Object.keys(newTweets).length - 1  + ' new tweets.')
+        console.log('Got ' + Object.keys(newTweets).length - 1 + ' new tweets.')
         this.updateTweets(newTweets);
         this.newGame();
       }
@@ -134,8 +136,23 @@ export default class GameController {
     store.dispatch(updateParsedTweets(tweets, lastTweetFetched));
   }
 
+
+  //resolves after 1 second - need to adjust to accomodate different times
+  async animateOut() {
+    store.dispatch(tweetOut());
+    store.dispatch(optionsOut());
+
+    return new Promise(resolve => setTimeout(
+      () => {
+        resolve();
+      }, 1000
+    ));
+  }
+
   updateGame(newGame) {
+
     store.dispatch(updateCurGame(newGame));
+
   }
 
   async fetchNewTweets(updateStore) {

@@ -1,20 +1,31 @@
 const initialUI = {
-    tweetIn: false,
+    tweetIn: true,
     optionsIn: false,
-    completeIn: false
+    completeIn: true
 }
 
 const ui = (state = initialUI, action) => {
-    switch(action.type) {
-        case 'TOGGLE_TWEET_IN':
+    switch (action.type) {
+        case 'TWEET_IN_TRUE':
             return {
                 ...state,
-                tweetIn: !state.tweetIn
+                tweetIn: true
             }
-        case 'TOGGLE_OPTIONS_IN':
+        case 'TWEET_IN_FALSE':
             return {
                 ...state,
-                optionsIn: !state.optionsIn
+                tweetIn: false
+            }
+        case 'OPTIONS_IN_TRUE':
+            return {
+                ...state,
+                optionsIn: true
+
+            }
+        case 'OPTIONS_IN_FALSE':
+            return {
+                ...state,
+                optionsIn: false
 
             }
         case 'TOGGLE_COMPLETE_IN':

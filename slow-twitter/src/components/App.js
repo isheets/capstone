@@ -51,6 +51,8 @@ const App = () => {
   const user = useSelector(state => state.user);
   const game = useSelector(state => state.game);
 
+  const animateOptions = useSelector(state => state.ui.optionsIn);
+
   let gameAdmin;
   let gridStyle = 'main-grid';
   let gridSpan = '';
@@ -105,6 +107,7 @@ const App = () => {
 
   let content = null;
 
+
   if (game.curGame !== null) {
     content = (
       <div className="page-wrapper">
@@ -122,9 +125,8 @@ const App = () => {
         <div className={"main-flex " + gridStyle}>
           <TweetCard />
           <CSSTransition
-            in={true}
+            in={animateOptions}
             classNames="fade"
-            appear={true}
             timeout={1000}
         >
           <div className={"main-grid-col-2 " + gridSpan}>
