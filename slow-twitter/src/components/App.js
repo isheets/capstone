@@ -51,7 +51,7 @@ const App = () => {
   const user = useSelector(state => state.user);
   const game = useSelector(state => state.game);
 
-  const animateOptions = useSelector(state => state.ui.optionsIn);
+  let animateOptions = useSelector(state => state.ui.optionsIn);
 
   let gameAdmin;
   let gridStyle = 'main-grid';
@@ -118,18 +118,17 @@ const App = () => {
 
   let content = null;
 
+  console.log("using " + animation + ' for options animation');
 
   if (game.curGame !== null) {
     content = (
       <div className="page-wrapper">
         <div className="top-bar">
-          <div className="user-details">
-            <h3>{user.userDetails.name}</h3>
-          </div>
           <div className="title">
             <h1>SLOW TWITTER</h1>
           </div>
-          <div className="user-details">
+          <div className="log-out">
+            <h3>{user.userDetails.name}</h3>
             <button className="small-text">LOG OUT</button>
           </div>
         </div>
@@ -140,7 +139,7 @@ const App = () => {
             classNames={animation}
             timeout={animationDur}
         >
-          <div className={"main-grid-col-2 " + gridSpan}>
+          <div className={"main-grid-col-2 " + gridSpan + " " + animation}>
             {game.curGame.type === 'Complete' || game.curGame.type === 'NoTweets' ?
               <Fragment>
                 <div className="span">{gameAdmin}</div>
@@ -186,6 +185,7 @@ const App = () => {
       </div>
     );
   }
+
 
   return <Fragment>{content}</Fragment>;
 };

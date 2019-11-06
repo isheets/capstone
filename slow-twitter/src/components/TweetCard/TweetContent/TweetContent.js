@@ -47,6 +47,10 @@ const TweetContent = () => {
             )
         }
 
+        if(curGame.type === 'NoTweets') {
+            return null;
+        }
+
         else {
             content = (
                 <Fragment>

@@ -183,12 +183,15 @@ body {
 .top-bar {
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
   margin: auto;
   margin-bottom: 30px;
+  padding-bottom: 10px;
   margin-top: 30px;
+  justify-content: space-between;
+  border-bottom: 1px solid black;
 }
+
 
 .main-grid {
   display: grid;
@@ -465,6 +468,7 @@ button:active {
 
 .main-grid-col-2{
   visibility: hidden;
+  margin-top: 5px;
 }
 
 .fade-appear-done, .fade-enter-done, .scale-appear-done, .scale-enter-done {
@@ -541,4 +545,12 @@ button:active {
 
 .scale-exit-done {
   visibility: hidden;
+}
+
+.none {
+  visibility: visible;
+}
+
+.none-enter-done {
+  visibility: visible;
 }

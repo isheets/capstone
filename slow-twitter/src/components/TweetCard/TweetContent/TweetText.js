@@ -75,15 +75,16 @@ const TweetText = props => {
 			infoContent = <AuthorBlank />;
 			header = <h2 className="section-title">Guess the Author:</h2>
 			textToRender = curTweet.text;
-			if (curTweet.urls !== null) {
-				for (let i = 0; i < curTweet.urls.length; i++) {
-					urlsToRender.push(
-						<a target="_blank" href={curTweet.urls[i].expanded_url} rel="noopener noreferrer" key={i}>
-							&#x2197; {curTweet.urls[i].display_url}
-						</a>
-					);
-				}
-			}
+			urlsToRender = null;
+			// if (curTweet.urls !== null) {
+			// 	for (let i = 0; i < curTweet.urls.length; i++) {
+			// 		urlsToRender.push(
+			// 			<a target="_blank" href={curTweet.urls[i].expanded_url} rel="noopener noreferrer" key={i}>
+			// 				&#x2197; {curTweet.urls[i].display_url}
+			// 			</a>
+			// 		);
+			// 	}
+			// }
 		}
 		else if (game.type === "Complete" || game.type === 'NoTweets') {
 			textToRender = curTweet.text;
