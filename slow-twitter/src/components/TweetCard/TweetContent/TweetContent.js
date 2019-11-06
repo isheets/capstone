@@ -24,8 +24,18 @@ const TweetContent = () => {
 
     let content = null;
 
+    let animation = 'slide-up';
+    let animationDur = 500;
+
+    if (animateToggle === false) {
+        animationDur = 200;
+    }
+
     //make sure we have content to render
     if (curTweet !== null) {
+        if(curGame.type === 'Complete') {
+            animation = 'fade';
+        }
         //check if we need to render a quote tweet
         if (curTweet.isQuote === true) {
             content = (
@@ -58,9 +68,9 @@ const TweetContent = () => {
     return (
         <CSSTransition
             in={animateToggle}
-            classNames="slide-up"
+            classNames={animation}
             appear={true}
-            timeout={1000}
+            timeout={animationDur}
             onExited={()=> enterTransition()}
             onEntered={() => showOptions()}
         >

@@ -57,6 +57,14 @@ const App = () => {
   let gridStyle = 'main-grid';
   let gridSpan = '';
 
+  let animation = 'fade';
+  let animationDur = 400;
+
+  if(animateOptions === false) {
+    animationDur = 200;
+  }
+
+
   if (!!user.isAuthenticated) {
     if (game.curGame !== null) {
       //we have a game
@@ -70,12 +78,15 @@ const App = () => {
 
       //show some administration like next button or refresh
       else if (game.curGame.type === 'Complete') {
+        animation = 'scale';
+        animationDur = 200;
         gameAdmin = (<TweetNav />);
         gridStyle = 'single';
         gridSpan = 'span';
       }
       else if (game.curGame.type === 'NoTweets') {
         //this should probably be a new component
+        animation = 'none';
         gameAdmin = (
           <div className='no-new-tweets'>
             <h2>No new tweets to fetch.</h2>
@@ -126,8 +137,8 @@ const App = () => {
           <TweetCard />
           <CSSTransition
             in={animateOptions}
-            classNames="fade"
-            timeout={1000}
+            classNames={animation}
+            timeout={animationDur}
         >
           <div className={"main-grid-col-2 " + gridSpan}>
             {game.curGame.type === 'Complete' || game.curGame.type === 'NoTweets' ?

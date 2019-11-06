@@ -2,7 +2,6 @@
     height: min-content;
     overflow-y: hidden;
     position: relative;
-    align-self: flex-start;
 }
 
 .tweet-content-wrapper {
@@ -159,33 +158,26 @@
     transform: translateY(100%);
     opacity: .5;
     position: relative;
-    align-self: flex-start;
     box-shadow: var(--shadow);
-    margin: 5px;
 }
 .slide-up-appear-active {
     opacity: 1;
     transform: translateY(0%);
-    transition: transform 1000ms linear, opacity 1000ms linear;
+    transition: transform 500ms ease-in-out, opacity 500ms linear;
     box-shadow: var(--shadow);
-    margin: 5px;
 }
 .slide-up-enter {
     transform: translateY(100%);
     opacity: .5;
     position: relative;
-    align-self: flex-start;
     box-shadow: var(--shadow);
-    margin: 5px;
 }
 
 .slide-up-enter-active {
     opacity: 1;
     transform: translateY(0%);
-    transition: transform 1000ms linear, opacity 1000ms linear;
+    transition: transform 500ms ease-in-out, opacity 500ms linear;
     box-shadow: var(--shadow);
-    margin: 5px;
-
 }
 
 .slide-up-exit {
@@ -194,7 +186,7 @@
 
 .slide-up-exit-active {
     opacity: 0;
-    transition: opacity 1000ms; 
+    transition: opacity 200ms; 
 }
 
 .slide-up-exit-done {

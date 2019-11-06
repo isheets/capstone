@@ -194,6 +194,7 @@ body {
   display: grid;
   grid-template-columns: 60% 35%;
   column-gap: 5%;
+  overflow: hidden;
 }
 
 .main-flex {
@@ -466,26 +467,30 @@ button:active {
   visibility: hidden;
 }
 
-.fade-appear-done, .fade-enter-done {
+.fade-appear-done, .fade-enter-done, .scale-appear-done, .scale-enter-done {
   visibility: visible;
 }
 
 .fade-appear {
+  transform: translateX(100%);
   opacity: 0;
   visibility: visible;
 }
 .fade-appear-active {
+  transform: translateX(0%);
   opacity: 1;
-  transition: opacity 1000ms linear;
+  transition: transform 200ms ease-out, opacity 400ms linear;
   visibility: visible;
 }
 .fade-enter {
+  transform: translateX(100%);
   opacity: 0;
   visibility: visible;
 }
 .fade-enter-active {
+  transform: translateX(0%);
   opacity: 1;
-  transition: opacity 1000ms linear;
+  transition: transform 200ms ease-out, opacity 400ms linear;
   visibility: visible;
 }
 
@@ -496,10 +501,44 @@ button:active {
 
 .fade-exit-active {
   opacity: 0;
-  transition: opacity 1000ms;
+  transition: opacity 200ms;
   visibility: visible;
 }
 
 .fade-exit-done {
+  visibility: hidden;
+}
+
+.scale-appear {
+  transform: scale(0);
+  visibility: visible;
+}
+.scale-appear-active {
+  transform: scale(1);
+  transition: transform 200ms ease-out;
+  visibility: visible;
+}
+.scale-enter {
+  transform: scale(0);
+  visibility: visible;
+}
+.scale-enter-active {
+  transform: scale(1);
+  transition: transform 200ms ease-out;
+  visibility: visible;
+}
+
+.scale-exit {
+  transform: scale(1);
+  visibility: visible;
+}
+
+.scale-exit-active {
+  transform: scale(0);
+  transition: transform 200ms ease-out;
+  visibility: visible;
+}
+
+.scale-exit-done {
   visibility: hidden;
 }
