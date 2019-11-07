@@ -55,9 +55,11 @@ var createToken = function (auth) {
 
 var generateToken = function (req, res, next) {
   req.token = createToken(req.auth);
+  console.log(req);
   return next();
 };
 
+//send back to front-end
 var sendToken = function (req, res) {
   res.setHeader('x-auth-token', req.token);
   return res.status(200).send(JSON.stringify(req.user));
@@ -196,7 +198,6 @@ router.route('/auth/twitter')
       return res.send(401, 'User Not Authenticated');
     }
 
-    console.log(req);
 
     // prepare token for API
     req.auth = {

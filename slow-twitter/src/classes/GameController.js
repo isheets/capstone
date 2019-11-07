@@ -29,12 +29,17 @@ export default class GameController {
     let tweets = await this.fetchNewTweets();
     let friends = await this.fetchAllFriends();
     let newGame = await this.newGame(true, tweets, friends);
+    let lastTweetFetched = null;
+    if (tweets !== null && tweets.length > 0) {
+      lastTweetFetched = tweets[tweets.length - 1].tweetID;
+    }
     if (newGame && tweets && friends) {
-      store.dispatch(setDataAndInitGame(newGame, friends, tweets));
+      store.dispatch(setDataAndInitGame(newGame, friends, tweets, lastTweetFetched));
     }
     else {
+      newGame.type = 'NoTweets';
       console.error('problem in GameController.init()');
-      store.dispatch(setDataAndInitGame(newGame, friends, tweets));
+      store.dispatch(setDataAndInitGame(newGame, friends, tweets, lastTweetFetched));
     }
     return Promise.resolve();
   }
@@ -103,7 +108,13 @@ export default class GameController {
       console.log(newTweets);
       if (newTweets === null || Object.keys(newTweets).length < 1) {
         console.error('Out of tweets in GameController.newGame()');
-        state.game.curGame.type = 'NoTweets';
+        if(state.game.curGame !== null) {
+          state.game.curGame.type = 'NoTweets';
+        }
+        else {
+          state.game.curGame = {};
+          state.game.curGame.type = 'NoTweets';
+        }
         this.updateGame(state.game.curGame);
       }
       else {

@@ -19,14 +19,13 @@ export const updateToken = token => ({
   token
 })
 
-export const setDataAndInitGame = (curGame, parsedFriends, parsedTweets) => ({
+export const setDataAndInitGame = (curGame, parsedFriends, parsedTweets, lastTweetFetched) => ({
   type: 'INIT_GAME',
   curGame,
   parsedFriends,
   parsedTweets,
   lastTweetFetchDate: Date.now(),
-  //potential bug here - see fix in updateParsedTweets()
-  lastTweetFetched: parsedTweets[parsedTweets.length - 1].tweetID
+  lastTweetFetched: lastTweetFetched
 })
 
 //action creator for setting the value of store.tweets.lastTweetFetched for timeline fetching management
