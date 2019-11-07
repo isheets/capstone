@@ -428,11 +428,11 @@ button {
   font-size: 150%;
   box-shadow: 1px 1px 4px 1px black;
   cursor: pointer;
-  transition: .3s box-shadow;
+  transition: .1s box-shadow;
 }
 
 button:hover {
-  box-shadow: 1px 1px 2px 1px black;;
+  box-shadow: 1px 1px 6px 2px black;;
 }
 
 button:active {

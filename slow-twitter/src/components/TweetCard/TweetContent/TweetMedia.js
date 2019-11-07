@@ -85,6 +85,9 @@ const TweetMedia = props => {
       content = null;
     }
   }
+  else {
+    content = null;
+  }
 
   //return <div className={`tweet-media-${numMedia}`}>{content}</div>;
   return <Fragment>{content}</Fragment>;

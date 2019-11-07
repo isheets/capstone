@@ -119,13 +119,16 @@ router.get('/friends/list', function(req, res) {
   let cursor = req.query.cursor;
   let aT = req.query.aT;
   let aTS = req.query.aTS;
+  
+  console.log('Fetching Friends');
+  console.log('CURSOR: ' + cursor);
 
   if(twitter === null) {
     configTwitter(aT, aTS);
   }
 
   var successFN = (data) => {
-      console.log(data);
+      //console.log(data);
       return res.send(data)
   }
 
@@ -192,6 +195,8 @@ router.route('/auth/twitter')
     if (!req.user) {
       return res.send(401, 'User Not Authenticated');
     }
+
+    console.log(req);
 
     // prepare token for API
     req.auth = {

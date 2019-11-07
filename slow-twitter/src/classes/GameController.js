@@ -34,6 +34,7 @@ export default class GameController {
     }
     else {
       console.error('problem in GameController.init()');
+      store.dispatch(setDataAndInitGame(newGame, friends, tweets));
     }
     return Promise.resolve();
   }

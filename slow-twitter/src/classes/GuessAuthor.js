@@ -65,14 +65,16 @@ export default class GuessAuthor {
         friendOptions.push(correctAuthor);
 
         for (let i = 0; i < 5; i++) {
-            let randIdx = getRandomUniqueIndex(friends.length - 1);
-            let randFriend = friends[randIdx];
-            while (randFriend.handle === correctAuthor.handle) {
-                randIdx = getRandomUniqueIndex(friends.length - 1);
-                randFriend = friends[randIdx];
+            if (friends !== null) {
+                let randIdx = getRandomUniqueIndex(friends.length - 1);
+                let randFriend = friends[randIdx];
+                while (randFriend.handle === correctAuthor.handle) {
+                    randIdx = getRandomUniqueIndex(friends.length - 1);
+                    randFriend = friends[randIdx];
+                }
+                randFriend.correct = false;
+                friendOptions.push(randFriend);
             }
-            randFriend.correct = false;
-            friendOptions.push(randFriend);
         }
 
         this.friendOptions = friendOptions;
