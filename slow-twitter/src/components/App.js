@@ -68,7 +68,7 @@ const App = () => {
   let animation = 'fade';
   let animationDur = 400;
 
-  if(animateOptions === false) {
+  if (animateOptions === false) {
     animationDur = 200;
   }
 
@@ -146,19 +146,19 @@ const App = () => {
             in={animateOptions}
             classNames={animation}
             timeout={animationDur}
-        >
-          <div className={"main-grid-col-2 " + gridSpan + " " + animation}>
-            {game.curGame.type === 'Complete' || game.curGame.type === 'NoTweets' ?
-              <Fragment>
-                <div className="span">{gameAdmin}</div>
-              </Fragment>
-              :
-              <Fragment>
-                <DragOptions />
-                <Lives />
-              </Fragment>
-            }
-          </div>
+          >
+            <div className={"main-grid-col-2 " + gridSpan + " " + animation}>
+              {game.curGame.type === 'Complete' || game.curGame.type === 'NoTweets' ?
+                <Fragment>
+                  <div className="span">{gameAdmin}</div>
+                </Fragment>
+                :
+                <Fragment>
+                  <DragOptions />
+                  <Lives />
+                </Fragment>
+              }
+            </div>
           </CSSTransition>
         </div>
       </div>
@@ -168,7 +168,29 @@ const App = () => {
 
   //loading after authentication
   else if (user.isAuthenticated) {
-    content = <h1>Loading game</h1>;
+    content = (
+      <div className="page-wrapper">
+        <div className="top-bar">
+          <div className="title">
+            <h1>SLOW TWITTER</h1>
+          </div>
+          <div className="user-info">
+            <h3>{user.userDetails.name}</h3>
+            <button className="small-text" onClick={() => logout()}>LOG OUT</button>
+          </div>
+        </div>
+        <div id="noTrespassingOuterBarG">
+          <div id="noTrespassingFrontBarG" class="noTrespassingAnimationG">
+            <div class="noTrespassingBarLineG"></div>
+            <div class="noTrespassingBarLineG"></div>
+            <div class="noTrespassingBarLineG"></div>
+            <div class="noTrespassingBarLineG"></div>
+            <div class="noTrespassingBarLineG"></div>
+            <div class="noTrespassingBarLineG"></div>
+          </div>
+        </div>
+      </div>
+    );
 
   }
 

@@ -37,7 +37,9 @@ export default class GameController {
       store.dispatch(setDataAndInitGame(newGame, friends, tweets, lastTweetFetched));
     }
     else {
-      newGame.type = 'NoTweets';
+      if (tweets === null) {
+        newGame.type = 'NoTweets';
+      }
       console.error('problem in GameController.init()');
       store.dispatch(setDataAndInitGame(newGame, friends, tweets, lastTweetFetched));
     }
@@ -108,7 +110,7 @@ export default class GameController {
       console.log(newTweets);
       if (newTweets === null || Object.keys(newTweets).length < 1) {
         console.error('Out of tweets in GameController.newGame()');
-        if(state.game.curGame !== null) {
+        if (state.game.curGame !== null) {
           state.game.curGame.type = 'NoTweets';
         }
         else {
