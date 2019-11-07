@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
 import {useSelector} from 'react-redux';
-import heartfull from './../img/heart-full.svg'
 
 
 const Lives = () => {

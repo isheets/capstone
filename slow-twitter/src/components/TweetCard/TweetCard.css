@@ -64,12 +64,14 @@
     font-size: 90%;
 }
 .quote-tweet-info-name {
+    margin-right: 5%;
     font-size: 100%;
     font-weight: 800;
     font-family: ibm-plex-mono, sans-serif;
 }
 
 .quote-tweet-info-details {
+    font-weight: 500;
     font-size: 90%;
 }
 
@@ -149,46 +151,7 @@
 .quote-tweet-grid {
     margin-top: 15px;
     width: calc(100% - 20px);
-    border: 1px solid var(--red);
+    border: 1px dotted black;
     padding: 10px;
-}
-
-
-.slide-up-appear {
-    transform: translateY(100%);
-    opacity: .5;
-    position: relative;
-    box-shadow: var(--shadow);
-}
-.slide-up-appear-active {
-    opacity: 1;
-    transform: translateY(0%);
-    transition: transform 500ms ease-in-out, opacity 500ms linear;
-    box-shadow: var(--shadow);
-}
-.slide-up-enter {
-    transform: translateY(100%);
-    opacity: .5;
-    position: relative;
-    box-shadow: var(--shadow);
-}
-
-.slide-up-enter-active {
-    opacity: 1;
-    transform: translateY(0%);
-    transition: transform 500ms ease-in-out, opacity 500ms linear;
-    box-shadow: var(--shadow);
-}
-
-.slide-up-exit {
-    opacity: 1;
-}
-
-.slide-up-exit-active {
-    opacity: 0;
-    transition: opacity 200ms; 
-}
-
-.slide-up-exit-done {
-    visibility: hidden;
+    border-radius: 3px;
 }

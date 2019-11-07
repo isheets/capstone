@@ -36,6 +36,10 @@ const TweetContent = () => {
         if(curGame.type === 'Complete') {
             animation = 'fade';
         }
+        else if(curGame.type === 'NoTweets') {
+            return null;
+        }
+        
         //check if we need to render a quote tweet
         if (curTweet.isQuote === true) {
             content = (
@@ -46,11 +50,6 @@ const TweetContent = () => {
                 </Fragment>
             )
         }
-
-        if(curGame.type === 'NoTweets') {
-            return null;
-        }
-
         else {
             content = (
                 <Fragment>

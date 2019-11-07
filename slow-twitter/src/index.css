@@ -180,25 +180,67 @@ body {
   padding: 2%;
 }
 
+.welcome-message-wrapper {
+  background-image: url('./img/paper-bg_1.png');
+  background-repeat: repeat;
+  border-radius: 3px;
+  padding: 5px;
+  font-family: ibm-plex-mono, sans-serif;
+  font-weight: 500;
+  position: relative;
+  box-shadow: var(--shadow);
+  margin: 5px;
+  height: min-content;
+  width: 66%;
+  margin: 5px auto;
+}
+
+.welcome-message {
+  width: 90%;
+  padding: 15px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  margin: auto;
+  border-right: 18px;
+  border-left: 18px;
+  border-style: dotted;
+  border-color: var(--blue);
+  border-image-source: url('./img/holes_5.svg');
+  border-image-slice: 33% 33%;
+  border-image-repeat: round;
+}
+
 .top-bar {
   width: 100%;
   display: flex;
   align-items: flex-end;
   margin: auto;
   margin-bottom: 30px;
+  padding: 5px;
   padding-bottom: 10px;
   margin-top: 30px;
   justify-content: space-between;
   border-bottom: 1px solid black;
 }
 
-
-.main-grid {
-  display: grid;
-  grid-template-columns: 60% 35%;
-  column-gap: 5%;
-  overflow: hidden;
+.user-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
+
+.user-name {
+  margin-right: 20px;
+}
+
+.user-pic {
+  margin-right: 5px;
+  width: 40px;
+  border-radius: 3px;
+  filter: grayscale(100%);
+}
+
+
 
 .main-flex {
   display: flex;
@@ -206,6 +248,10 @@ body {
   justify-content: center;
   height: min-content;
   overflow-y: hidden;
+}
+
+.rel {
+  position: relative;
 }
 
 .tweet {
@@ -270,7 +316,11 @@ h3 {
 
 .section-title {
   margin-bottom: 30px;
-  font-weight: 700;
+  font-weight: 800;
+}
+
+p{
+  line-height: 150%;
 }
 
 
@@ -393,30 +443,7 @@ a:hover {
   color:var(--red);
 }
 
-.twitter-login-container {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-}
-
-.twitter-login-button {
-  display: inline-block;
-  margin: auto;
-  padding: 10px;
-  color: var(--tan);
-  background-color: rgba(0,0,0,0);
-  box-shadow: 2px 2px 0 0 var(--red);
-  outline: none;
-  border:none;
-  font-weight: bold;
-  font-size: 110%;
-}
-
-.twitter-login-button:hover {
-  box-shadow: 4px 4px 0 0 var(--red);
-}
-
-button {
+button, .twitter-login-button {
   background-color: black;
   outline: none;
   padding: 5px;
@@ -427,15 +454,16 @@ button {
   font-style: normal;
   font-size: 150%;
   box-shadow: 1px 1px 4px 1px black;
+  border-radius: 3px;
   cursor: pointer;
   transition: .1s box-shadow;
 }
 
-button:hover {
+button:hover, .twitter-login-button:hover {
   box-shadow: 1px 1px 6px 2px black;;
 }
 
-button:active {
+button:active, .twitter-login-button:active {
   box-shadow: 0px 1px 1px 0 var(--brown);
 }
 
@@ -443,28 +471,10 @@ button:active {
   font-size: 125%;
 }
 
-
-.torn {
-  background: var(--tan);
-  box-shadow: 0 3px 5px rgba(0,0,0,0.05);
+.log-out {
+  line-height: 100%;
 }
 
-.torn:before, .torn:after {
-  content: ""; height: 2px;
-  position: relative;
-  left: 0;
-  right: 0;
-  -webkit-clip-path: polygon(0% 0%, 5%  100%, 10% 0%, 15%  100%, 20% 0%, 25% 100%, 30% 0%, 35%  100%, 40% 0%, 45%  100%, 50% 0%, 55%  100%, 60% 0%, 65%  100%, 70% 0%, 75%  100%, 80% 0%, 85%  100%, 90% 0%, 95%  100%, 100% 0%);
-  clip-path: polygon(0% 0%, 5%  100%, 10% 0%, 15%  100%, 20% 0%, 25% 100%, 30% 0%, 35%  100%, 40% 0%, 45%  100%, 50% 0%, 55%  100%, 60% 0%, 65%  100%, 70% 0%, 75%  100%, 80% 0%, 85%  100%, 90% 0%, 95%  100%, 100% 0%);
-}
-.torn:before {
-  background-color: var(--blue);
-  top: 0;
-}
-.torn:after {
-  background-color: var(--tan);
-  bottom: -2px;
-}
 
 .main-grid-col-2{
   visibility: hidden;
@@ -555,13 +565,106 @@ button:active {
   visibility: visible;
 }
 
+.slide-up-appear {
+  transform: translateY(100%);
+  opacity: .5;
+  position: relative;
+  box-shadow: var(--shadow);
+}
+.slide-up-appear-active {
+  opacity: 1;
+  transform: translateY(0%);
+  transition: transform 500ms ease-in-out, opacity 500ms linear;
+  box-shadow: var(--shadow);
+}
+.slide-up-enter {
+  transform: translateY(100%);
+  opacity: .5;
+  position: relative;
+  box-shadow: var(--shadow);
+}
 
+.slide-up-enter-active {
+  opacity: 1;
+  transform: translateY(0%);
+  transition: transform 500ms ease-in-out, opacity 500ms linear;
+  box-shadow: var(--shadow);
+}
+
+.slide-up-exit {
+  opacity: 1;
+}
+
+.slide-up-exit-active {
+  opacity: 0;
+  transition: opacity 200ms; 
+}
+
+.slide-up-exit-done {
+  visibility: hidden;
+}
+
+/* special animations for intial page load (first time user) */
+.fade-slow-appear {
+  transform: translateY(-100%);
+  opacity: .5;
+  visibility: visible;
+}
+.fade-slow-appear-active {
+  transform: translateY(0%);
+  opacity: 1;
+  transition: transform 1000ms ease-out, opacity 1000ms linear;
+  visibility: visible;
+}
+
+.slide-up-slow-appear {
+  transform: translateY(120%);
+  opacity: .5;
+  position: relative;
+  box-shadow: var(--shadow);
+}
+.slide-up-slow-appear-active {
+  opacity: 1;
+  transform: translateY(0%);
+  transition: transform 2000ms ease-in-out, opacity 1000ms linear;
+  box-shadow: var(--shadow);
+}
+.slide-up-slow-enter {
+  transform: translateY(100%);
+  opacity: .5;
+  position: relative;
+  box-shadow: var(--shadow);
+}
+
+.slide-up-slow-enter-active {
+  opacity: 1;
+  transform: translateY(0%);
+  transition: transform 2000ms ease-in-out, opacity 1000ms linear;
+  box-shadow: var(--shadow);
+}
+
+.slide-up-slow-exit {
+  opacity: 1;
+}
+
+.slide-up-slow-exit-active {
+  opacity: 0;
+  transition: opacity 200ms; 
+}
+
+.slide-up-slow-exit-done {
+  visibility: hidden;
+}
+
+/* css loading animation */
 #noTrespassingOuterBarG{
 	height:33px;
 	width:260px;
 	border:2px solid rgb(0,0,0);
 	overflow:hidden;
-	background-color:rgba(0,0,0,0);
+  background-color:rgba(0,0,0,0);
+  box-shadow: var(--shadow);
+  border-radius: 3px;
 	margin:auto;
 }
 

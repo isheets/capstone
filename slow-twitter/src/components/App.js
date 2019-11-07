@@ -72,6 +72,8 @@ const App = () => {
     animationDur = 200;
   }
 
+  let welcome = false;
+
 
   if (user.isAuthenticated === true) {
     if (game.curGame !== null) {
@@ -136,8 +138,9 @@ const App = () => {
             <h1>SLOW TWITTER</h1>
           </div>
           <div className="user-info">
-            <h3>{user.userDetails.name}</h3>
-            <button className="small-text" onClick={() => logout()}>LOG OUT</button>
+            <img src={user.userDetails.img} alt='your profile picture' className='user-pic'></img>
+            <h3 className='user-name'>{user.userDetails.name}</h3>
+            <button className="small-text log-out" onClick={() => logout()}>LOG OUT</button>
           </div>
         </div>
         <div className={"main-flex " + gridStyle}>
@@ -175,8 +178,9 @@ const App = () => {
             <h1>SLOW TWITTER</h1>
           </div>
           <div className="user-info">
-            <h3>{user.userDetails.name}</h3>
-            <button className="small-text" onClick={() => logout()}>LOG OUT</button>
+            <img src={user.userDetails.img} alt='your profile picture' className='user-pic'></img>
+            <h3 className='user-name'>{user.userDetails.name}</h3>
+            <button className="small-text log-out" onClick={() => logout()}>LOG OUT</button>
           </div>
         </div>
         <div id="noTrespassingOuterBarG">
@@ -197,22 +201,48 @@ const App = () => {
   //initial view not signed in
   else {
     content = (
-      <div className="top-bar">
-        <div className="black-box">
-          <h1>SLOW TWITTER</h1>
+      <div className="page-wrapper">
+        <CSSTransition
+            in={true}
+            classNames={'fade-slow'}
+            timeout={1000}
+            appear={true}
+          >
+        <div className="top-bar">
+          <div className="title">
+            <h1>SLOW TWITTER</h1>
+          </div>
+          <div className="user-info">
+            <TwitterLogin
+              loginUrl="http://localhost:8080/api/v1/auth/twitter"
+              onFailure={onFailedAuth}
+              onSuccess={onSuccessAuth}
+              requestTokenUrl="http://localhost:8080/api/v1/auth/twitter/reverse"
+              className="twitter-login-button small-text"
+              text="SIGN IN TO TWITTER"
+              showIcon={false}
+            />
+          </div>
         </div>
-        <div className="black-box">
-          <TwitterLogin
-            loginUrl="http://localhost:8080/api/v1/auth/twitter"
-            onFailure={onFailedAuth}
-            onSuccess={onSuccessAuth}
-            requestTokenUrl="http://localhost:8080/api/v1/auth/twitter/reverse"
-            className="twitter-login-button"
-            text="SIGN IN TO TWITTER"
-            showIcon={false}
-          />
+        </CSSTransition>
+        <div className={"main-flex rel"}>
+          <CSSTransition
+            in={true}
+            classNames={'slide-up-slow'}
+            appear={true}
+            timeout={2000}
+          >
+            <div className="welcome-message-wrapper">
+              <div className="welcome-message">
+                <h2 className='section-title'>Welcome to Slow Twitter.</h2>
+                <p>This site will transform your Twitter feed into a series of mini-games.</p>
+                <p>Login to your Twitter account get started.</p>
+              </div>
+            </div>
+          </CSSTransition>
         </div>
       </div>
+
     );
   }
 
