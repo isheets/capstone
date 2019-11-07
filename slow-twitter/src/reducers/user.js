@@ -6,6 +6,8 @@ const intialUser = {
 
 const user = (state = intialUser, action) => {
     switch(action.type) {
+        case 'RESET':
+            return intialUser
         case 'SET_AUTHENTICATION':
             return {
                 ...state,

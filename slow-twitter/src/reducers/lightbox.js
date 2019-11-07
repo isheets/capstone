@@ -5,6 +5,8 @@ const intialLightbox = {
   
   const lightbox = (state = intialLightbox, action) => {
     switch (action.type) {
+      case 'RESET':
+        return intialLightbox;
       case "TOGGLE_LB_VISIBLE":
         return {
           ...state,

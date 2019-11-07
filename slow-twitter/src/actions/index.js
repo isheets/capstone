@@ -1,3 +1,8 @@
+//called upon logout
+export const logoutAndReset = () => ({
+  type: 'RESET'
+})
+
 //action creator for updating the value of store.user.isAuthenticated
 //expects isAuthenticated to be boolean
 export const updateAuthentication = isAuthenticated => ({

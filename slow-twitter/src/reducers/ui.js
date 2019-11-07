@@ -6,6 +6,8 @@ const initialUI = {
 
 const ui = (state = initialUI, action) => {
     switch (action.type) {
+        case 'RESET':
+            return initialUI;
         case 'TWEET_IN_TRUE':
             return {
                 ...state,

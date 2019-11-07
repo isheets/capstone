@@ -8,6 +8,8 @@ const intialGame = {
 
 const game = (state = intialGame, action) => {
   switch (action.type) {
+    case 'RESET':
+      return intialGame;
     case "INIT_GAME":
       return {
         ...state,

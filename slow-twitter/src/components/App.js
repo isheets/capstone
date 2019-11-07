@@ -3,7 +3,8 @@ import TwitterLogin from "react-twitter-auth";
 import {
   updateAuthentication,
   updateToken,
-  updateUser
+  updateUser,
+  logoutAndReset
 } from "./../actions";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -45,6 +46,13 @@ const onSuccessAuth = async (response) => {
   });
 };
 
+const logout = () => {
+  //clear cache
+  localStorage.removeItem('state');
+  //set state to initial
+  dispatch(logoutAndReset());
+}
+
 
 const App = () => {
   //get current state
@@ -65,7 +73,7 @@ const App = () => {
   }
 
 
-  if (!!user.isAuthenticated) {
+  if (user.isAuthenticated === true) {
     if (game.curGame !== null) {
       //we have a game
       const sixHours = 6 * 60 * 60 * 1000;
@@ -120,16 +128,16 @@ const App = () => {
 
   console.log("using " + animation + ' for options animation');
 
-  if (game.curGame !== null) {
+  if (user.isAuthenticated && game.curGame !== null) {
     content = (
       <div className="page-wrapper">
         <div className="top-bar">
           <div className="title">
             <h1>SLOW TWITTER</h1>
           </div>
-          <div className="log-out">
+          <div className="user-info">
             <h3>{user.userDetails.name}</h3>
-            <button className="small-text">LOG OUT</button>
+            <button className="small-text" onClick={() => logout()}>LOG OUT</button>
           </div>
         </div>
         <div className={"main-flex " + gridStyle}>
