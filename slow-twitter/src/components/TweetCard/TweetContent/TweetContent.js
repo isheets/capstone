@@ -16,6 +16,20 @@ const TweetContent = () => {
 
     console.log('rendering content');
 
+    const enterTransition = () => {
+        dispatch(tweetIn());
+    }
+
+    const showOptions = () => {
+        dispatch(optionsIn());
+        printSound.pause();
+    }
+
+    
+    const playSound = () => {
+        printSound.play();
+    }
+
     let curGame = useSelector(state => state.game.curGame);
 
     let animateToggle = useSelector(state => state.ui.tweetIn);
@@ -25,6 +39,12 @@ const TweetContent = () => {
     let curTweet = null;
     if (curGame !== null) {
         curTweet = curGame.curTweet;
+        if(curGame.type === 'Complete') {
+            if(curGame.status === 'Fail') {
+                showOptions();
+                return null;
+            }
+        }
     }
 
     let content = null;
@@ -65,19 +85,7 @@ const TweetContent = () => {
         }
     }
 
-    const enterTransition = () => {
-        dispatch(tweetIn());
-    }
-
-    const showOptions = () => {
-        dispatch(optionsIn());
-        printSound.pause();
-    }
-
-    
-    const playSound = () => {
-        printSound.play();
-    }
+   
 
     return (
         <CSSTransition

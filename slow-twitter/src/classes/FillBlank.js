@@ -203,6 +203,7 @@ export default class FillBlank {
 		successSound.play();
 		await this.parent.animateOut();
 		this.type = 'Complete';
+		this.status = 'Success'
 		this.parent.updateGame(this);
 		return true;
 	}
@@ -210,7 +211,7 @@ export default class FillBlank {
 
 
 	//game is done and not everything is correct
-	fail() {
+	async fail() {
 		//display some sort of failure message
 		//proceed to next tweet
 		toast.error('Game over, man. Game over.', {
@@ -223,7 +224,9 @@ export default class FillBlank {
 			hideProgressBar: true
 		});
 		failSound.play();
+		await this.parent.animateOut();
 		this.type = 'Complete';
+		this.status = 'Fail'
 		this.parent.updateGame(this);
 	}
 

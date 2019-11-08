@@ -248,6 +248,8 @@ body {
   justify-content: center;
   height: min-content;
   overflow-y: hidden;
+  width: 90%;
+  margin: auto;
 }
 
 .rel {
@@ -255,8 +257,12 @@ body {
 }
 
 .tweet {
-  width: 60%;
+  width: 70%;
   margin-right: 20px;
+}
+.main-grid-col-2{
+  visibility: hidden;
+  margin-top: 5px;
 }
 
 .single {
@@ -475,11 +481,6 @@ button:active, .twitter-login-button:active {
   line-height: 100%;
 }
 
-
-.main-grid-col-2{
-  visibility: hidden;
-  margin-top: 5px;
-}
 
 .fade-appear-done, .fade-enter-done, .scale-appear-done, .scale-enter-done {
   visibility: visible;
@@ -756,4 +757,29 @@ button:active, .twitter-login-button:active {
 	100%{
 		margin-left:-62px;
 	}
+}
+
+@media all and (max-width: 1250px)  {
+  .main-flex {
+    width: 100%;
+  }
+}
+
+@media all and (max-width: 1100px)  {
+  .double {
+    grid-template-columns: min-content;
+    column-gap: 20px;
+  }
+
+  .tweet {
+    width: 80%;
+  }
+
+  .main-grid-col-2 {
+    width: 20%;
+  }
+}
+
+@media all and (max-width: 950px)  {
+
 }

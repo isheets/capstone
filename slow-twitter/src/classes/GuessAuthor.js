@@ -133,11 +133,12 @@ export default class GuessAuthor {
         });
         successSound.play();
         await this.parent.animateOut();
+        this.status = 'Success'
         this.type = 'Complete';
         this.parent.updateGame(this);
     }
 
-    fail() {
+    async fail() {
         //display some sort of failure message
         //proceed to next tweet
         toast.error('Game over, man. Game over.', {
@@ -150,7 +151,9 @@ export default class GuessAuthor {
             hideProgressBar: true
         });
         failSound.play();
+        await this.parent.animateOut();
         this.type = 'Complete';
+        this.status = 'Success'
         this.parent.updateGame(this);
     }
 

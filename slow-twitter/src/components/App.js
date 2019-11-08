@@ -144,7 +144,7 @@ const App = () => {
       <div className="page-wrapper">
         <div className="top-bar">
           <div className="title">
-            <h1>SLOW TWITTER</h1>
+            <h1>EASY COME, EASY GO</h1>
           </div>
           <div className="user-info">
             <img src={user.userDetails.img} alt='your profile picture' className='user-pic'></img>
