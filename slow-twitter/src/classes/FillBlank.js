@@ -6,6 +6,16 @@ import { toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import GameController from "./GameController";
 
+import badFile from './../sound/bad.mp3'
+import goodFile from './../sound/type.mp3';
+import successFile from './../sound/success.mp3';
+import failFile from './../sound/fail.mp3';
+
+let badSound = new Audio(badFile);
+let goodSound = new Audio(goodFile);
+let successSound = new Audio(successFile);
+let failSound = new Audio(failFile);
+
 var pos = require("pos");
 var tagger = new pos.Tagger();
 
@@ -137,6 +147,7 @@ export default class FillBlank {
 	//handles a correct drop
 	correctDrop() {
 		//probably add word here
+		goodSound.play();
 		let done = this.checkDone();
 		if(done) {
 			this.parent.updateGame(this);
@@ -152,6 +163,7 @@ export default class FillBlank {
 			this.fail();
 		}
 		else {
+			badSound.play();
 			toast.error('Wrong! ' + this.lives + " lives remaining.", {
 				position: "top-center",
 				autoClose: 2000,
@@ -188,6 +200,7 @@ export default class FillBlank {
 			transition: Zoom,
 			hideProgressBar: true
 		});
+		successSound.play();
 		await this.parent.animateOut();
 		this.type = 'Complete';
 		this.parent.updateGame(this);
@@ -209,6 +222,7 @@ export default class FillBlank {
 			transition: Zoom,
 			hideProgressBar: true
 		});
+		failSound.play();
 		this.type = 'Complete';
 		this.parent.updateGame(this);
 	}

@@ -9,9 +9,9 @@ const Lives = () => {
 
 
     if(curGame !== null) {
-        content.push(<h2 className="lives">Lives:</h2>);
+        content.push(<h2 className="lives">Strikes:</h2>);
         for(let i = 0; i < curGame.lives; i++) {
-            content.push(<h2 className='heart-img'>&#10086;</h2>);
+            content.push(<h2 className='heart-img' key={i}>&#x2715;</h2>);
         }
     }
     else {

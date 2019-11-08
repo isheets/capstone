@@ -7,6 +7,11 @@ import QuoteTweet from "./QuoteTweet/QuoteTweet";
 import { CSSTransition } from 'react-transition-group';
 import { tweetIn, optionsIn } from '../../../actions';
 
+import printFile from './../../../sound/print.mp3';
+
+
+let printSound = new Audio(printFile);
+
 const TweetContent = () => {
 
     console.log('rendering content');
@@ -25,7 +30,7 @@ const TweetContent = () => {
     let content = null;
 
     let animation = 'slide-up';
-    let animationDur = 500;
+    let animationDur = 1000;
 
     if (animateToggle === false) {
         animationDur = 200;
@@ -39,7 +44,7 @@ const TweetContent = () => {
         else if(curGame.type === 'NoTweets') {
             return null;
         }
-        
+
         //check if we need to render a quote tweet
         if (curTweet.isQuote === true) {
             content = (
@@ -66,6 +71,12 @@ const TweetContent = () => {
 
     const showOptions = () => {
         dispatch(optionsIn());
+        printSound.pause();
+    }
+
+    
+    const playSound = () => {
+        printSound.play();
     }
 
     return (
@@ -75,6 +86,7 @@ const TweetContent = () => {
             appear={true}
             timeout={animationDur}
             onExited={()=> enterTransition()}
+            onEntering={() => playSound()}
             onEntered={() => showOptions()}
         >
             <div className="tweet-content-wrapper torn">

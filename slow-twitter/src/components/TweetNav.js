@@ -3,13 +3,16 @@ import GameController from './../classes/GameController';
 import {useDispatch} from 'react-redux';
 import { tweetOut, optionsOut } from '../actions';
 
+import clickFile from './../sound/click.mp3';
 
+let clickSound = new Audio(clickFile);
 
 let gameController = new GameController();
 
 let dispatch;
 
 let animateAndNext = async () => {
+    clickSound.play();
     dispatch(tweetOut());
     dispatch(optionsOut());
     setTimeout(function() {

@@ -17,6 +17,11 @@ import GameController from '../classes/GameController';
 
 import { CSSTransition } from 'react-transition-group';
 
+import clickFile from './../sound/click.mp3';
+import printFile from './../sound/print.mp3';
+
+let clickSound = new Audio(clickFile);
+let printSound = new Audio(printFile);
 
 let dispatch;
 
@@ -47,6 +52,7 @@ const onSuccessAuth = async (response) => {
 };
 
 const logout = () => {
+  clickSound.play();
   //clear cache
   localStorage.removeItem('state');
   //set state to initial
@@ -102,7 +108,10 @@ const App = () => {
             <h2>No new tweets to fetch.</h2>
             <h3>Try again later.</h3>
             <button
-              onClick={() => gameController.newGame()}
+              onClick={() => {
+                clickSound.play();
+                gameController.newGame();
+              }}
               className="button"
             >
               RETRY
@@ -231,6 +240,8 @@ const App = () => {
             classNames={'slide-up-slow'}
             appear={true}
             timeout={2000}
+            onEntering={() => printSound.play()}
+            onEntered={() => printSound.pause()}
           >
             <div className="welcome-message-wrapper">
               <div className="welcome-message">
