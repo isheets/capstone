@@ -2,6 +2,7 @@
   "name": "slow-twitter",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://isheets.github.io/easy-come-easy-go/",
   "dependencies": {
     "babel-eslint": "^10.0.3",
     "eslint-config-react-app": "^5.0.2",
@@ -10,6 +11,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^2.1.2",
+    "gh-pages": "^2.1.1",
     "he": "^1.2.0",
     "lodash.throttle": "^4.1.1",
     "pos": "^0.4.2",
@@ -32,7 +34,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
