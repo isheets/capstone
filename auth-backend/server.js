@@ -153,7 +153,7 @@ router.route('/auth/twitter/reverse')
     request.post({
       url: 'https://api.twitter.com/oauth/request_token',
       oauth: {
-        oauth_callback: "https%3A%2F%2Fisheets.github.io%2Ftwitter-callback",
+        oauth_callback: "https%3A%2F%2Fisheets.github.io",
         consumer_key: twitterConfig.consumerKey,
         consumer_secret: twitterConfig.consumerSecret
       }
