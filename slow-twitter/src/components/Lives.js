@@ -10,8 +10,16 @@ const Lives = () => {
 
     if(curGame !== null) {
         content.push(<h2 className="lives">Strikes:</h2>);
-        for(let i = 0; i < curGame.lives; i++) {
-            content.push(<h2 className='heart-img' key={i}>&#x2715;</h2>);
+        
+        let strikes = 3 - curGame.lives;
+        let numIcons = 0;
+        for(let i = 0; i < strikes; i++) {
+            content.push(<h2 className='strike' key={i}>&#x2715;</h2>);
+            numIcons++;
+        }
+
+        for(let i = numIcons; i < 3; i++) {
+            content.push(<h2 className='strike-left' key={i}>&#x2715;</h2>);
         }
     }
     else {

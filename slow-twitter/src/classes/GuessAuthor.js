@@ -152,8 +152,8 @@ export default class GuessAuthor {
         });
         failSound.play();
         await this.parent.animateOut();
+        this.status = 'Fail'
         this.type = 'Complete';
-        this.status = 'Success'
         this.parent.updateGame(this);
     }
 
