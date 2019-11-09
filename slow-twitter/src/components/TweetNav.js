@@ -1,7 +1,7 @@
 import React from 'react'
 import GameController from './../classes/GameController';
 import { useDispatch, useSelector } from 'react-redux';
-import { tweetOut, optionsOut, optionsIn } from '../actions';
+import { tweetOut, optionsOut, optionsIn, tweetIn } from '../actions';
 
 import clickFile from './../sound/click.mp3';
 
@@ -11,15 +11,15 @@ let gameController = new GameController();
 
 let dispatch;
 
-let fail = false;
 
-let animateAndNext = async () => {
+
+let animateAndNext = async (fail) => {
     clickSound.play();
     if (fail === true) {
         dispatch(optionsOut());
         setTimeout(function () {
             gameController.newGame()
-            dispatch(optionsIn());
+            dispatch(tweetIn());
         }, 200);
     }
     else {
@@ -40,6 +40,8 @@ const TweetNav = () => {
 
     let message = 'Tweet completed.';
 
+    let fail = false;
+
     if (curGame !== null) {
         if (curGame.type === 'Complete') {
             if (curGame.status === 'Fail') {
@@ -53,7 +55,7 @@ const TweetNav = () => {
     return (
         <div className="tweet-nav-wrapper">
             <h2>{message}</h2>
-            <button onClick={() => animateAndNext()}>NEXT &#x27AA;</button>
+            <button onClick={() => animateAndNext(fail)}>NEXT &#x27AA;</button>
         </div>
     )
 }

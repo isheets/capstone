@@ -9,12 +9,12 @@ const Lives = () => {
 
 
     if(curGame !== null) {
-        content.push(<h2 className="lives">Strikes:</h2>);
+        content.push(<h2 className="lives" key={100}>Strikes:</h2>);
         
         let strikes = 3 - curGame.lives;
         let numIcons = 0;
         for(let i = 0; i < strikes; i++) {
-            content.push(<h2 className='strike' key={i}>&#x2715;</h2>);
+            content.push(<h2 className='strike' key={numIcons}>&#x2715;</h2>);
             numIcons++;
         }
 
