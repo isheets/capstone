@@ -19,9 +19,11 @@ import { CSSTransition } from 'react-transition-group';
 
 import clickFile from './../sound/click.mp3';
 import printFile from './../sound/print.mp3';
+import successFile from './../sound/success.mp3';
 
 let clickSound = new Audio(clickFile);
 let printSound = new Audio(printFile);
+let successSound = new Audio(successFile);
 
 let dispatch;
 
@@ -39,6 +41,7 @@ const onSuccessAuth = async (response) => {
     //successful auth, update store
     if (token) {
       console.log("User auth successful :)");
+      successSound.play();
 
       //dispatch the user object to store
       dispatch(updateUser(user));

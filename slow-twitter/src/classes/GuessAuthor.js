@@ -102,11 +102,11 @@ export default class GuessAuthor {
     incorrectDrop() {
         //subtract life
         this.lives = this.lives - 1;
+        badSound.play();
         if (this.lives === 0) {
             this.fail();
         }
         else {
-            badSound.play();
             toast.error('Wrong! ' + this.lives + " lives remaining.", {
                 position: "top-center",
                 autoClose: 2000,
