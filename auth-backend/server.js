@@ -55,9 +55,11 @@ var createToken = function (auth) {
 
 var generateToken = function (req, res, next) {
   req.token = createToken(req.auth);
+  console.log(req);
   return next();
 };
 
+//send back to front-end
 var sendToken = function (req, res) {
   res.setHeader('x-auth-token', req.token);
   return res.status(200).send(JSON.stringify(req.user));
@@ -77,14 +79,9 @@ router.get('/timeline', function (req, res) {
   console.log('since_id: ' + since);
   console.log("*********************************************")
   //if we haven't intialized twitter connection, do so now
-  if (twitter == null) {
-    twitter = new Twitter({
-      "consumerKey": twitterConfig.consumerKey,
-      "consumerSecret": twitterConfig.consumerSecret,
-      "accessToken": aT,
-      "accessTokenSecret": aTS,
-      "callBackUrl": "http://localhost:4000"
-    });
+
+  if (twitter === null) {
+    configTwitter(aT, aTS);
   }
 
   //success function
@@ -95,8 +92,8 @@ router.get('/timeline', function (req, res) {
 
   //error function
   var error = (err, response, body) => {
-    console.log(err, response, body);
-    return res.status(500).send({ message: "whoops, couldn't get the timeline" });
+    console.log(err.data);
+    return res.status(err.statusCode).send(err.data);
   }
 
   //if request includes a since_id, use it
@@ -106,6 +103,47 @@ router.get('/timeline', function (req, res) {
   //if no since id, default to fetching 10 most recent tweets
   else {
     twitter.getHomeTimeline({ count: '40', tweet_mode: "extended" }, error, returnTimeline);
+  }
+});
+
+var configTwitter = (aT, aTS) => {
+    twitter = new Twitter({
+      "consumerKey": twitterConfig.consumerKey,
+      "consumerSecret": twitterConfig.consumerSecret,
+      "accessToken": aT,
+      "accessTokenSecret": aTS,
+      "callBackUrl": "http://localhost:4000"
+    });
+}
+
+//ENDPOINT FOR GETTING LIST OF FRIENDS ****NEEDS TO BE ACCESSED AFTER FETCH TIMELINE****
+router.get('/friends/list', function(req, res) {
+  let cursor = req.query.cursor;
+  let aT = req.query.aT;
+  let aTS = req.query.aTS;
+  
+  console.log('Fetching Friends');
+  console.log('CURSOR: ' + cursor);
+
+  if(twitter === null) {
+    configTwitter(aT, aTS);
+  }
+
+  var successFN = (data) => {
+      //console.log(data);
+      return res.send(data)
+  }
+
+  var error = (error, response, body) => {
+    console.log(error);
+    return res.status(error.statusCode).send(error.data);
+  }
+
+  if(cursor){
+    twitter.getCustomApiCall('/friends/list.json', {cursor: cursor}, error, successFN);
+  }
+  else {
+    twitter.getCustomApiCall('/friends/list.json', {}, error, successFN);
   }
 });
 
@@ -159,6 +197,7 @@ router.route('/auth/twitter')
     if (!req.user) {
       return res.send(401, 'User Not Authenticated');
     }
+
 
     // prepare token for API
     req.auth = {

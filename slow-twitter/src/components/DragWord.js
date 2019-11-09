@@ -1,39 +1,19 @@
 import React, { Fragment } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useDrag } from "react-dnd";
-import {
-  updateCurTweetId,
-  updateCurGame
-} from "./../actions";
-import { NONAME } from "dns";
 
-let parsedTweets;
-let curTweetId;
-let dispatch;
-let droppedWords;
-let extractedWords;
-
-
-
-const Drag = props => {
-  dispatch = useDispatch();
-  let game = useSelector(state => state.game.curGame);
+const DragWord = props => {
+  let fibGame = useSelector(state => state.game.curGame);
 
 
   const word = props.word;
   const order = props.order;
   let strike = false;
+  let opacity = 1;
 
   let content = null;
 
-  if (game !== null) {
-    //check if word is one of the already dropped ones, and if so then strike it out
-    for (let wordObj of game.droppedWords) {
-      if (wordObj.word === word) {
-        strike = true;
-      }
-    }
-  }
+
 
   const [{ isDragging }, drag] = useDrag({
     item: { value: word, order: order, type: "word" },
@@ -44,25 +24,40 @@ const Drag = props => {
       if (item && dropResult) {
         strike = true;
         //call function to check order and word correctness
-        game.handleDrop(item.value, dropResult.order, item.order);
+        fibGame.handleDrop(item.value, dropResult.order, item.order);
       }
+    },
+    options: {
+      dropEffect: 'copy'
     },
     collect: monitor => ({
       isDragging: monitor.isDragging()
     })
   });
+  opacity = isDragging ? 0.4 : 1;
 
-  const opacity = isDragging ? 0.4 : 1;
+
+  if (fibGame !== null) {
+    //check if word is one of the already dropped ones, and if so then strike it out
+    for (let wordObj of fibGame.droppedWords) {
+      if (wordObj.word === word) {
+        strike = true;
+        opacity = 0.5;
+      }
+    }
+  }
 
   //switch strike based on whether word has been dropped
   const textDecoration = strike ? 'line-through' : 'none';
 
-  
+
 
   if (word !== null) {
     content = (
-      <div ref={drag} style={{ opacity, textDecoration }} className="word-drag">
-        {word}
+      <div className="word-wrapper">
+        <div ref={drag} style={{ opacity, textDecoration }} className="word-drag">
+          {word}
+        </div>
       </div>
     );
   }
@@ -70,4 +65,4 @@ const Drag = props => {
   return <Fragment>{content}</Fragment>;
 };
 
-export default Drag;
+export default DragWord;

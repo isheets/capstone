@@ -1,41 +1,63 @@
 import React, { Fragment } from "react";
 import { useSelector } from "react-redux";
-import TweetProfilePic from "./TweetProfilePic";
-import TweetInfo from "./TweetInfo";
 import TweetContent from "./TweetContent/TweetContent";
 import "./TweetCard.css";
-import { updateCurTweet } from "../../actions";
+
+
+
 
 const TweetCard = () => {
   //hook into state to get the current tweet to display
   let game = useSelector(state => state.game.curGame);
   let content;
 
-  if (game != null) {
+  let gridOrder = '';
+  let gridSpan = '';
+
+  if (game !== null) {
     let curTweet = game.curTweet;
-    
+
     //make sure we have content to render
     if (curTweet !== null) {
-      //check if we will need to render a quote tweet
-      if (curTweet.isQuote == true) {
+      //render the info and everything if its FillBlank
+      if (game.type === 'FillBlank') {
+        content = (
+          <Fragment>
+            <TweetContent />
+          </Fragment>
+        );
       }
+      //put in blank instead of info
+      else if (game.type === 'GuessAuthor') {
+        content = (
+          <Fragment>
+            <TweetContent />
+          </Fragment>
+        )
+      }
+      else if (game.type === 'Complete' || game.type === 'NoTweets') {
+        content = (
+          <Fragment>
+            <TweetContent />
+          </Fragment>
+        );
 
-      content = (
-        <Fragment>
-          <TweetProfilePic url={curTweet.user.pic} />
-          <TweetInfo />
-          <TweetContent />
-        </Fragment>
-      );
+        gridOrder = 'second'
+        gridSpan = 'span-cols'
+      }
+      else {
+        console.error('Game type not caught in TweetCard');
+      }
     }
+
   }
 
   //no tweets view
   else {
-    content = <h1>No tweet to render, fetch timeline</h1>;
+    content = null;
   }
 
-  return <div className="tweet-card-wrapper"><div className="tweet-card">{content}</div></div>;
+  return (<div className={'tweet ' + gridOrder + " " + gridSpan}>{content}</div>);
 };
 
 export default TweetCard;

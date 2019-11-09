@@ -1,36 +1,61 @@
 import React from 'react'
-import { useSelector, useDispatch } from "react-redux";
-import { updateCurTweetId, updateCurGame, updateParsedTweets } from './../actions';
-import {FillBlank} from './../classes/FillBlank';
+import GameController from './../classes/GameController';
+import { useDispatch, useSelector } from 'react-redux';
+import { tweetOut, optionsOut, optionsIn, tweetIn } from '../actions';
+
+import clickFile from './../sound/click.mp3';
+
+let clickSound = new Audio(clickFile);
+
+let gameController = new GameController();
 
 let dispatch;
-let game;
 
 
-export var nextTweet = () => {
-    if (game.parsedTweets !== null) {
-        if (game.parsedTweets.length > 1) {
-            console.log(game.parsedTweets);
-            let newTweets = game.parsedTweets;
-            newTweets.shift();
-            console.log(newTweets);
-            dispatch(updateParsedTweets(newTweets));
-            let newGame = new FillBlank;
-            newGame.setCurrentTweet(newTweets[0]);
-            dispatch(updateCurGame(newGame));
-        }
+
+let animateAndNext = async (fail) => {
+    clickSound.play();
+    if (fail === true) {
+        dispatch(optionsOut());
+        setTimeout(function () {
+            gameController.newGame()
+            dispatch(tweetIn());
+        }, 200);
     }
     else {
-        console.error("Can't go to next tweet, does not exist. curTweetId: " + game.curTweetId);
+        dispatch(tweetOut());
+        dispatch(optionsOut());
+        setTimeout(function () {
+            gameController.newGame()
+        }, 200);
     }
+
 }
 
 const TweetNav = () => {
-    game = useSelector(state => state.game);
+
     dispatch = useDispatch();
+
+    let curGame = useSelector(state => state.game.curGame);
+
+    let message = 'Tweet completed.';
+
+    let fail = false;
+
+    if (curGame !== null) {
+        if (curGame.type === 'Complete') {
+            if (curGame.status === 'Fail') {
+                fail = true;
+                message = 'Fail. Keep moving.'
+            }
+
+        }
+    }
+
     return (
-        <div>
-            <button onClick={() => nextTweet()}>Next</button>
+        <div className="tweet-nav-wrapper">
+            <h2>{message}</h2>
+            <button onClick={() => animateAndNext(fail)}>NEXT &#x27AA;</button>
         </div>
     )
 }

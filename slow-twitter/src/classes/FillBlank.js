@@ -1,11 +1,20 @@
-import React, { Fragment } from "react";
-import Game from "./Game";
+import React from "react";
 import verbs from "./../custom-dict/verbs";
 import posMap from "./../config/pos";
-import Blank from "./../components/TweetCard/TweetContent/Blank";
-import {nextTweet} from './../components/TweetNav';
-import store from './../index';
-import {updateParsedTweets, updateCurGame} from './../actions';
+import Blank from "../components/TweetCard/TweetContent/WordBlank";
+import { toast, Zoom } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import GameController from "./GameController";
+
+import badFile from './../sound/bad.mp3'
+import goodFile from './../sound/type.mp3';
+import successFile from './../sound/success.mp3';
+import failFile from './../sound/fail.mp3';
+
+let badSound = new Audio(badFile);
+let goodSound = new Audio(goodFile);
+let successSound = new Audio(successFile);
+let failSound = new Audio(failFile);
 
 var pos = require("pos");
 var tagger = new pos.Tagger();
@@ -20,8 +29,8 @@ Sentencer.configure({
 	}
 });
 
-export class FillBlank {
-	constructor(newTweet) {
+export default class FillBlank {
+	constructor(newTweet, foundWords) {
 		//call constructor from super class Game
 		this.curTweet = newTweet;
 		this.type = 'FillBlank'
@@ -33,36 +42,24 @@ export class FillBlank {
 		this.numDropped = 0; //intially equal to zero
 		this.droppedWords = []; // array of dropped words
 		this.lives = 3;
+		this.parent = new GameController();
+		if (foundWords) {
+			this.foundWords = foundWords;
+			this.textToRender = this.extractWords();
+		}
+		else {
+			this.foundWords = null;
+			this.textToRender = this.findAndExtractWords();
+		}
 	}
 
 	getLives() {
 		return this.lives;
 	}
 
-	setCurrentTweet(newTweet) {
-		console.log(newTweet);
-		this.curTweet = newTweet;
-	}
-
-	updateTweets(tweets) {
-		store.dispatch(updateParsedTweets(tweets));
-	}
-
-	updateGame(game) {
-		store.dispatch(updateCurGame(game));
-	}
 
 	newGame() {
-		let state = store.getState();
-		let parsedTweets = state.game.parsedTweets;
-		let newTweets = parsedTweets;
-		console.log(newTweets);
-		newTweets.splice(0, 1);
-		console.log(newTweets);
-		let newGame = new FillBlank;
-		newGame.curTweet = newTweets[0];
-		this.updateTweets(newTweets);
-		this.updateGame(newGame);
+		this.parent.newGame();
 	}
 
 	//takes a drop and checks if it's true
@@ -76,7 +73,7 @@ export class FillBlank {
 
 		if (droppedIn === correctDrop) {
 			newWordObj.correct = true;
-		} 
+		}
 		//incorrect drop, subtract life and return false
 		else {
 			newWordObj.correct = false;
@@ -88,7 +85,7 @@ export class FillBlank {
 		//check if we already dropped the word, move it if so and stop
 		if (this.checkMovedWord(droppedWord)) {
 			console.log("moved word");
-			for(let i = 0; i < this.droppedWords.length; i++) {
+			for (let i = 0; i < this.droppedWords.length; i++) {
 				let wordObj = this.droppedWords[i];
 				console.log(wordObj);
 				if (wordObj.word === newWordObj.word) {
@@ -101,7 +98,7 @@ export class FillBlank {
 		//check if already filled the blank, change the word if so
 		else if (this.checkAlreadyDropped(droppedIn)) {
 			console.log("already dropped");
-			for(let i = 0; i < this.droppedWords.length; i++) {
+			for (let i = 0; i < this.droppedWords.length; i++) {
 				let wordObj = this.droppedWords[i];
 				if (wordObj.droppedIn === newWordObj.droppedIn) {
 					this.droppedWords[i] = newWordObj;
@@ -148,9 +145,13 @@ export class FillBlank {
 
 
 	//handles a correct drop
-	correctDrop() { 
+	correctDrop() {
 		//probably add word here
-		this.checkDone();
+		goodSound.play();
+		let done = this.checkDone();
+		if(done) {
+			this.parent.updateGame(this);
+		}
 		return true;
 	}
 
@@ -158,11 +159,23 @@ export class FillBlank {
 	incorrectDrop() {
 		//subtract life
 		this.lives = this.lives - 1;
-		if(this.lives === 0) {
-			return this.fail();
+		badSound.play();
+		if (this.lives === 0) {
+			this.fail();
 		}
-		return false;
-	 }
+		else {
+			toast.error('Wrong! ' + this.lives + " lives remaining.", {
+				position: "top-center",
+				autoClose: 2000,
+				closeButton: false,
+				pauseOnHover: true,
+				draggable: false,
+				transition: Zoom,
+				hideProgressBar: true
+			});
+			this.parent.updateGame(this);
+		}
+	}
 
 	//checks if we have filled all the blanks
 	checkDone() {
@@ -170,23 +183,51 @@ export class FillBlank {
 		console.log('checking to see if we completed the entire tweet');
 		if (this.droppedWords.length === this.extractedWords.length) {
 			this.success();
+			return true;
 		}
+		else return false
 	}
 
 	//game is done and everything is correct
-	success() { 
-		//reset lives
+	async success() {
 		//get the next tweet
-		this.newGame();
+		toast.success('Tweet completed correctly!', {
+			position: "top-center",
+			autoClose: 2000,
+			closeButton: false,
+			pauseOnHover: true,
+			draggable: false,
+			transition: Zoom,
+			hideProgressBar: true
+		});
+		successSound.play();
+		await this.parent.animateOut();
+		this.type = 'Complete';
+		this.status = 'Success'
+		this.parent.updateGame(this);
+		return true;
 	}
-	
+
 
 
 	//game is done and not everything is correct
-	fail() {
+	async fail() {
 		//display some sort of failure message
 		//proceed to next tweet
-		return "fail"
+		toast.error('Game over, man. Game over.', {
+			position: "top-center",
+			autoClose: 2000,
+			closeButton: false,
+			pauseOnHover: true,
+			draggable: false,
+			transition: Zoom,
+			hideProgressBar: true
+		});
+		failSound.play();
+		await this.parent.animateOut();
+		this.type = 'Complete';
+		this.status = 'Fail'
+		this.parent.updateGame(this);
 	}
 
 
@@ -212,9 +253,21 @@ export class FillBlank {
 	}
 
 	static fromJSON(serializedJson) {
-		let newInstance = Object.assign(new FillBlank(), serializedJson);
+		let newInstance = new FillBlank(serializedJson.curTweet, serializedJson.foundWords);
+
+		if (newInstance.type !== 'NoWords') {
+			newInstance.type = 'FillBlank'
+		}
+		newInstance.extractedWords = serializedJson.extractedWords; //array of extracted word objects
+		newInstance.wordOptions = serializedJson.wordOptions; //array of word options objects
+		newInstance.numBlanks = serializedJson.numBlanks;
+		newInstance.numDropped = serializedJson.numDropped; //intially equal to zero
+		newInstance.droppedWords = serializedJson.droppedWords; // array of dropped words
+		newInstance.lives = serializedJson.lives;
+		newInstance.parent = new GameController();
+
 		return newInstance;
-	} 
+	}
 
 	findAndExtractWords() {
 		return this.getRandomWords();
@@ -226,7 +279,7 @@ export class FillBlank {
 		let text = this.curTweet.text;
 		//construct regex to split string into all words
 		let allWordExp =
-			"(?<=\\s|^|\\b)(?:[-’%$#&\\/]\\b|\\b[-’%$#&\\/]|[A-Za-z0-9]|\\([A-Za-z0-9]+\\))+(?=\\s|$|\\b)";
+			"(?<!@)(?<=\\s|^|\\b)(?:[-’'%$#&\\/]\\b|\\b[-’'%$#&\\/]|[A-Za-z0-9]|\\([A-Za-z0-9]+\\))+(?=\\s|$|\\b)";
 		let allWordReg = new RegExp(allWordExp, "g");
 
 
@@ -236,10 +289,8 @@ export class FillBlank {
 		//some issue with getting words - maybe all emojis or excalamation or something else
 		if (wordAr === null) {
 			//log an error and just return the text to avoid crash
-			console.error("NO WORDS IN WORD ARRAY");
-			//dispatch(setExtractedWords([]));
-			//dispatch(setWordOptions([]));
-			return text;
+			this.type = 'NoWords';
+			return null;
 		}
 		//declare array to hold all words we extract
 		let extractedWordArray = [];
@@ -267,7 +318,7 @@ export class FillBlank {
 			let extractedWord = wordAr[randIdx];
 
 			while (
-				checkValidWord(extractedWord, extractedWordArray) == false &&
+				checkValidWord(extractedWord, extractedWordArray) === false &&
 				numCheckedWords < wordAr.length - 1
 			) {
 				randIdx = getRandomUniqueIndex(wordAr.length - 1);
@@ -278,6 +329,9 @@ export class FillBlank {
 
 			if (numCheckedWords === wordAr.length - 1) {
 				console.log("checked all the words");
+				//can't do FIB so resort to GuessAuthor
+				this.type = 'NoWords';
+				return null;
 			} else {
 				let wordLex = new pos.Lexer().lex(extractedWord);
 				let taggedWord = tagger.tag(wordLex);
@@ -290,10 +344,13 @@ export class FillBlank {
 					mappedPOS: mappedPos
 				});
 			}
+
 		}
 
 		//we picked out words, next up: find them
 		return this.findWordsInText(extractedWordArray);
+
+
 	}
 
 	//take the words we want to find and then....find them in the text
@@ -324,13 +381,19 @@ export class FillBlank {
 		//sort the array so that smallest idx is first
 		foundWordArray.sort((a, b) => (a.start > b.start ? 1 : -1));
 
+		//set property incase we need to re-extract later
+		console.log('setting foundWords')
+		this.foundWords = foundWordArray;
+
 		//we have a sorted array of words we want to extract and their start/end indexes
-		return this.extractWords(foundWordArray)
+		return this.extractWords()
 	}
 
-	extractWords(foundWordArray) {
+	extractWords() {
+		console.log('extractingWords');
 		//get the text
 		let text = this.curTweet.text;
+		let foundWordArray = this.foundWords;
 
 		let extractWordObjs = [];
 
@@ -357,10 +420,18 @@ export class FillBlank {
 		//array to hold all the jsx
 		let jsxAr = [];
 
-		//iterator to keep track of how what word we're replacing
+		//iterator to keep track of what word we're replacing
 		let curWordIdx = 0;
 
-		for (let i = 0; i < parts.length; i++) {
+		let startIdx;
+		if(parts[0] == '') {
+			startIdx = 1;
+		}
+		else {
+			startIdx = 0;
+		}
+
+		for (let i = startIdx; i < parts.length; i++) {
 			//insert fill in the blank compenent in at placeholder
 			if (parts[i] === "[need a blank here plzz]") {
 				jsxAr.push(
@@ -379,6 +450,11 @@ export class FillBlank {
 			}
 		}
 
+		if (jsxAr.length < 2) {
+			this.parent.newGuessAuthor(this.curTweet);
+			return null;
+		}
+
 		//one correct word and three matching random incorrect words
 		let wordOptions = [];
 		for (let word of extractWordObjs) {
@@ -387,20 +463,71 @@ export class FillBlank {
 				order: word.order
 			});
 			for (let i = 0; i < 3; i++) {
+				let randWord = Sentencer.make(`{{ ${word.pos} }}`);
+				let normedWord = normalizeCap(word.word, randWord);
 				wordOptions.push({
-					word: Sentencer.make(`{{ ${word.pos} }}`),
+					word: normedWord,
 					order: -1
 				});
 			}
 		}
 
+
+
 		this.setWordOptions(wordOptions);
 		this.setExtractedWords(extractWordObjs);
 
-		//console.log(jsxAr);
+		console.log(jsxAr);
 
 		return jsxAr;
 	}
+}
+
+//function that transforms the randomly generated word to match the case of the correct choice it corresponds to
+var normalizeCap = (modelWord, normWord) => {
+
+	let character = '';
+	let i = 0;
+	let allCaps = true;
+	let normedChars = [];
+	while (i < modelWord.length) {
+		character = modelWord.charAt(i);
+
+		if (!isNaN(character * 1)) {
+			alert('character is numeric');
+		} else {
+			if (character === character.toUpperCase()) {
+				//character is uppercase
+				//need to make sure normWord is not shorter than modelWord
+				if (normWord[i]) {
+					normedChars[i] = normWord[i].toUpperCase();
+				}
+			}
+			if (character === character.toLowerCase()) {
+				//character is lowercase
+				allCaps = false;
+				if (normWord[i]) {
+					normedChars[i] = normWord[i].toLowerCase();
+				}
+			}
+		}
+		i++;
+	}
+	//capitalize the rest of normWord if the model word is all caps
+	if (allCaps === true) {
+		while (i < normWord.length) {
+			normedChars[i] = normWord[i].toUpperCase();
+			i++;
+		}
+	}
+	else {
+		while (i < normWord.length) {
+			normedChars[i] = normWord[i];
+			i++;
+		}
+	}
+
+	return normedChars.join('');
 }
 
 //private function to get a random index from the text word array

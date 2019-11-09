@@ -1,37 +1,47 @@
 import React, { Fragment } from "react";
 import TwitterLogin from "react-twitter-auth";
 import {
-  updateCurTweetId,
   updateAuthentication,
   updateToken,
   updateUser,
-  updateParsedTweets,
-  updateLastTweetFetched,
-  updateCurGame
+  logoutAndReset
 } from "./../actions";
 import { useSelector, useDispatch } from "react-redux";
-import { FillBlank } from './../classes/FillBlank'
 
 import TweetCard from "./TweetCard/TweetCard";
 import TweetNav from "./TweetNav";
 import DragOptions from "./DragOptions";
+import Lives from './Lives';
 
-var he = require("he");
+import GameController from '../classes/GameController';
+
+import { CSSTransition } from 'react-transition-group';
+
+import clickFile from './../sound/click.mp3';
+import printFile from './../sound/print.mp3';
+import successFile from './../sound/success.mp3';
+
+let clickSound = new Audio(clickFile);
+let printSound = new Audio(printFile);
+let successSound = new Audio(successFile);
 
 let dispatch;
+
+let gameController = new GameController();
 
 const onFailedAuth = error => {
   console.log("Twitter auth failed :(");
   console.log(error);
 };
 
-const onSuccessAuth = response => {
+const onSuccessAuth = async (response) => {
   const token = response.headers.get("x-auth-token");
   console.log(response);
-  response.json().then(user => {
+  response.json().then(async user => {
     //successful auth, update store
     if (token) {
       console.log("User auth successful :)");
+      successSound.play();
 
       //dispatch the user object to store
       dispatch(updateUser(user));
@@ -40,241 +50,217 @@ const onSuccessAuth = response => {
       //dispatch action to update authentication to store
       dispatch(updateAuthentication(true));
 
-      //initial feed fetch
-      refreshFeed(userToken, userTokenSecret, null);
     }
   });
 };
 
-//grabs the feed based on
-const refreshFeed = (userToken, userTokenSecret, lastTweetFetched = null) => {
-  if (userToken !== null && userTokenSecret !== null) {
-    fetch(
-      `http://localhost:8080/api/v1/timeline?aT=${userToken}&aTS=${userTokenSecret}${
-      lastTweetFetched ? `&since=${lastTweetFetched}` : ``
-      }`,
-      { headers: { "Content-Type": "application/json; charset=utf-8" } }
-    )
-      .then(res => res.json())
-      .then(response => {
-        //make sure it's not null
-        if (response) {
-          console.log(response);
-          parseRawTweets(response);
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  } else {
-    console.error("Cannot refreshFeed, bad args");
-  }
-};
+const logout = () => {
+  clickSound.play();
+  //clear cache
+  localStorage.removeItem('state');
+  //set state to initial
+  dispatch(logoutAndReset());
+}
 
-//take raw response from tweets and construct well-formed object with only needed info
-const parseRawTweets = rawTweets => {
-  let newTweets = [];
-  //first tweet will have id of 0
-  for (let tweet of rawTweets) {
-    //throw out if the tweet is a retweet
-    if (tweet.retweeted_status) {
-      console.log("Tweet not parsed; is a retweet");
-    } else if (tweet.in_reply_to_status_id !== null) {
-      console.log("Tweet not parsed; is a reply");
-    } else {
-      //construct the object
-      let newTweet = {};
-      newTweet.date = tweet.created_at;
-      newTweet.tweetID = tweet.id_str;
-      newTweet.text = he.decode(tweet.full_text); //make sure that the text is unescaped
-      newTweet.urls = null;
-      if (tweet.entities.urls.length > 0) {
-        newTweet.urls = tweet.entities.urls;
-      }
-      if (newTweet.urls !== null) {
-        for (let url of newTweet.urls) {
-          newTweet.text = newTweet.text.replace(url.url, "");
-        }
-      }
 
-      newTweet.user = {};
-      newTweet.user.name = tweet.user.name;
-      newTweet.user.pic = tweet.user.profile_image_url;
-      newTweet.user.handle = tweet.user.screen_name;
-
-      //check for media of any type
-      if (tweet.extended_entities) {
-        newTweet.media = [];
-        newTweet.hasMedia = true;
-        for (let i = 0; i < tweet.extended_entities.media.length; i++) {
-          newTweet.media[i] = {};
-          newTweet.media[i].type = tweet.extended_entities.media[i].type;
-          //remove the in-text media link from the tweet text
-          newTweet.text = newTweet.text.replace(
-            tweet.extended_entities.media[i].url,
-            ""
-          );
-          if (newTweet.media[i].type === "photo") {
-            newTweet.media[i].url =
-              tweet.extended_entities.media[i].media_url_https;
-          } else if (newTweet.media[i].type === "video") {
-            newTweet.media[i].url =
-              tweet.extended_entities.media[i].video_info.variants[0].url;
-            newTweet.media[i].format =
-              tweet.extended_entities.media[
-                i
-              ].video_info.variants[0].content_type;
-          } else if (newTweet.media[i].type === "animated_gif") {
-          }
-          //NEED TO CHECK FOR OTHER TYPES OF MEDIA
-        }
-      } else {
-        newTweet.hasMedia = false;
-      }
-
-      //check for quote tweet
-      if (tweet.is_quote_status === true) {
-        newTweet.isQuote = true;
-
-        newTweet.quoteTweet = {};
-        newTweet.quoteTweet.text = he.decode(tweet.quoted_status.full_text); //make sure string is unescaped
-        newTweet.quoteTweet.date = tweet.quoted_status.created_at;
-        newTweet.quoteTweet.tweetID = tweet.quoted_status.id_str;
-        newTweet.quoteTweet.urls = null;
-        if (tweet.quoted_status.entities.urls.length > 0) {
-          newTweet.quoteTweet.urls = tweet.quoted_status.entities.urls;
-        }
-        if (newTweet.quoteTweet.urls !== null) {
-          for (let url of newTweet.quoteTweet.urls) {
-            newTweet.quoteTweet.text = newTweet.quoteTweet.text.replace(
-              url.url,
-              ""
-            );
-          }
-        }
-
-        newTweet.quoteTweet.user = {};
-        newTweet.quoteTweet.user.name = tweet.quoted_status.user.name;
-        newTweet.quoteTweet.user.pic =
-          tweet.quoted_status.user.profile_image_url;
-        newTweet.quoteTweet.user.handle = tweet.quoted_status.user.screen_name;
-
-        //check for quote tweet media
-        //check for media of any type
-        if (tweet.quoted_status.extended_entities) {
-          newTweet.quoteTweet.media = [{}];
-          newTweet.quoteTweet.hasMedia = true;
-          for (
-            let i = 0;
-            i < tweet.quoted_status.extended_entities.media.length;
-            i++
-          ) {
-            //remove the in-text media link from the tweet text
-            newTweet.quoteTweet.text = newTweet.quoteTweet.text.replace(
-              tweet.quoted_status.extended_entities.media[i].url,
-              ""
-            );
-            newTweet.quoteTweet.media[i] = {};
-            if (newTweet.quoteTweet.media[i].type === "photo") {
-              newTweet.quoteTweet.media[i].url =
-                tweet.quoted_status.extended_entities.media[i].media_url_https;
-            } else if (newTweet.quoteTweet.media[i].type === "video") {
-              newTweet.quoteTweet.media[i].url =
-                tweet.quoted_status.extended_entities.media[
-                  i
-                ].video_info.variants[0].url;
-            }
-          }
-        } else {
-          newTweet.quoteTweet.hasMedia = false;
-        }
-      } else {
-        newTweet.isQuote = false;
-      }
-
-      //put at the beginning of newTweets[] for oldest tweets first only if we have text to work with
-      if (newTweet.text.length > 0 && newTweet.isQuote === false) {
-        newTweets.unshift(newTweet);
-      } else if (newTweet.isQuote === true) {
-        if (newTweet.text.length > 0 && newTweet.quoteTweet.text.length > 0) {
-          newTweets.unshift(newTweet);
-        }
-      } else {
-        console.log(
-          "TWEET PROCESSED BUT HAD NO TEXT AT THE END OF parseRawTweets()"
-        );
-      }
-    }
-  }
-  console.log(newTweets);
-  //clear out old tweets - need to think about what makes the most sense...maybe clear out tweets older than 1 day or something
-  //dispatch(updateParsedTweets([]));
-  dispatch(updateParsedTweets(newTweets));
-  dispatch(updateLastTweetFetched(newTweets[newTweets.length - 1].tweetID));
-
-  let newGame = new FillBlank(newTweets[0]);
-  dispatch(updateCurGame(newGame))
-};
-let userToken;
-let userTokenSecret;
 const App = () => {
   //get current state
   const user = useSelector(state => state.user);
+  const game = useSelector(state => state.game);
 
-  userToken = null;
-  userTokenSecret = null;
-  let lastTweetFetched = useSelector(state => state.game.lastTweetFetched);
-  if (user.userDetails !== null) {
-    userToken = user.userDetails.twitterProvider.token;
-    userTokenSecret = user.userDetails.twitterProvider.tokenSecret;
+  let animateOptions = useSelector(state => state.ui.optionsIn);
+
+  let gameAdmin;
+  let gridStyle = 'main-grid';
+  let gridSpan = '';
+
+  let animation = 'fade';
+  let animationDur = 400;
+
+  if (animateOptions === false) {
+    animationDur = 200;
   }
+
+  let welcome = false;
+
+
+  if (user.isAuthenticated === true) {
+    if (game.curGame !== null) {
+      //we have a game
+      const sixHours = 6 * 60 * 60 * 1000;
+      if (Date.now() - game.lastTweetFetchDate > sixHours) {
+        console.log("last fetched more than six hours ago, re-fetching and creating new game now now")
+        gameController.init();
+
+        game.curGame = null;
+      }
+
+      //show some administration like next button or refresh
+      else if (game.curGame.type === 'Complete') {
+        animation = 'scale';
+        animationDur = 200;
+        gameAdmin = (<TweetNav />);
+        gridStyle = 'single';
+        gridSpan = 'span';
+      }
+      else if (game.curGame.type === 'NoTweets') {
+        //this should probably be a new component
+        animation = 'none';
+        gameAdmin = (
+          <div className='no-new-tweets'>
+            <h2>No new tweets to fetch.</h2>
+            <h3>Try again later.</h3>
+            <button
+              onClick={() => {
+                clickSound.play();
+                gameController.newGame();
+              }}
+              className="button"
+            >
+              RETRY
+          </button>
+          </div>
+        );
+
+        gridStyle = 'single';
+        gridSpan = 'span';
+      }
+    }
+    else {
+      gameController.init();
+    }
+  }
+
+
+  //check to see if we need to refresh
 
   //init reference to dispatch
   dispatch = useDispatch();
 
-  //conditionally generate top-level view based on whether user is authenticated or not
-  let content = !!user.isAuthenticated ? (
-    <div>
-      <div className="top-bar">
-        <div className="black-box">
-          <h1>SLOW TWITTER</h1>
+
+  let content = null;
+
+  console.log("using " + animation + ' for options animation');
+
+  if (user.isAuthenticated && game.curGame !== null) {
+    content = (
+      <div className="page-wrapper">
+        <div className="top-bar">
+          <div className="title">
+            <h1>EASY COME, EASY GO</h1>
+          </div>
+          <div className="user-info">
+            <img src={user.userDetails.img} alt='your profile picture' className='user-pic'></img>
+            <h3 className='user-name'>{user.userDetails.name}</h3>
+            <button className="small-text log-out" onClick={() => logout()}>LOG OUT</button>
+          </div>
         </div>
-        <div className="black-box">
-          <h2>{user.userDetails.name}</h2>
-        </div>
-      </div>
-      <div className="main-grid">
-        <TweetCard />
-        <div className="drag-options-wrapper">
-          <DragOptions />
-        </div>
-      </div>
-      <TweetNav />
-      <button
-        onClick={() => refreshFeed(userToken, userTokenSecret, lastTweetFetched)}
-        className="button"
-      >
-        Refresh Timeline
-      </button>
-    </div>
-  ) : (
-      <div className="top-bar">
-        <div className="black-box">
-          <h1>SLOW TWITTER</h1>
-        </div>
-        <div className="black-box">
-          <TwitterLogin
-            loginUrl="http://localhost:8080/api/v1/auth/twitter"
-            onFailure={onFailedAuth}
-            onSuccess={onSuccessAuth}
-            requestTokenUrl="http://localhost:8080/api/v1/auth/twitter/reverse"
-            className="twitter-login-button"
-            text="SIGN IN TO TWITTER"
-            showIcon={false}
-          />
+        <div className={"main-flex " + gridStyle}>
+          <TweetCard />
+          <CSSTransition
+            in={animateOptions}
+            classNames={animation}
+            timeout={animationDur}
+          >
+            <div className={"main-grid-col-2 " + gridSpan + " " + animation}>
+              {game.curGame.type === 'Complete' || game.curGame.type === 'NoTweets' ?
+                <Fragment>
+                  <div className="span">{gameAdmin}</div>
+                </Fragment>
+                :
+                <Fragment>
+                  <DragOptions />
+                  <Lives />
+                </Fragment>
+              }
+            </div>
+          </CSSTransition>
         </div>
       </div>
     );
+
+  }
+
+  //loading after authentication
+  else if (user.isAuthenticated) {
+    content = (
+      <div className="page-wrapper">
+        <div className="top-bar">
+          <div className="title">
+            <h1>SLOW TWITTER</h1>
+          </div>
+          <div className="user-info">
+            <img src={user.userDetails.img} alt='your profile picture' className='user-pic'></img>
+            <h3 className='user-name'>{user.userDetails.name}</h3>
+            <button className="small-text log-out" onClick={() => logout()}>LOG OUT</button>
+          </div>
+        </div>
+        <div id="noTrespassingOuterBarG">
+          <div id="noTrespassingFrontBarG" class="noTrespassingAnimationG">
+            <div class="noTrespassingBarLineG"></div>
+            <div class="noTrespassingBarLineG"></div>
+            <div class="noTrespassingBarLineG"></div>
+            <div class="noTrespassingBarLineG"></div>
+            <div class="noTrespassingBarLineG"></div>
+            <div class="noTrespassingBarLineG"></div>
+          </div>
+        </div>
+      </div>
+    );
+
+  }
+
+  //initial view not signed in
+  else {
+    content = (
+      <div className="page-wrapper">
+        <CSSTransition
+            in={true}
+            classNames={'fade-slow'}
+            timeout={1000}
+            appear={true}
+          >
+        <div className="top-bar">
+          <div className="title">
+            <h1>SLOW TWITTER</h1>
+          </div>
+          <div className="user-info">
+            <TwitterLogin
+              loginUrl="http://slow-twitter.appspot.com/api/v1/auth/twitter"
+              onFailure={onFailedAuth}
+              onSuccess={onSuccessAuth}
+              requestTokenUrl="http://slow-twitter.appspot.com/api/v1/auth/twitter/reverse"
+              className="twitter-login-button small-text"
+              text="SIGN IN TO TWITTER"
+              showIcon={false}
+            />
+          </div>
+        </div>
+        </CSSTransition>
+        <div className={"main-flex rel"}>
+          <CSSTransition
+            in={true}
+            classNames={'slide-up-slow'}
+            appear={true}
+            timeout={2000}
+            onEntering={() => printSound.play()}
+            onEntered={() => printSound.pause()}
+          >
+            <div className="welcome-message-wrapper">
+              <div className="welcome-message">
+                <h2 className='section-title'>Welcome to Slow Twitter.</h2>
+                <p>This site will transform your Twitter feed into a series of mini-games.</p>
+                <p>Login to your Twitter account get started.</p>
+              </div>
+            </div>
+          </CSSTransition>
+        </div>
+      </div>
+
+    );
+  }
+
+
   return <Fragment>{content}</Fragment>;
 };
 export default App;

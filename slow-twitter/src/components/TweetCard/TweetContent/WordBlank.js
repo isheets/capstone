@@ -1,8 +1,11 @@
 import React, { Fragment } from "react";
 import { useDrop } from "react-dnd";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const Blank = props => {
+
+  console.log('rendering blank');
+
   let extractedWord = props.extractedWord;
   let blankOrder = props.blankOrder;
   let game = useSelector(state => state.game.curGame);
@@ -19,24 +22,23 @@ const Blank = props => {
   });
 
   let content = null;
-  let blankFiller = ".........";
-  let width = "fit-content";
+  let blankFiller = null;
+  let width = "40px";
 
   const isActive = canDrop && isOver;
-  let backgroundColor = "rgb(48, 39, 40)";
+  let backgroundColor = 'transparent';
   let color = backgroundColor;
   if (isActive) {
-    backgroundColor = "rgb(48, 39, 40)";
-    color = backgroundColor;
+    backgroundColor = "transparent";
+    color = "black";
     //size all the blanks according to the word being dragged
     blankFiller = wordBeingDragged.value;
     width = 'min-content';
   } else if (canDrop) {
-    backgroundColor = "rgb(79, 177, 211)";
+    backgroundColor = "#BF0404";
     color = backgroundColor;
     blankFiller = wordBeingDragged.value;
     width = 'min-content';
-
   }
 
   let wordInBlank = null;
@@ -56,7 +58,7 @@ const Blank = props => {
       <span
         ref={drop}
         className="tweet-blank-filled"
-        style={{ backgroundColor: "rgb(48, 39, 40)", color: "rgb(187, 197, 182)" }}
+        style={{ backgroundColor: "transparent", color: "black" }}
       >
         {wordInBlank.word}
       </span>

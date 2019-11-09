@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import FsLightbox from 'fslightbox-react';
 
@@ -28,7 +28,7 @@ const TweetMedia = props => {
 
   //check if tweet with media we are rendering is quote or orginial
 
-  if (quote == true) {
+  if (quote === true) {
     tweetWithMedia = curTweet.quote;
   } else {
     tweetWithMedia = curTweet;
@@ -59,6 +59,7 @@ const TweetMedia = props => {
               height="240"
               controls
               className="tweet-media-item fit"
+              key={i}
             >
               <source src={media.url} type={media.format}></source>
               Your browser does not support inline video viewing.
@@ -83,6 +84,9 @@ const TweetMedia = props => {
     } else {
       content = null;
     }
+  }
+  else {
+    content = null;
   }
 
   //return <div className={`tweet-media-${numMedia}`}>{content}</div>;

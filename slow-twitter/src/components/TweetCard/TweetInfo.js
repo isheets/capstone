@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react'
 import { useSelector } from "react-redux";
 
-var timeSinceTweet = function( tweetDateString ) {
-    //Get 1 day in milliseconds
-    var one_day=1000*60*60*24;
+import Typing from 'react-typing-animation';
+
+export var timeSinceTweet = function( tweetDateString ) {
   
     // Convert both dates to milliseconds
     var tweetDate = new Date(tweetDateString);
@@ -50,7 +50,7 @@ const TweetInfo = (props) => {
     let tweetToRender;
     let classForTweetInfo;
     //check if we need to render quote tweet info or no
-    if(quote == true) {
+    if(quote === true) {
         tweetToRender = curTweet.quoteTweet;
         classForTweetInfo = "quote-tweet-info";
     }
@@ -58,10 +58,10 @@ const TweetInfo = (props) => {
         tweetToRender = curTweet;
         classForTweetInfo = "tweet-info"
     }
-    let content;
+    let infoContent;
     if (tweetToRender !== null) {
         timeSinceTweet(tweetToRender.date);
-        content = (
+     infoContent = (
             <div className={classForTweetInfo}>
                 <h3 className={classForTweetInfo + "-name"}>{tweetToRender.user.name}</h3>
                 <h4 className={classForTweetInfo + "-details"}>@{tweetToRender.user.handle} / {timeSinceTweet(tweetToRender.date)}</h4>
@@ -69,11 +69,11 @@ const TweetInfo = (props) => {
         )
     }
     else {
-        content = (<p>curTweet not found</p>);
+     infoContent = (<p>curTweet not found</p>);
     }
     return (
         <Fragment>
-            {content}
+             {infoContent}
         </Fragment>
     )
 }
